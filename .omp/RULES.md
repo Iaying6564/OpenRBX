@@ -1,3 +1,7 @@
+# Working rules
+
+- Work only inside the checkout. Scratch, logs, dumps, and helper scripts go under `build/` (gitignored) or `%TEMP%`. Never create worktrees, sibling directories, or files in `Downloads`.
+
 # Commit rules
 
 - Read `skill://openrbx-commit` before writing any commit message.
