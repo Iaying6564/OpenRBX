@@ -89,19 +89,15 @@ private:
 
 		bool operator<(const DecalKey& other) const
 		{
-			if (size.x != other.size.x) {
-				return size.x < other.size.x;
+			if (face < other.face) {
+				return true;
 			}
 
-			if (size.y != other.size.y) {
-				return size.y < other.size.y;
+			if (face > other.face) {
+				return false;
 			}
 
-			if (size.z != other.size.z) {
-				return size.z < other.size.z;
-			}
-
-			return face < other.face;
+			return size < other.size;
 		}
 	};
 
@@ -123,15 +119,15 @@ private:
 
 		bool operator<(const TextureKey& other) const
 		{
-			if (DecalKey::operator<(other)) {
+			if (studsPerTile < other.studsPerTile) {
 				return true;
 			}
 
-			if (studsPerTile.x != other.studsPerTile.x) {
-				return studsPerTile.x < other.studsPerTile.x;
+			if (studsPerTile > other.studsPerTile) {
+				return false;
 			}
 
-			return studsPerTile.y < other.studsPerTile.y;
+			return DecalKey::operator<(other);
 		}
 	};
 
