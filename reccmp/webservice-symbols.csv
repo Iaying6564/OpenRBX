@@ -156,7 +156,7 @@ address,size,symbol,name
 0x101f9d00,0x4,?cframe@AggregateChunk@Render@RBX@@UAEABVCoordinateFrame@G3D@@XZ,
 0x101f9d10,0x26,?getMaterial@AggregateChunk@Render@RBX@@UAE?AV?$ReferenceCountedPointer@VMaterial@Render@RBX@@@G3D@@XZ,
 0x101f9d40,0x26,?getMesh@AggregateChunk@Render@RBX@@UAE?AV?$ReferenceCountedPointer@VMesh@Render@RBX@@@G3D@@XZ,
-0x101fa520,0x1ab,?go@Clusterer@Render@RBX@@QAEAAV?$vector@VCluster@Clusterer@Render@RBX@@V?$allocator@VCluster@Clusterer@Render@RBX@@@std@@@std@@I@Z,
+0x101fa520,0x1ab,,?go@Clusterer@Render@RBX@@QAEAAV?$vector@VCluster@Clusterer@Render@RBX@@V?$allocator@VCluster@Clusterer@Render@RBX@@@std@@@std@@I@Z
 0x100068f0,,?onAddListener@?$Notifier@VInstance@RBX@@VPropertyChanged@2@@RBX@@MBEXPAV?$Listener@VInstance@RBX@@VPropertyChanged@2@@2@@Z,
 0x100068f0,,?onRemoveListener@?$Notifier@VInstance@RBX@@VPropertyChanged@2@@RBX@@MBEXPAV?$Listener@VInstance@RBX@@VPropertyChanged@2@@2@@Z,
 0x10047dc0,,??1?$AbstractFactoryProduct@VInstance@RBX@@@RBX@@UAE@XZ,

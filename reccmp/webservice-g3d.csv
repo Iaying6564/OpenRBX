@@ -157,8 +157,8 @@ address,size,type,symbol,name
 0x1012f350,0x2ab,library,?encodeBMP@GImage@G3D@@ABEXAAVBinaryOutput@2@@Z,
 0x1012f600,0x394,library,?encodeTGA@GImage@G3D@@ABEXAAVBinaryOutput@2@@Z,
 0x1012f9a0,0x95,library,,G3D::error_exception
-0x1012fa40,0x47,library,?png_write_data@G3D@@YAXPAUpng_struct_def@@PAEI@Z,G3D::png_write_data
-0x1012fa90,0x7a,library,?png_error@G3D@@YAXPAUpng_struct_def@@PBD@Z,G3D::png_error
+0x1012fa40,0x47,library,,G3D::png_write_data
+0x1012fa90,0x7a,library,,G3D::png_error
 0x1012fb10,0x5a,library,??1Error@GImage@G3D@@QAE@XZ,
 0x1012fb70,0x5f,library,??0Error@GImage@G3D@@QAE@ABV012@@Z,
 0x1012fbd0,0x6d,library,?png_warning@G3D@@YAXPAUpng_struct_def@@PBD@Z,
@@ -167,7 +167,7 @@ address,size,type,symbol,name
 0x101300b0,0x545,library,?decodeTGA@GImage@G3D@@AAEXAAVBinaryInput@2@@Z,
 0x10130600,0xb2f,library,?decodeBMP@GImage@G3D@@AAEXAAVBinaryInput@2@@Z,
 0x10131130,0x2a2,library,?decodeJPEG@GImage@G3D@@AAEXAAVBinaryInput@2@@Z,
-0x101313e0,0x17,library,?png_read_data@G3D@@YAXPAUpng_struct_def@@PAEI@Z,G3D::png_read_data
+0x101313e0,0x17,library,,G3D::png_read_data
 0x10131400,0x425,library,?decodePNG@GImage@G3D@@AAEXAAVBinaryInput@2@@Z,
 0x10131830,0x1ca,library,,G3D::scanUInt
 0x10131a00,0x26,library,?clear@GImage@G3D@@QAEXXZ,
@@ -261,9 +261,8 @@ address,size,type,symbol,name
 0x10136150,0x61,library,?fromARGB@Color3@G3D@@SA?AV12@I@Z,
 0x101361c0,0x7e,library,??0Color3uint8@G3D@@QAE@ABVColor3@1@@Z,
 0x10136240,0xca,library,?unitize@Quat@G3D@@QBE?AV12@XZ,
-0x10136310,0x16,library,??0Matrix3@G3D@@QAE@ABV01@@Z,
 0x10136310,0x16,library,??4Matrix3@G3D@@QAEAAV01@ABV01@@Z,
-0x10136310,22,library,G3D::Matrix3::Matrix3,G3D::Matrix3::Matrix3
+0x10136310,0x16,library,??0Matrix3@G3D@@QAE@ABV01@@Z,
 0x10136330,0x41,library,?set@Matrix3@G3D@@QAEXMMMMMMMMM@Z,
 0x10136380,0x1e,library,?getColumn@Matrix3@G3D@@QBE?AVVector3@2@H@Z,
 0x10136380,30,library,?getColumn@Matrix3@G3D@@QBE?AVVector3@2@H@Z,G3D::Matrix3::getColumn
@@ -334,7 +333,7 @@ address,size,type,symbol,name
 0x101395d0,0xb3,library,??_0Vector3@G3D@@QAEAAV01@M@Z,
 0x10139690,0x80,library,?unitize@Vector3@G3D@@QAEMM@Z,
 0x10139690,0x80,library,?unitize@Color3@G3D@@QAEMM@Z,
-0x10139690,128,library,G3D::Vector3::unitize,G3D::Vector3::unitize
+0x10139690,128,library,,G3D::Vector3::unitize
 0x10139710,0xd1,library,?generateOrthonormalBasis@Vector3@G3D@@SAXAAV12@00_N@Z,
 0x101397f0,0x11,library,?xz@Vector3@G3D@@QBE?AVVector2@2@XZ,
 0x10139810,0x12,library,?yz@Vector3@G3D@@QBE?AVVector2@2@XZ,
@@ -761,7 +760,7 @@ address,size,type,symbol,name
 0x101d0230,0x163,library,?fromGImage@Texture@G3D@@SA?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ABVGImage@2@PBVTextureFormat@2@W4WrapMode@12@W4InterpolateMode@12@W4Dimension@12@W4DepthReadMode@12@M@Z,
 0x101d03a0,0x105,library,?createEmpty@Texture@G3D@@SA?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@HHABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBVTextureFormat@2@W4WrapMode@12@W4InterpolateMode@12@W4Dimension@12@W4DepthReadMode@12@M@Z,
 0x101d04b0,0x1a4,library,?alphaOnlyVersion@Texture@G3D@@QBE?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@XZ,
-0x101d0660,0x759,library,?fromFile@Texture@G3D@@SA?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@PBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBVTextureFormat@2@W4WrapMode@12@W4InterpolateMode@12@W4Dimension@12@NW4DepthReadMode@12@MM@Z,G3D::Texture::fromFile
+0x101d0660,0x759,library,,G3D::Texture::fromFile
 0x101d0dc0,0x17f,library,?fromFile@Texture@G3D@@SA?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBVTextureFormat@2@W4WrapMode@12@W4InterpolateMode@12@W4Dimension@12@NW4DepthReadMode@12@MM@Z,
 0x101d0f40,0x560,library,?fromTwoFiles@Texture@G3D@@SA?AV?$ReferenceCountedPointer@VTexture@G3D@@@2@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0PBVTextureFormat@2@W4WrapMode@12@W4InterpolateMode@12@W4Dimension@12@W4DepthReadMode@12@M@Z,
 0x101d14a0,0x27e,library,?computePackedArray@GFont@G3D@@ABE?AVVector2@2@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NNNNW4Spacing@12@PAV32@@Z,
