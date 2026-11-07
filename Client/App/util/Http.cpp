@@ -53,7 +53,7 @@ public:
 };
 
 // SIZE 0x4
-class String_sink : public boost::iostreams::device<boost::iostreams::output>
+struct String_sink : public boost::iostreams::device<boost::iostreams::output>
 {
 public:
 	std::string& s; // 0x00
