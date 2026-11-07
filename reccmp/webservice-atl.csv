@@ -744,14 +744,14 @@ address,size,type,symbol,name
 0x10026c80,,library,??$AtlGetSAXValue@_J@@YAJPA_JPB_WH@Z,
 0x10026fb0,,library,??$AtlGetSAXValue@_K@@YAJPA_KPB_WH@Z,
 0x100286c0,,library,?AtlSoapGetArraySize@@YAJPAUISAXAttributes@@PAIPAPB_W2@Z,
-0x10004ec0,170,library,,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >"
-0x10004df0,105,library,,"ATL::CSimpleStringT<char,0>::CloneData"
-0x10005130,122,library,,"ATL::CSimpleStringT<char,0>::Fork"
-0x100054a0,20,library,,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::Format"
-0x10004d60,140,library,,"ATL::CSimpleStringT<char,0>::SetString"
-0x100051b0,24,library,,ATL::AtlThrowImpl
-0x100052c0,143,library,,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >"
-0x100307f0,125,library,,A2WBSTR
+0x10004ec0,170,library,??0?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@QAE@PBD@Z,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >"
+0x10004df0,105,library,?CloneData@?$CSimpleStringT@D$0A@@ATL@@CAPAUCStringData@2@PAU32@@Z,"ATL::CSimpleStringT<char,0>::CloneData"
+0x10005130,122,library,?Fork@?$CSimpleStringT@D$0A@@ATL@@AAEXH@Z,"ATL::CSimpleStringT<char,0>::Fork"
+0x100054a0,20,library,?Format@?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@QAAXPBDZZ,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::Format"
+0x10004d60,140,library,?SetString@?$CSimpleStringT@D$0A@@ATL@@QAEXPBDH@Z,"ATL::CSimpleStringT<char,0>::SetString"
+0x100051b0,24,library,?AtlThrowImpl@ATL@@YGXJ@Z,ATL::AtlThrowImpl
+0x100052c0,143,library,??0?$CStringT@DV?$StrTraitATL@DV?$ChTraitsCRT@D@ATL@@@ATL@@@ATL@@QAE@PB_W@Z,"ATL::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >::CStringT<char,ATL::StrTraitATL<char,ATL::ChTraitsCRT<char> > >"
+0x100307f0,125,library,?A2WBSTR@@YAPA_WPBDH@Z,A2WBSTR
 0x100211f0,,library,?AddRef@?$CIsapiExtension@V?$CThreadPool@VCIsapiWorker@ATL@@VCRTThreadTraits@2@VWin32WaitTraits@2@@ATL@@VCNoRequestStats@2@UCDefaultErrorProvider@2@VCRTThreadTraits@2@VCNoStatClass@2@V62@@ATL@@W3AGKXZ,
 0x10021220,,library,?QueryInterface@?$CIsapiExtension@V?$CThreadPool@VCIsapiWorker@ATL@@VCRTThreadTraits@2@VWin32WaitTraits@2@@ATL@@VCNoRequestStats@2@UCDefaultErrorProvider@2@VCRTThreadTraits@2@VCNoStatClass@2@V62@@ATL@@W3AGJABU_GUID@@PAPAX@Z,
 0x100212b0,,library,?QueryInterface@?$CIsapiExtension@V?$CThreadPool@VCIsapiWorker@ATL@@VCRTThreadTraits@2@VWin32WaitTraits@2@@ATL@@VCNoRequestStats@2@UCDefaultErrorProvider@2@VCRTThreadTraits@2@VCNoStatClass@2@V62@@ATL@@W7AGJABU_GUID@@PAPAX@Z,

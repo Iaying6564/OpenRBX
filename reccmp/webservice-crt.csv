@@ -1,6 +1,6 @@
 address,size,type,symbol,name
-0x10043b20,0x87,library,,
-0x10109bc0,0x4b,library,,
+0x10043b20,0x87,library,?_Buynode@?$list@UItem@SignatureDescriptor@Reflection@RBX@@V?$allocator@UItem@SignatureDescriptor@Reflection@RBX@@@std@@@std@@IAEPAU_Node@?$_List_nod@UItem@SignatureDescriptor@Reflection@RBX@@V?$allocator@UItem@SignatureDescriptor@Reflection@RBX@@@std@@@2@PAU342@0ABUItem@SignatureDescriptor@Reflection@RBX@@@Z,
+0x10109bc0,0x4b,library,?_Buynode@?$_Tree@V?$_Tmap_traits@VVector3@G3D@@PAVBlockTemplate@RBX@@UmyLess@4@V?$allocator@U?$pair@$$CBVVector3@G3D@@PAVBlockTemplate@RBX@@@std@@@std@@$0A@@std@@@std@@IAEPAU_Node@?$_Tree_nod@V?$_Tmap_traits@VVector3@G3D@@PAVBlockTemplate@RBX@@UmyLess@4@V?$allocator@U?$pair@$$CBVVector3@G3D@@PAVBlockTemplate@RBX@@@std@@@std@@$0A@@std@@@2@PAU342@00ABU?$pair@$$CBVVector3@G3D@@PAVBlockTemplate@RBX@@@2@D@Z,
 0x101e614c,0x5,library,??_U@YAPAXI@Z,
 0x101e80e6,0xf,library,@__security_check_cookie@4,
 0x101e8102,0x49,library,??_Etype_info@@UAEPAXI@Z,
@@ -92,7 +92,7 @@ address,size,type,symbol,name
 0x101e9158,,library,_GetFileVersionInfoSizeA@8,
 0x101e915e,,library,_GetFileVersionInfoA@16,
 0x101e9164,,library,_VerQueryValueA@16,
-0x101e614c,5,library,,operator new[]
-0x101e81fd,18,library,,atexit
-0x101e80e6,15,library,,__security_check_cookie
-0x101e8710,,library,,_chkstk
+0x101e614c,5,library,??_U@YAPAXI@Z,operator new[]
+0x101e81fd,18,library,_atexit,atexit
+0x101e80e6,15,library,@__security_check_cookie@4,__security_check_cookie
+0x101e8710,,library,__chkstk,_chkstk
