@@ -1099,3 +1099,10 @@ address,type,name,module
 0x10300fd0,global,GS_ExceptionRecord,gs_report.obj
 0x10301020,global,DebuggerWasPresent,gs_report.obj
 0x10301028,global,GS_ContextRecord,gs_report.obj
+0x10238d00,global,tab_funcs,ltablib.obj
+0x10238e80,global,mathlib,lmathlib.obj
+0x10239030,global,strlib,lstrlib.obj
+0x102393c0,global,base_funcs,lbaselib.obj
+0x10239488,global,co_funcs,lbaselib.obj
+0x10239800,global,iolib,liolib.obj
+0x10239860,global,flib,liolib.obj
