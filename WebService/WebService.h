@@ -2579,6 +2579,19 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 
 } // namespace Roblox
 
-HANDLER_ENTRY_SDL("Default", CWebService, ::Roblox::CWebService, WSDL)
+// HANDLER_ENTRY_SDL pastes __COUNTER__ into every name it generates, and the
+// attribute provider's injected source had already taken 34 expansions by this
+// point in the original: it carries s_szClassNameWSDL34, __hdlrEntry_CWebService_35
+// and __hdlrEntry_WSDL_36. Attributed ATL is unavailable in this toolchain, so the
+// injections are written back out of .rdata in WebServiceMaps.cpp instead and the
+// counter never advances. The macro is therefore spelled out through ATL's own
+// internal forms with the three recorded numbers, which is what pairs the
+// CSDLGenerator instantiation and the two handler-entry records.
+using Roblox::CWebService;
+_ATLSOAP_DECLARE_WSDL_SRF()
+extern __declspec(selectany) const char s_szClassNameWSDL34[] = "Default";
+typedef ATL::CSDLGenerator<CWebService, s_szClassNameWSDL34> WSDL;
+__DECLARE_REQUEST_HANDLER("Default", CWebService, ::Roblox::CWebService, 35)
+__DECLARE_REQUEST_HANDLER("WSDL", WSDL, WSDL, 36)
 
 #endif // WEBSERVICE_WEBSERVICE_H
