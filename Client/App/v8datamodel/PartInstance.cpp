@@ -22,7 +22,7 @@ namespace RBX {
 char sPart[] = "Part";
 
 // GLOBAL: WEBSERVICE 0x102d4568
-const char* const category_Part = "Part";
+const char* category_Part = "Part";
 
 bool PartInstance::highlightSleepParts;
 bool PartInstance::highlightAwakeParts;

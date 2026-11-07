@@ -32,7 +32,7 @@ namespace RBX {
 
 class IReferenceBinder;
 
-extern const char* const category_Part;
+extern const char* category_Part;
 
 namespace Reflection {
 
