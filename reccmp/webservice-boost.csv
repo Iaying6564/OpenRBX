@@ -1623,3 +1623,4 @@ address,size,type,symbol,name
 0x101e7f70,,library,_at_thread_exit,
 0x101e7d50,,library,?_Incsize@?$list@P6AXXZV?$allocator@P6AXXZ@std@@@std@@IAEXI@Z,
 0x101ea890,0x6e,library,??$reset@Ubasic_connection@detail@signals@boost@@@?$shared_ptr@Ubasic_connection@detail@signals@boost@@@boost@@QAEXPAUbasic_connection@detail@signals@1@@Z,
+0x101ea7e0,,library,??$?0Ubasic_connection@detail@signals@boost@@@shared_count@detail@boost@@QAE@PAUbasic_connection@1signals@2@@Z,
