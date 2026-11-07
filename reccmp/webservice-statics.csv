@@ -1106,3 +1106,12 @@ address,type,name,module
 0x10239488,global,co_funcs,lbaselib.obj
 0x10239800,global,iolib,liolib.obj
 0x10239860,global,flib,liolib.obj
+0x10300f8c,global,tss_data_mutex,tss.obj.obj
+0x10300f90,global,tss_data_cleanup_handlers,tss.obj.obj
+0x10300f94,global,tss_data_use,tss.obj.obj
+0x102f1b98,global,tss_data_native_key,tss.obj.obj
+0x10300fb8,global,once_init_threadmon_mutex,tss_hooks.obj.obj
+0x102f1bac,global,tls_key,tss_hooks.obj.obj
+0x10300fbc,global,attached_thread_count,tss_hooks.obj.obj
+0x10300f88,global,tss_data_once,tss.obj.obj
+0x10300fa0,global,threadmon_mutex,tss_hooks.obj.obj
