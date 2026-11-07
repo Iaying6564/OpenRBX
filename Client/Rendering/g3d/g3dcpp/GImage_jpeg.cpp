@@ -22,10 +22,9 @@ extern "C" {
 #endif
 }
 
-namespace G3D {
-
-
-const int jpegQuality = 96;
+// The IJG memory managers are file-scope statics and the original keeps them outside
+// namespace G3D, so their symbols are bare (_init_destination, not ?init_destination@G3D@@).
+// Inside the namespace they paired with jdatadst.c's and jdatasrc.c's copies instead.
 
 /**
  The IJG library needs special setup for compress/decompressing
@@ -245,6 +244,12 @@ static void jpeg_memory_src (
     // until buffer loaded
     src->pub.next_input_byte = NULL; 
 }
+
+
+namespace G3D {
+
+
+const int jpegQuality = 96;
 
 
 void GImage::encodeJPEG(
