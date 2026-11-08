@@ -8,6 +8,7 @@
 #include "G3D/GImage.h"
 #include "G3D/BinaryInput.h"
 #include "G3D/BinaryOutput.h"
+#include <stdexcept>
  
  /**
  Pick up libjpeg headers locally on Windows, but from the system on all other platforms.
@@ -249,6 +250,19 @@ static void jpeg_memory_src (
 namespace G3D {
 
 
+// The IJG error handler. The original keeps it file-local inside namespace G3D,
+// so its PDB entry is the undecorated G3D::error_exception and both JPEG paths
+// install it by hand on the error manager after jpeg_std_error.
+static void error_exception(j_common_ptr cinfo) {
+	cinfo->err->output_message(cinfo);
+	jpeg_destroy(cinfo);
+
+	char buffer[JMSG_LENGTH_MAX];
+	cinfo->err->format_message(cinfo, buffer);
+	throw std::runtime_error(buffer);
+}
+
+
 const int jpegQuality = 96;
 
 
@@ -271,6 +285,7 @@ void GImage::encodeJPEG(
     jpeg_error_mgr          jerr;
 
 	cinfo.err = jpeg_std_error(&jerr);
+	jerr.error_exit = error_exception;
 	jpeg_create_compress(&cinfo);
 
     // Specify the destination for the compressed data.
@@ -342,6 +357,7 @@ void GImage::decodeJPEG(
     channels = 3;
     // We have to set up the error handler, in case initialization fails.
 	cinfo.err = jpeg_std_error(&jerr);
+	jerr.error_exit = error_exception;
 
     // Initialize the JPEG decompression object.
 	jpeg_create_decompress(&cinfo);
