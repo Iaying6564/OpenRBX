@@ -156,6 +156,54 @@ set(OPENRBX_GRAPHICS3D_SOURCES
 file(GLOB OPENRBX_ZLIB_SOURCES "${G3D}/zlib/*.c")
 file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" ${OPENRBX_ZLIB_SOURCES})
 
+# __FILE__ in these objects is the absolute path of the source, where the
+# original's is the relative spelling its PDB records (`cwd` =
+# <root>\Client\Rendering\g3d, `src` = .\glg3dcpp\GLCaps.cpp), so 38 residual
+# rows in the WEBSERVICE report differ only in that one string literal. Measured
+# on this toolchain, in order of how much they were worth trying:
+#
+#   /d1trimfile:<prefix>  c1xx : fatal error C1007: unrecognized flag
+#   /D__FILE__="."        warning C4117: macro name is reserved, #define ignored
+#   /FI with #undef/#define   the same C4117, both directives ignored
+#   /FI with `#line 1 "x"`    compiles clean, and the main file still reports
+#                             its own name: MSVC restores the file position when
+#                             it leaves a forced include
+#   a wrapper that #includes the real .cpp
+#                             __FILE__ inside it becomes <dir-of-includer>\.\x.cpp;
+#                             cl joins the spelling to the includer's directory,
+#                             so the absolute prefix cannot be dropped
+#   add_custom_command with WORKING_DIRECTORY and a relative source argument
+#                             works, and is the only construct that produces the
+#                             exact bytes: the object carries .\glg3dcpp\GLCaps.cpp
+#                             and nothing else in it changes. But it has to carry
+#                             its own copy of the flag set, and an external .obj
+#                             listed in add_library(... OBJECT) is dropped
+#                             silently, so it cannot reach graphics3d, which is an
+#                             OBJECT library because the original's .text order
+#                             needs one object per source.
+#
+# What does work, and costs one line per file instead of a build system:
+#     #line 1 ".\\glg3dcpp\\GLCaps.cpp"
+# as the first line of the source, with the backslashes DOUBLED because cl
+# escape-processes the directive's filename: the single form warned C4129
+# 'unrecognized character escape sequence' and dropped them, so the object
+# carried .glg3dcppGLCaps.cpp and the report did not move at all. Verified
+# against the original's bytes: with `#line 1` the assert pushes 0x22b and
+# .\glg3dcpp\GLCaps.cpp, both matching the original, and every other row of
+# every function in the file is unchanged (`#line 2` would shift __LINE__ by
+# one, which is why the number is 1 and the directive sits on line 1 of a file
+# whose first line is a comment). Nothing under Client/Rendering/g3d carries a
+# marker, so resetting the filename cannot disturb line-record resolution.
+# Applied to ten files in b1b00fde: 32 functions improved, 24 of them to
+# exactly 1.0000, no regressions, +0.3558 accuracy-units. Probe diffs for all
+# twelve candidates are in build/probe/Vendored/.
+#
+# The four files whose __LINE__ also differs are a separate cause and this
+# directive does not fix it: RenderDevice.cpp is uniformly -2, System.cpp +2 and
+# Table.h +1, so the original's copies are a commit or two from ours, while
+# GImage.cpp is a genuinely larger file (the original reaches line 2932 where
+# ours has 1000) and is not closable without substituting upstream source.
+#
 # The original built zlib as its own project, in ..\..\temp\zlib\Release, and not
 # inside glg3d, so its ten objects carry /O2's own /Ob2 and not the /Ob1 glg3d
 # asks for. inflate is the only place that shows: at /Ob1 the small helpers stay
