@@ -221,7 +221,7 @@ const float Constants::getKmsMaxJointForce(float grid1, float grid2)
 		force = MAX_LEGO_JOINT_FORCES_MEASURED[width];
 	}
 	else {
-		force = width * (1.0f / 7.0f) * MAX_LEGO_JOINT_FORCES_MEASURED[6];
+		force = MAX_LEGO_JOINT_FORCES_MEASURED[6] * (width / 7.0f);
 	}
 
 	force = force * 0.5f;
