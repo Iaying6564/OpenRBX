@@ -46,7 +46,9 @@ NormalId Extents::closestFace(const Vector3& point)
 // FUNCTION: ROBLOX 0x005f8880
 float Extents::areaXZ() const
 {
-	return (high.x - low.x) * (high.z - low.z);
+	const Vector3 d = high - low;
+
+	return d.x * d.z;
 }
 
 // FUNCTION: WEBSERVICE 0x100a5a50
@@ -177,7 +179,8 @@ Vector3 Extents::faceCenter(NormalId faceId) const
 bool Extents::containedByFrustum(const G3D::GCamera::Frustum& frustum) const
 {
 	for (int i = 0; i < frustum.faceArray.size(); ++i) {
-		const Plane& plane = frustum.faceArray[i].plane;
+		const G3D::GCamera::Frustum::Face& face = frustum.faceArray[i];
+		const Plane& plane = face.plane;
 
 		for (int j = 0; j < 8; ++j) {
 			const Vector3 corner = getCorner(j);
@@ -210,7 +213,9 @@ Extents Extents::express(const CoordinateFrame& myFrame, const CoordinateFrame& 
 	Vector3 maxC(-Math::inf(), -Math::inf(), -Math::inf());
 
 	for (int i = 0; i < 8; ++i) {
-		const Vector3 inOther = expressInFrame.pointToObjectSpace(myFrame.pointToWorldSpace(getCorner(i)));
+		const Vector3 corner = getCorner(i);
+		const Vector3 world = myFrame.pointToWorldSpace(corner);
+		const Vector3 inOther = expressInFrame.pointToObjectSpace(world);
 
 		minC = minC.min(inOther);
 		maxC = maxC.max(inOther);
