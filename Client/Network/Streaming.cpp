@@ -536,7 +536,7 @@ void StringSender::send(RakNet::BitStream& stream, const std::string& value)
 	nextIndex++;
 }
 
-// STUB: WEBSERVICE 0x101ad130
+// FUNCTION: WEBSERVICE 0x101ad130
 // STUB: ROBLOX 0x004c0400
 void StringReceiver::deserializeString(Reflection::Property& property, RakNet::BitStream& bitStream)
 {
@@ -545,16 +545,19 @@ void StringReceiver::deserializeString(Reflection::Property& property, RakNet::B
 
 	Instance* instance = static_cast<Instance*>(property.getInstance());
 
-	property.getDescriptor().setStringValue(instance, value);
+	const Reflection::PropertyDescriptor& descriptor = property.getDescriptor();
+	descriptor.setStringValue(instance, value);
 }
 
-// STUB: WEBSERVICE 0x101ad620
+// FUNCTION: WEBSERVICE 0x101ad620
 // STUB: ROBLOX 0x004c08f0
 void StringSender::serializeString(const Reflection::ConstProperty& property, RakNet::BitStream& bitStream)
 {
 	const Instance* instance = static_cast<const Instance*>(property.getInstance());
 
-	std::string value = property.getDescriptor().getStringValue(instance);
+	const Reflection::PropertyDescriptor& descriptor = property.getDescriptor();
+
+	std::string value = descriptor.getStringValue(instance);
 	send(bitStream, value);
 }
 
