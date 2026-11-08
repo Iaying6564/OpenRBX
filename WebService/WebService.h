@@ -2569,6 +2569,8 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 // `dynamic atexit destructor for 'standardOutLog''
 // SYNTHETIC: WEBSERVICE 0x102212b0
 // `dynamic atexit destructor for 'dotVersion''
+// SYNTHETIC: WEBSERVICE 0x102212c0
+// `initRoblox'::`16'::`dynamic atexit destructor for 'errorUploader''
 // SYNTHETIC: WEBSERVICE 0x102212d0
 // `dynamic atexit destructor for '_AtlModule''
 // SYNTHETIC: WEBSERVICE 0x102212e0
