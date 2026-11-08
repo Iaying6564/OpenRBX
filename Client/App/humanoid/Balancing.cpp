@@ -53,8 +53,8 @@ G3D::Vector3 Balancing::getYAxis() const
 	return G3D::Vector3::unitY();
 }
 
-// STUB: WEBSERVICE 0x10122140
-// STUB: ROBLOX 0x006632c0
+// FUNCTION: WEBSERVICE 0x10122140
+// FUNCTION: ROBLOX 0x006632c0
 void Balancing::onComputeForce(const float dt)
 {
 	Body* torso = humanoid->getTorsoBody();
@@ -85,7 +85,7 @@ void Balancing::onComputeForce(const float dt)
 				}
 			}
 
-			torqueRoot -= branchIBody * kD * angVelRoot;
+			torqueRoot = torqueRoot - branchIBody * kD * angVelRoot;
 
 			G3D::Vector3 addedTorque = rootPV.position.vectorToWorldSpace(torqueRoot) - oldTorqueWorld;
 			root->accumulateTorque(addedTorque);
@@ -119,8 +119,8 @@ PartInstance* Balancing::findFloor(bool existingFloor)
 			return floor;
 		}
 
-		for (int x = -1; x < 2; x += 2) {
-			for (int z = -1; z < 2; z += 2) {
+		for (int x = -1; x <= 1; x += 2) {
+			for (int z = -1; z <= 1; z += 2) {
 				offset.x = x * halfSize.x;
 				offset.z = z * halfSize.z;
 				pointOnTorso = torsoCoord.pointToWorldSpace(offset);
