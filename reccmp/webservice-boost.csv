@@ -43,7 +43,7 @@ address,size,type,symbol,name
 0x10005b30,0x7,library,??1placeholder@any@boost@@UAE@XZ,
 0x10005b40,0x1f,library,??_Eplaceholder@any@boost@@UAEPAXI@Z,
 0x100085c0,0x16,library,??1?$scoped_lock@Vmutex@boost@@@thread@detail@boost@@QAE@XZ,
-0x100085e0,0xf,library,,??1?$scoped_ptr@VView@1RBX@@@boost@@QAE@XZ
+0x100085e0,0xf,library,??1?$scoped_ptr@VView@1RBX@@@boost@@QAE@XZ,
 0x10008690,0x35,library,??1?$shared_ptr@VStandardOut@RBX@@@boost@@QAE@XZ,
 0x10008690,53,library,??1?$shared_ptr@Vrecursive_mutex@boost@@@boost@@QAE@XZ,boost::shared_ptr<RBX::DataModel>::~shared_ptr<RBX::DataModel>
 0x10008e40,0x2a,library,??$throw_exception@Vbad_weak_ptr@boost@@@boost@@YAXABVbad_weak_ptr@0@@Z,
@@ -1623,4 +1623,5 @@ address,size,type,symbol,name
 0x101e7f70,,library,_at_thread_exit,
 0x101e7d50,,library,?_Incsize@?$list@P6AXXZV?$allocator@P6AXXZ@std@@@std@@IAEXI@Z,
 0x101ea890,0x6e,library,??$reset@Ubasic_connection@detail@signals@boost@@@?$shared_ptr@Ubasic_connection@detail@signals@boost@@@boost@@QAEXPAUbasic_connection@detail@signals@1@@Z,
+0x101ea7c0,,library,??$checked_delete@Ubasic_connection@detail@signals@boost@@@boost@@YAXPAUbasic_connection@detail@signals@0@@Z,boost::checked_delete<boost::signals::detail::basic_connection>
 0x101ea7e0,,library,??$?0Ubasic_connection@detail@signals@boost@@@shared_count@detail@boost@@QAE@PAUbasic_connection@1signals@2@@Z,
