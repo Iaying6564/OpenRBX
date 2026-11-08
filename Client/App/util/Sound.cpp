@@ -350,6 +350,8 @@ void SoundService::getSoundStats(const LoadedSounds& sounds, unsigned int& numSo
 
 void SoundService::getSoundStats(unsigned int& numSounds, unsigned int& numUnusedSounds) const
 {
+	numUnusedSounds = 0;
+	numSounds = 0;
 	getSoundStats(loadedSounds, numSounds, numUnusedSounds);
 	getSoundStats(loaded3DSounds, numSounds, numUnusedSounds);
 }
@@ -946,8 +948,6 @@ void SoundServiceStatsItem::update()
 			maxalloced = b;
 		}
 
-		numUnusedSounds = 0;
-		numSounds = 0;
 		service->getSoundStats(numSounds, numUnusedSounds);
 	}
 	else {
