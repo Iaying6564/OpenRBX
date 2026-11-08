@@ -213,9 +213,9 @@ Matrix3 Math::snapToAxes(const Matrix3& align)
 			dots[a][i] = t;
 
 			if (fabs(t) > fabs(best)) {
-				tBest = i;
 				best = t;
 				aBest = a;
+				tBest = i;
 			}
 		}
 	}
@@ -236,9 +236,9 @@ Matrix3 Math::snapToAxes(const Matrix3& align)
 		if (a != aBest) {
 			for (int i = 0; i < 3; ++i) {
 				if (i != tBest && fabs(dots[a][i]) > fabs(second)) {
+					aSecond = a;
 					second = dots[a][i];
 					tSecond = i;
-					aSecond = a;
 				}
 			}
 		}
@@ -474,13 +474,13 @@ float Math::getHeading(const Vector3& look)
 	return atan2f(-look.x, -look.z);
 }
 
-// STUB: WEBSERVICE 0x100df630
-// STUB: ROBLOX 0x005f0820
+// FUNCTION: WEBSERVICE 0x100df630
+// FUNCTION: ROBLOX 0x005f0820
 void Math::getHeadingElevation(const CoordinateFrame& c, float& heading, float& elevation)
 {
 	const Vector3 look = c.rotation.getColumn(2) * CoordinateFrame::zLookDirection;
 
-	heading = atan2f(-look.x, -look.z);
+	heading = getHeading(look);
 	elevation = asinf(look.y);
 }
 
@@ -632,8 +632,8 @@ CoordinateFrame Math::snapToGrid(const CoordinateFrame& snap, const Vector3& gri
 	return CoordinateFrame(snapToAxes(snap.rotation), toGrid(snap.translation, grid));
 }
 
-// STUB: WEBSERVICE 0x100dfd20
-// STUB: ROBLOX 0x005f1160
+// FUNCTION: WEBSERVICE 0x100dfd20
+// FUNCTION: ROBLOX 0x005f1160
 bool Math::fuzzyAxisAligned(const Matrix3& m0, const Matrix3& m1, float radTolerance)
 {
 	Vector3 a1[3];
@@ -648,7 +648,13 @@ bool Math::fuzzyAxisAligned(const Matrix3& m0, const Matrix3& m1, float radToler
 		bool found = false;
 
 		for (int j = 0; j < 3; ++j) {
-			if (a0.cross(a1[j]).magnitude() < radTolerance) {
+			Vector3 cr = a0.cross(a1[j]);
+			float sq = cr.x * cr.x;
+
+			sq += cr.y * cr.y;
+			sq += cr.z * cr.z;
+
+			if (sqrtf(sq) < radTolerance) {
 				found = true;
 				break;
 			}
