@@ -5925,7 +5925,7 @@ address,type,symbol
 0x102f7330,global,??_B?1??classDescriptor@?$Described@VStockSound@@$1?sStockSound@@3PADAV?$FactoryProduct@VStockSound@@VSoundChannel@Soundscape@RBX@@$1?sStockSound@@3PADA@RBX@@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@51
 0x102f7338,global,s___RBX::Reflection::EnumDesc<enum RBX::Soundscape::ReverbType>::singleton
 0x102f73d0,global,??_B?1??singleton@?$EnumDesc@W4ReverbType@Soundscape@RBX@@@Reflection@RBX@@SAABV123@XZ@51
-0x102f73d8,global,?s@?1??singleton@?$EnumDesc@W4SoundType@RBX@@@Reflection@RBX@@SAABV234@XZ@4V234@A
+0x102f73d8,global,s___RBX::Reflection::EnumDesc<enum RBX::SoundType>::singleton
 0x102f7470,global,??_B?1??singleton@?$EnumDesc@W4SoundType@RBX@@@Reflection@RBX@@SAABV123@XZ@51
 0x102f7474,global,?markTlsIndex@Mark@Profiling@RBX@@2KA
 0x102f7478,global,n___RBX::Name::doDeclare<&RBX::sShirtGraphic>
@@ -6254,7 +6254,7 @@ address,type,symbol
 0x102fa02c,global,??_B?1??unitZ@Vector3@G3D@@SAABV12@XZ@51
 0x102fa030,global,minSize___G3D::Array<RBX::Primitive const *>::resize
 0x102fa034,global,??_B?3??resize@?$Array@PBVPrimitive@RBX@@@G3D@@QAEXH_N@Z@53
-0x102fa038,global,?s@?1??singleton@?$EnumDesc@W4CameraType@Camera@RBX@@@Reflection@RBX@@SAABV234@XZ@4V234@A
+0x102fa038,global,s___RBX::Reflection::EnumDesc<enum RBX::Camera::CameraType>::singleton
 0x102fa0d0,global,??_B?1??singleton@?$EnumDesc@W4CameraType@Camera@RBX@@@Reflection@RBX@@SAABV123@XZ@51
 0x102fa0d8,global,"foo___RBX::Reflection::Described<RBX::Camera,&RBX::sCamera,RBX::FactoryProduct<RBX::Camera,RBX::Instance,&RBX::sCamera> >::classDescriptor"
 0x102fa160,global,??_B?1??classDescriptor@?$Described@VCamera@RBX@@$1?sCamera@2@3PADAV?$FactoryProduct@VCamera@RBX@@VInstance@2@$1?sCamera@2@3PADA@2@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@51
@@ -6264,7 +6264,7 @@ address,type,symbol
 0x102fa1ec,global,n___RBX::Name::doDeclare<&RBX::sBackpackItem>
 0x102fa1f0,global,??_B?1???$doDeclare@$1?sBackpackItem@RBX@@3QBDB@Name@RBX@@CAABV01@XZ@51
 0x102fa1f4,global,flag___RBX::Name::declare<&RBX::sBackpackItem>
-0x102fa1f8,global,?s@?1??singleton@?$EnumDesc@W4BinType@HopperBin@RBX@@@Reflection@RBX@@SAABV234@XZ@4V234@A
+0x102fa1f8,global,s___RBX::Reflection::EnumDesc<enum RBX::HopperBin::BinType>::singleton
 0x102fa290,global,??_B?1??singleton@?$EnumDesc@W4BinType@HopperBin@RBX@@@Reflection@RBX@@SAABV123@XZ@51
 0x102fa298,global,"foo___RBX::Reflection::Described<RBX::HopperBin,&RBX::sHopperBin,RBX::FactoryProduct<RBX::HopperBin,RBX::BackpackItem,&RBX::sHopperBin> >::classDescriptor"
 0x102fa320,global,??_B?1??classDescriptor@?$Described@VHopperBin@RBX@@$1?sHopperBin@2@3QBDBV?$FactoryProduct@VHopperBin@RBX@@VBackpackItem@2@$1?sHopperBin@2@3QBDB@2@@Reflection@RBX@@SAAAVClassDescriptor@23@XZ@51
@@ -6587,7 +6587,7 @@ address,type,symbol
 0x102fd1dc,global,n___RBX::Name::doDeclare<&RBX::sFreefall>
 0x102fd1e0,global,??_B?1???$doDeclare@$1?sFreefall@RBX@@3QBDB@Name@RBX@@CAABV01@XZ@51
 0x102fd1e4,global,flag___RBX::Name::declare<&RBX::sFreefall>
-0x102fd1e8,global,?minSize@?3??resize@?$Array@W4NormalId@RBX@@@G3D@@QAEXH_N@Z@4HB
+0x102fd1e8,global,minSize___G3D::Array<enum RBX::NormalId>::resize
 0x102fd1ec,global,??_B?3??resize@?$Array@W4NormalId@RBX@@@G3D@@QAEXH_N@Z@53
 0x102fd1f0,global,s___RBX::Reflection::EnumDesc<enum RBX::SpecialShape::MeshType>::singleton
 0x102fd288,global,??_B?1??singleton@?$EnumDesc@W4MeshType@SpecialShape@RBX@@@Reflection@RBX@@SAABV123@XZ@51
@@ -7021,7 +7021,7 @@ address,type,symbol
 0x10301ae8,global,n___RBX::Name::doDeclare<&RBX::sLighting>
 0x10301aec,global,??_B?1???$doDeclare@$1?sLighting@RBX@@3PADA@Name@RBX@@CAABV01@XZ@51
 0x10301af0,global,?m@?$StaticMutex@VOSContext@@@@0PAVmutex@boost@@A
-0x10301af4,global,?_m@?1??init@?$StaticMutex@VOSContext@@@@CAXXZ@4Vmutex@boost@@A
+0x10301af4,global,_m___StaticMutex<OSContext>::init
 0x10301afc,global,??_B?1??init@?$StaticMutex@VOSContext@@@@CAXXZ@51
 0x10301b08,global,showedMessage___RobloxCrashReporter::ProcessException
 0x10301b10,global,??_B?1???$assign_to@P6AXPAVThreadLogManager@@@Z@?$function1@XPAVThreadLogManager@@V?$allocator@Vfunction_base@boost@@@std@@@boost@@AAEXP6AXPAVThreadLogManager@@@Z@Z@51
