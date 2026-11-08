@@ -160,7 +160,12 @@ struct StandardOutMessages
 	StandardOutMessage* items; // 0x04
 };
 
-struct IWebService : public IUnknown
+// __declspec(novtable): the original's PDB has no IWebService record at all --
+// neither `??_7IWebService@Roblox@@6B` nor a default constructor -- while ours
+// emits both.  Without the keyword, every CWebService construction stores the
+// secondary vftable for this primary base, an instruction the original never
+// emits.
+struct __declspec(novtable) IWebService : public IUnknown
 {
 	virtual HRESULT __stdcall HelloWorld(BSTR* bstrOutput) = 0; // vtable+0x0c
 	virtual HRESULT __stdcall GetVersion(BSTR* result) = 0;     // vtable+0x10
