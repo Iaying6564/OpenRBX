@@ -13,7 +13,9 @@ bool Debugable::validatingDebug;
 // FUNCTION: ROBLOX 0x0058e8a0
 void Debugable::dump(std::ostream& stream)
 {
-	stream << typeid(*this).name();
+	const std::type_info& typeInfo = typeid(*this);
+
+	stream << typeInfo.name();
 }
 
 } // namespace RBX
