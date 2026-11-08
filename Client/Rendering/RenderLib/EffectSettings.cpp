@@ -86,7 +86,8 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 		}
 	}
 
-	std::sort(lighting->shadowedLightArray.begin(), lighting->shadowedLightArray.end(), brighter);
+	G3D::Array<G3D::GLight>& shadowed = lighting->shadowedLightArray;
+	std::sort(shadowed.begin(), shadowed.end(), brighter);
 
 	int excessShadowLights = lighting->shadowedLightArray.size() - numShadowLights;
 
@@ -100,7 +101,8 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 		lighting->shadowedLightArray.resize(lighting->shadowedLightArray.size() - excessShadowLights, true);
 	}
 
-	std::sort(lighting->lightArray.begin(), lighting->lightArray.end(), brighter);
+	G3D::Array<G3D::GLight>& lights = lighting->lightArray;
+	std::sort(lights.begin(), lights.end(), brighter);
 
 	int excessLights = lighting->lightArray.size() - numNonShadowLights;
 
