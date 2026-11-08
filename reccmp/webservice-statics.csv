@@ -311,6 +311,9 @@ address,type,name,module
 0x10252b38,global,fuzzyEpsilon,Texture.obj
 0x10252d70,global,fuzzyEpsilon,GFont.obj
 0x10252d98,global,fuzzyEpsilon,LightingParameters.obj
+0x10254f20,global,lenfix,inflate.obj
+0x10255720,global,distfix,inflate.obj
+0x102557a0,global,order,inflate.obj
 0x10255988,global,fuzzyEpsilon,Sky.obj
 0x10255b08,global,fuzzyEpsilon,VAR.obj
 0x10255bd8,global,fuzzyEpsilon,VARArea.obj
@@ -325,6 +328,10 @@ address,type,name,module
 0x102576c0,global,fuzzyEpsilon,Win32Window.obj
 0x10257828,global,fuzzyEpsilon,glenumtostring.obj
 0x10258e80,global,fuzzyEpsilon,DDSTexture.obj
+0x10259a60,global,lbase,inftrees.obj
+0x10259aa0,global,lext,inftrees.obj
+0x10259ae0,global,dbase,inftrees.obj
+0x10259b20,global,dext,inftrees.obj
 0x10259c40,global,fuzzyEpsilon,Draw.obj
 0x10259c58,global,fuzzyEpsilon,Textures.obj
 0x10259c60,global,fuzzyEpsilon,HitTest.obj
