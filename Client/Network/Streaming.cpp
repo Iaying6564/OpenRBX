@@ -638,7 +638,7 @@ void IdSerializer::deserializeRef(Reflection::Property& property, RakNet::BitStr
 	deserializeId(bitStream, id);
 
 	Instance* instance;
-	if (Instance::lookupByGuid(id, instance)) {
+	if (bool found = Instance::lookupByGuid(id, instance)) {
 		desc.setRefValue(owner, instance);
 	}
 	else {
