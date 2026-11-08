@@ -1602,7 +1602,7 @@ address,type,symbol
 0x10121990,synthetic,??$getset@P8FaceInstance@RBX@@BE?AW4NormalId@2@XZP812@AEXW432@@Z@?$PropDescriptor@VFaceInstance@RBX@@W4NormalId@2@@Reflection@RBX@@SA?AV?$auto_ptr@VGetSet@?$TypedPropertyDescriptor@W4NormalId@RBX@@@Reflection@RBX@@@std@@P8FaceInstance@2@BE?AW4NormalId@2@XZP852@AEXW462@@Z@Z
 0x10121a90,synthetic,??$?0P8FaceInstance@RBX@@BE?AW4NormalId@1@XZP801@AEXW421@@Z@?$EnumPropDescriptor@VFaceInstance@RBX@@W4NormalId@2@@Reflection@RBX@@QAE@PBD0P8FaceInstance@2@BE?AW4NormalId@2@XZP832@AEXW442@@ZW4Functionality@PropertyDescriptor@12@@Z
 0x10121b90,synthetic,?setStringValue@?$EnumPropDescriptor@VFaceInstance@RBX@@W4NormalId@2@@Reflection@RBX@@UBE_NPAVDescribedBase@23@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
-0x10122140,stub,?onComputeForce@Balancing@RBX@@MAEXM@Z
+0x10122140,synthetic,?onComputeForce@Balancing@RBX@@MAEXM@Z
 0x101231d0,synthetic,??1?$Named@VFlying@RBX@@$1?sJumping@2@3QBDB@RBX@@UAE@XZ
 0x10126350,synthetic,??1?$Named@VMouseCommand@RBX@@$1?sPartDragTool@2@3PADA@RBX@@UAE@XZ
 0x1012aa90,synthetic,??_9Contact@RBX@@$BBM@AE
