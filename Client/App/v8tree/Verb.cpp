@@ -15,7 +15,7 @@ void VerbContainer::setVerbParent(VerbContainer* parent)
 // FUNCTION: ROBLOX 0x0059ceb0
 Verb* VerbContainer::getVerb(const Name& name)
 {
-	if (name != Name::getNullName()) {
+	if (Name::getNullName() != name) {
 		std::map<const Name*, Verb*>::iterator iter = verbs.find(&name);
 		if (iter != verbs.end()) {
 			return iter->second;
