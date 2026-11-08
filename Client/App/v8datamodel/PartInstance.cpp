@@ -1092,7 +1092,7 @@ void PartInstance::onCameraNear(float distance)
 	}
 }
 
-// STUB: WEBSERVICE 0x1009ff60
+// FUNCTION: WEBSERVICE 0x1009ff60
 // STUB: ROBLOX 0x005b2ce0
 void PartInstance::render3dAdorn(Adorn* adorn)
 {
@@ -1101,7 +1101,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (highlightSleepParts && primitive->getAssembly()) {
-		Sim::AssemblyState status = primitive->getAssembly()->getRootAssemblyConst()->getSleepStatus();
+		Sim::AssemblyState status = primitive->getAssembly()->getRootAssembly()->getSleepStatus();
 
 		if (status != Sim::ANCHORED && status != Sim::AWAKE) {
 			Color3 sleepColor;
@@ -1124,7 +1124,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (highlightAwakeParts && primitive->getAssembly()) {
-		Sim::AssemblyState status = primitive->getAssembly()->getRootAssemblyConst()->getSleepStatus();
+		Sim::AssemblyState status = primitive->getAssembly()->getRootAssembly()->getSleepStatus();
 
 		if (status != Sim::ANCHORED && status != Sim::SLEEPING_DEEPLY) {
 			Color3 wakeColor;
@@ -1151,11 +1151,11 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (showAnchoredParts && primitive->getAnchorObject()) {
+		G3D::Color4 surfaceColor(Color3::gray(), alpha());
+		const G3D::Matrix3& rotation = primitive->getCoordinateFrame().rotation;
+
 		DrawAdorn::partSurface(
-			getPart(),
-			Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), primitive->getCoordinateFrame().rotation),
-			adorn,
-			G3D::Color4(Color3::gray(), alpha())
+			getPart(), Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), rotation), adorn, surfaceColor
 		);
 	}
 
@@ -1167,7 +1167,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 		setAlphaModifier(0.3f);
 
 		if (Assembly* assembly = primitive->getAssembly()) {
-			if (primitive.get() == assembly->getAssemblyPrimitiveConst()) {
+			if (primitive.get() == assembly->getAssemblyPrimitive()) {
 				adorn->setObjectToWorldMatrix(
 					CoordinateFrame(Matrix3::identity(), primitive->getCoordinateFrame().translation)
 				);
