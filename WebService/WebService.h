@@ -214,8 +214,10 @@ private:
 	void touch(Job& job, double timeout) { job.expiration = G3D::System::getLocalTime() + timeout; }
 	double secondsToTimeout(const Job& job) { return job.expiration - G3D::System::getLocalTime(); }
 
+	// The original expands this at every one of its thirteen sites; /LTCG keeps
+	// one out-of-line copy for the nine convertToLua instantiations without it.
 	template <class T>
-	T* allocate(T*, int count)
+	__forceinline T* allocate(T*, int count)
 	{
 		if (count == 0) {
 			return NULL;
@@ -2506,39 +2508,39 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 // clang-format off
 // TEMPLATE: WEBSERVICE 0x100195e0
 // Roblox::convert<Roblox::LuaValue1>
-// STUB: WEBSERVICE 0x10019890
+// FUNCTION: WEBSERVICE 0x10019890
 // Roblox::CWebService::convertToLua<Roblox::LuaValue1>
 // TEMPLATE: WEBSERVICE 0x1001bfd0
 // Roblox::convert<Roblox::LuaValue2>
-// STUB: WEBSERVICE 0x1001c470
+// FUNCTION: WEBSERVICE 0x1001c470
 // Roblox::CWebService::convertToLua<Roblox::LuaValue2>
 // TEMPLATE: WEBSERVICE 0x1001d370
 // Roblox::convert<Roblox::LuaValue3>
-// STUB: WEBSERVICE 0x1001d890
+// FUNCTION: WEBSERVICE 0x1001d890
 // Roblox::CWebService::convertToLua<Roblox::LuaValue3>
 // TEMPLATE: WEBSERVICE 0x1001e0d0
 // Roblox::convert<Roblox::LuaValue4>
-// STUB: WEBSERVICE 0x1001e490
+// FUNCTION: WEBSERVICE 0x1001e490
 // Roblox::CWebService::convertToLua<Roblox::LuaValue4>
 // TEMPLATE: WEBSERVICE 0x1001eb60
 // Roblox::convert<Roblox::LuaValue5>
-// STUB: WEBSERVICE 0x1001edd0
+// FUNCTION: WEBSERVICE 0x1001edd0
 // Roblox::CWebService::convertToLua<Roblox::LuaValue5>
 // TEMPLATE: WEBSERVICE 0x1001f2b0
 // Roblox::convert<Roblox::LuaValue6>
-// STUB: WEBSERVICE 0x1001f520
+// FUNCTION: WEBSERVICE 0x1001f520
 // Roblox::CWebService::convertToLua<Roblox::LuaValue6>
 // TEMPLATE: WEBSERVICE 0x1001f8c0
 // Roblox::convert<Roblox::LuaValue7>
-// STUB: WEBSERVICE 0x1001fb30
+// FUNCTION: WEBSERVICE 0x1001fb30
 // Roblox::CWebService::convertToLua<Roblox::LuaValue7>
 // TEMPLATE: WEBSERVICE 0x1001ff50
 // Roblox::convert<Roblox::LuaValue8>
-// STUB: WEBSERVICE 0x100201c0
+// FUNCTION: WEBSERVICE 0x100201c0
 // Roblox::CWebService::convertToLua<Roblox::LuaValue8>
 // TEMPLATE: WEBSERVICE 0x10020560
 // Roblox::convert<Roblox::LuaValue9>
-// STUB: WEBSERVICE 0x10020800
+// FUNCTION: WEBSERVICE 0x10020800
 // Roblox::CWebService::convertToLua<Roblox::LuaValue9>
 // TEMPLATE: WEBSERVICE 0x10020b70
 // Roblox::convert<Roblox::LuaValue10>
