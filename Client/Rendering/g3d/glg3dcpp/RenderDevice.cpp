@@ -1,3 +1,4 @@
+#line 1 ".\\glg3dcpp\\RenderDevice.cpp"
 /**
  @file RenderDevice.cpp
  
