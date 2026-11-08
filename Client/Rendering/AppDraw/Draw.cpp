@@ -70,7 +70,7 @@ void Draw::constraint(const Part& part, Adorn* adorn, int face, const G3D::Color
 	}
 }
 
-// STUB: WEBSERVICE 0x101ec940
+// FUNCTION: WEBSERVICE 0x101ec940
 // STUB: ROBLOX 0x006704c0
 void Draw::selectionBox(const Part& part, Adorn* adorn, const G3D::Color4& selectColor)
 {
@@ -82,8 +82,8 @@ void Draw::selectionBox(const Part& part, Adorn* adorn, const G3D::Color4& selec
 		int c2 = (axis + 1) % 3;
 		int c3 = (axis + 2) % 3;
 
-		for (int d2 = -1; d2 <= 1; d2 += 2) {
-			for (int d3 = -1; d3 <= 1; d3 += 2) {
+		for (int d2 = -1; d2 < 2; d2 += 2) {
+			for (int d3 = -1; d3 < 2; d3 += 2) {
 				G3D::Vector3 p0;
 				G3D::Vector3 p1;
 
