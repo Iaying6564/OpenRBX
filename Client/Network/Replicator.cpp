@@ -1532,7 +1532,9 @@ inline void Replicator::ChangePropertyItem::write(RakNet::BitStream& bitStream)
 
 		replicator.serializeId(bitStream, instance.get());
 
-		replicator.propNames.send(bitStream, name.toString());
+		SharedStringDictionary& names = replicator.propNames;
+
+		names.send(bitStream, name.toString());
 
 		if (NetworkSettings::singleton().printProperties) {
 			StandardOut::singleton()->print(
@@ -1593,7 +1595,9 @@ void Replicator::readProperties(RakNet::BitStream& inBitstream, Instance* instan
 		Reflection::Property property = *iter;
 
 		if (property.getDescriptor().canStreamWrite()) {
-			if (typeid(bool) == property.getDescriptor().type.type) {
+			const Reflection::Type& type = property.getDescriptor().type;
+
+			if (typeid(bool) == type.type) {
 				deserializeValue(inBitstream, property);
 			}
 			else {
@@ -1761,7 +1765,9 @@ void Replicator::writeProperties(Instance* instance, RakNet::BitStream& outBitst
 		const Reflection::PropertyDescriptor& descriptor = property.getDescriptor();
 
 		if (descriptor.canStreamWrite()) {
-			if (typeid(bool) == descriptor.type.type) {
+			const Reflection::Type& type = descriptor.type;
+
+			if (typeid(bool) == type.type) {
 				serializeValue(property, false, outBitstream);
 				if (NetworkSettings::singleton().printInstances && NetworkSettings::singleton().printProperties) {
 					StandardOut::singleton()->print(
