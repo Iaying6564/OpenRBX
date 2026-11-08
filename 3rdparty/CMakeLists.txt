@@ -153,7 +153,18 @@ set(OPENRBX_GRAPHICS3D_SOURCES
 # grayscale_convert, null_convert, start_pass_main and start_iMCU_row each paired
 # with the wrong copy. Objects the original left with no .text at all have no
 # order to recover and follow in filename order.
-file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" "${G3D}/zlib/*.c")
+file(GLOB OPENRBX_ZLIB_SOURCES "${G3D}/zlib/*.c")
+file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" ${OPENRBX_ZLIB_SOURCES})
+
+# The original built zlib as its own project, in ..\..\temp\zlib\Release, and not
+# inside glg3d, so its ten objects carry /O2's own /Ob2 and not the /Ob1 glg3d
+# asks for. inflate is the only place that shows: at /Ob1 the small helpers stay
+# out of line and the body scores 0.51 against the original, at /Ob2 it scores
+# 0.97. Every other zlib object is byte-identical either way, so the override is
+# scoped to the sources rather than to the target.
+if (MSVC)
+  set_source_files_properties(${OPENRBX_ZLIB_SOURCES} PROPERTIES COMPILE_OPTIONS "/Ob2")
+endif()
 
 add_library(graphics3d OBJECT ${OPENRBX_GRAPHICS3D_SOURCES})
 add_library(glg3d STATIC ${OPENRBX_GLG3D_SOURCES})
