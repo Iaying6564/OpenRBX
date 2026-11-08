@@ -121,14 +121,14 @@ public:
 			return;
 		}
 
-		RunState oldState = runState;
+		RunTransition transition(runState, state);
 
 		runState = state;
 		Notifier<RunService, RunState>::raise(state);
-		Notifier<RunService, RunTransition>::raise(RunTransition(oldState, state));
+		Notifier<RunService, RunTransition>::raise(transition);
 	}
 
-	// STUB: WEBSERVICE 0x100550f0
+	// FUNCTION: WEBSERVICE 0x100550f0
 	void run()
 	{
 		if (!runDisabled && (isEditState() || isPauseState())) {
@@ -136,7 +136,7 @@ public:
 		}
 	}
 
-	// STUB: WEBSERVICE 0x10055140
+	// FUNCTION: WEBSERVICE 0x10055140
 	void pause()
 	{
 		if (isRunState()) {
@@ -144,7 +144,7 @@ public:
 		}
 	}
 
-	// STUB: WEBSERVICE 0x10055180
+	// FUNCTION: WEBSERVICE 0x10055180
 	void reset() { setRunState(RS_NORMAL); }
 
 	void endRunThread(bool join);
