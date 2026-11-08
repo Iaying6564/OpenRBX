@@ -328,6 +328,11 @@ address,type,name,module
 0x102576c0,global,fuzzyEpsilon,Win32Window.obj
 0x10257828,global,fuzzyEpsilon,glenumtostring.obj
 0x10258e80,global,fuzzyEpsilon,DDSTexture.obj
+0x10258f50,global,extra_lbits,trees.obj
+0x10258fd8,global,extra_dbits,trees.obj
+0x10259050,global,extra_blbits,trees.obj
+0x102590a0,global,static_ltree,trees.obj
+0x10259520,global,static_dtree,trees.obj
 0x10259a60,global,lbase,inftrees.obj
 0x10259aa0,global,lext,inftrees.obj
 0x10259ae0,global,dbase,inftrees.obj
@@ -353,9 +358,14 @@ address,type,name,module
 0x1025a198,global,fuzzyEpsilon,Chunk.obj
 0x1025a1c8,global,fuzzyEpsilon,Clusterer.obj
 0x1025a1d0,global,fuzzyEpsilon,ToneMap.obj
+0x10261824,global,_entries,WebService.obj
+0x10261878,global,_entries,WebService.obj
 0x10262390,global,s_chBase64EncodingTable,
 0x10262404,global,s_chHexChars,
 0x10262440,global,s_Errors,
+0x10262444,global,s_Errors,WebService.obj
+0x10262840,global,_entries,WebService.obj
+0x102632b8,global,methods,WebService.obj
 0x102c7000,global,_bad_alloc_Message,AdornG3D.obj
 0x102c707c,global,_bad_alloc_Message,DrawPrimitives.obj
 0x102c709c,global,_bad_alloc_Message,Fonts.obj
@@ -704,6 +714,9 @@ address,type,name,module
 0x102f0870,global,_bad_alloc_Message,Win32Window.obj
 0x102f1b38,global,_bad_alloc_Message,glenumtostring.obj
 0x102f1b3c,global,_bad_alloc_Message,DDSTexture.obj
+0x102f1b40,global,static_l_desc,trees.obj
+0x102f1b54,global,static_d_desc,trees.obj
+0x102f1b68,global,static_bl_desc,trees.obj
 0x102f1b80,global,_bad_alloc_Message,newaop_s.obj
 0x102f1b84,global,_bad_alloc_Message,nothrow.obj
 0x102f1bd0,global,_bad_alloc_Message,newaopnt.obj
