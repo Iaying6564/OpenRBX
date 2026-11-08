@@ -30,8 +30,8 @@ DepthBlur* EffectSettings::getDepthBlur()
 	return depthBlur.get();
 }
 
-// STUB: WEBSERVICE 0x101f8bc0
-// STUB: ROBLOX 0x004a40f0
+// FUNCTION: WEBSERVICE 0x101f8bc0
+// FUNCTION: ROBLOX 0x004a40f0
 G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 	float shadingDetail,
 	float meshDetail,
@@ -113,9 +113,13 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 	_useAllLightsInUnshadowedPass = _stencilShadows == false;
 
 	for (int i = 0; i < lighting->lightArray.size(); i++) {
+		G3D::GLight& light = lighting->lightArray[i];
+		light.enabled = light.enabled;
 	}
 
 	for (int i = 0; i < lighting->shadowedLightArray.size(); i++) {
+		G3D::GLight& light = lighting->shadowedLightArray[i];
+		light.enabled = light.enabled;
 	}
 
 	if (_toneMap) {
