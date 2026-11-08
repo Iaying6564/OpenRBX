@@ -11,8 +11,12 @@ namespace RBX {
 
 // FUNCTION: WEBSERVICE 0x1011cfc0
 // FUNCTION: ROBLOX 0x006550a0
-GeoPair::GeoPair() : body0(NULL), body1(NULL), offset0(NULL), offset1(NULL)
+GeoPair::GeoPair()
 {
+	body0 = NULL;
+	body1 = NULL;
+	offset0 = NULL;
+	offset1 = NULL;
 }
 
 // FUNCTION: WEBSERVICE 0x1011cfe0
@@ -54,9 +58,8 @@ void GeoPair::computeBallBall(PairParams& _params)
 void GeoPair::computeBallPoint(PairParams& _params)
 {
 	const Vector3& pos0 = body0->getPos();
-	const CoordinateFrame& coord1 = body1->getCoordinateFrame();
 
-	_params.position = coord1.pointToWorldSpace(*offset1);
+	_params.position = body1->getCoordinateFrame().pointToWorldSpace(*offset1);
 	_params.normal = _params.position - pos0;
 	_params.length = _params.normal.unitize() - pairData.radius0;
 }
