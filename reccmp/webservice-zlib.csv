@@ -2,6 +2,7 @@ address,type,symbol,name
 0x101d3300,library,,putShortMSB
 0x101d3330,library,,flush_pending
 0x101d3b50,library,_deflateEnd@4,
+0x101d3c30,library,,lm_init
 0x101d4d00,library,_inflateReset@4,
 0x101d4e40,library,_inflateInit_@12,
 0x101d6530,library,_inflateEnd@4,
