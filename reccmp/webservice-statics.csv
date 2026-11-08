@@ -311,6 +311,8 @@ address,type,name,module
 0x10252b38,global,fuzzyEpsilon,Texture.obj
 0x10252d70,global,fuzzyEpsilon,GFont.obj
 0x10252d98,global,fuzzyEpsilon,LightingParameters.obj
+0x10252e68,global,crc_table,crc32.obj
+0x10254ea0,global,configuration_table,deflate.obj
 0x10254f20,global,lenfix,inflate.obj
 0x10255720,global,distfix,inflate.obj
 0x102557a0,global,order,inflate.obj
@@ -329,10 +331,13 @@ address,type,name,module
 0x10257828,global,fuzzyEpsilon,glenumtostring.obj
 0x10258e80,global,fuzzyEpsilon,DDSTexture.obj
 0x10258f50,global,extra_lbits,trees.obj
+0x10258fc4,global,bl_order,trees.obj
 0x10258fd8,global,extra_dbits,trees.obj
 0x10259050,global,extra_blbits,trees.obj
 0x102590a0,global,static_ltree,trees.obj
 0x10259520,global,static_dtree,trees.obj
+0x10259798,global,_length_code,trees.obj
+0x10259898,global,base_length,trees.obj
 0x10259a60,global,lbase,inftrees.obj
 0x10259aa0,global,lext,inftrees.obj
 0x10259ae0,global,dbase,inftrees.obj
