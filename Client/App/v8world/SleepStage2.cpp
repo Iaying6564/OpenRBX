@@ -308,8 +308,8 @@ void SleepStage::changeAssemblyState(Assembly* a, Sim::AssemblyState newState)
 	a->getSleepInfo()->state = newState;
 }
 
-// STUB: WEBSERVICE 0x10119970
-// STUB: ROBLOX 0x00643460
+// FUNCTION: WEBSERVICE 0x10119970
+// FUNCTION: ROBLOX 0x00643460
 void SleepStage::onAssemblyRemoving(Assembly* assembly)
 {
 	if (getState(assembly) != Sim::SLEEPING_DEEPLY) {
@@ -317,7 +317,12 @@ void SleepStage::onAssemblyRemoving(Assembly* assembly)
 		// rather than calling it, so the body is spelled out with newState folded to
 		// the constant. Statement order mirrors changeAssemblyState's above; both
 		// alternatives measure worse (348 bytes for newSet hoisted above oldSet, or
-		// computed after the erase, against 352 here and the original's 360).
+		// computed after the erase).
+		// The expansion keeps changeAssemblyState's `a' alias for every statement but
+		// the downstream test, which the original writes through `assembly'. That one
+		// difference decides the callee-saved assignment: spelled through `a' the body
+		// comes out at 352 bytes and 85 masked diffs, through `assembly' everywhere at
+		// 356 and 198.
 		Assembly* a = assembly;
 		Sim::AssemblyState newState = Sim::SLEEPING_DEEPLY;
 
@@ -331,7 +336,7 @@ void SleepStage::onAssemblyRemoving(Assembly* assembly)
 
 		a->getAssemblyPrimitive()->getBody()->setVelocity(Velocity::zero());
 
-		if (a->downstreamOfStage(this)) {
+		if (assembly->downstreamOfStage(this)) {
 			static_cast<SimJobStage*>(getDownstream())->onAssemblyRemoving(a);
 		}
 
