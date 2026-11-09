@@ -1,8 +1,16 @@
 address,type,symbol,name
+
+
 0x101d3300,library,,putShortMSB
 0x101d3330,library,,flush_pending
 0x101d3b50,library,_deflateEnd@4,
 0x101d3c30,library,,lm_init
+0x101d3cc0,library,,longest_match
+0x101d3e40,library,,longest_match_fast
+0x101d3f10,library,,fill_window
+0x101d4060,library,,deflate_stored
+0x101d4240,library,,deflate_fast
+0x101d45b0,library,,deflate_slow
 0x101d4d00,library,_inflateReset@4,
 0x101d4e40,library,_inflateInit_@12,
 0x101d6530,library,_inflateEnd@4,
