@@ -116,8 +116,8 @@ void Running::onComputeForce(const float dt)
 	}
 }
 
-// STUB: WEBSERVICE 0x10106a80
-// STUB: ROBLOX 0x00641100
+// FUNCTION: WEBSERVICE 0x10106a80
+// FUNCTION: ROBLOX 0x00641100
 bool Running::isFacingLadder(bool buffered)
 {
 	Body* body = humanoid->getTorsoBody();
@@ -146,7 +146,10 @@ bool Running::isFacingLadder(bool buffered)
 		Ray rayInPart;
 		float height = i / 7.0f;
 		rayInPart.origin = Vector3(0.0f, height - 3.0f, 0.0f);
-		rayInPart.direction = cf.lookVector() * 2.0f;
+		G3D::Vector3 dir = cf.lookVector() * 2.0f;
+		rayInPart.direction.x = dir.x;
+		rayInPart.direction.y = dir.y;
+		rayInPart.direction.z = dir.z;
 
 		Ray caster;
 		caster.origin = cf.translation + rayInPart.origin;
