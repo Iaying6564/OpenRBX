@@ -261,3 +261,4 @@ address,size,symbol,name
 0x10224d10,,,`dynamic atexit destructor for 'RBX::Decal::prop_Shiny''
 0x10224d30,,,`dynamic atexit destructor for 'RBX::Decal::prop_Specular''
 0x10225590,,,`dynamic atexit destructor for 'RBX::FaceInstance::prop_Face''
+0x102632b4,2,,
