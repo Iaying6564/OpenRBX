@@ -342,8 +342,8 @@ bool XmlNameValuePair::getValue(double& value) const
 	return false;
 }
 
-// STUB: WEBSERVICE 0x1008f510
-// STUB: ROBLOX 0x00595b20
+// FUNCTION: WEBSERVICE 0x1008f510
+// FUNCTION: ROBLOX 0x00595b20
 bool XmlNameValuePair::getValue(RBX::InstanceHandle& value) const
 {
 	XmlNameValuePair* self = const_cast<XmlNameValuePair*>(this);
@@ -360,11 +360,15 @@ bool XmlNameValuePair::getValue(RBX::InstanceHandle& value) const
 		self->handleValue = new RBX::InstanceHandle(NULL);
 		self->valueType = HANDLE;
 	}
-	else if (valueType == STRING && *stringValue == "") {
-		self->clearValue();
+	else if (valueType == STRING) {
+		const std::string& text = *stringValue;
 
-		self->handleValue = new RBX::InstanceHandle(NULL);
-		self->valueType = HANDLE;
+		if (text == "") {
+			self->clearValue();
+
+			self->handleValue = new RBX::InstanceHandle(NULL);
+			self->valueType = HANDLE;
+		}
 	}
 
 	if (valueType == HANDLE) {
