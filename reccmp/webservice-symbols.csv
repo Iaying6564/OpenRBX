@@ -120,6 +120,7 @@ address,size,symbol,name
 0x10165fc0,0x52,?detailLevel@Mesh@Render@RBX@@QBE?BV?$ReferenceCountedPointer@VLevel@Mesh@Render@RBX@@@G3D@@M@Z,
 0x10166980,0x338,?computeAABounds@Mesh@Render@RBX@@CAXABV?$vector@V?$ReferenceCountedPointer@VChunk@Render@RBX@@@G3D@@V?$allocator@V?$ReferenceCountedPointer@VChunk@Render@RBX@@@G3D@@@std@@@std@@AAVVector3@G3D@@1@Z,
 0x101676c0,0x48b,?computeDirectionalShadowVolume@Mesh@Render@RBX@@QBEXABVCoordinateFrame@G3D@@ABVVector3@5@AAV?$Array@I@5@AAV?$Array@VVector3@G3D@@@5@_N@Z,
+0x10167b50,89,??0Level@Mesh@Render@RBX@@QAE@W4Primitive@RenderDevice@G3D@@@Z,RBX::Render::Mesh::Level::Level
 0x10167d70,0xab0,?aggregate@Mesh@Render@RBX@@SA?AV?$ReferenceCountedPointer@VMesh@Render@RBX@@@G3D@@ABV?$vector@V?$ReferenceCountedPointer@VChunk@Render@RBX@@@G3D@@V?$allocator@V?$ReferenceCountedPointer@VChunk@Render@RBX@@@G3D@@@std@@@std@@AAVCoordinateFrame@5@AAM@Z,
 0x10168ea0,0x13e,?shadePixel@TextureProxy@Render@RBX@@SAXABVColor3uint8@G3D@@AAV45@@Z,
 0x10169100,0xd0,?shade@TextureProxy@Render@RBX@@QAE?AV?$ReferenceCountedPointer@VTextureProxy@Render@RBX@@@G3D@@ABVColor3@5@ABV45@@Z,
