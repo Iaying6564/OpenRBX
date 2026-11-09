@@ -1141,3 +1141,7 @@ address,type,name,module
 0x10300f88,global,tss_data_once,tss.obj.obj
 0x10300fa0,global,threadmon_mutex,tss_hooks.obj.obj
 0x1024cc04,global,png_digit,pngerror.obj
+0x10252da8,global,solarYear,LightingParameters.obj
+0x10252db0,global,halfSolarYear,LightingParameters.obj
+0x10252db8,global,moonPhaseInterval,LightingParameters.obj
+0x10252dc8,global,initialMoonPhase,LightingParameters.obj
