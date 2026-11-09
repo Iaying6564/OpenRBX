@@ -814,6 +814,8 @@ void RenderDevice::resetState() {
         glDisable(GL_LIGHTING);
 
         glDrawBuffer(GL_BACK);
+        // Clear the OpenGL error flag
+        glGetError();
 
         for (int i = 0; i < MAX_LIGHTS; ++i) {
             setLight(i, NULL, true);
