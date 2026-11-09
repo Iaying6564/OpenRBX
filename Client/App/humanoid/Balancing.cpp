@@ -93,8 +93,8 @@ void Balancing::onComputeForce(const float dt)
 	}
 }
 
-// STUB: WEBSERVICE 0x10122520
-// STUB: ROBLOX 0x006636a0
+// FUNCTION: WEBSERVICE 0x10122520
+// FUNCTION: ROBLOX 0x006636a0
 PartInstance* Balancing::findFloor(bool existingFloor)
 {
 	if (humanoid->getTorsoBody()) {
@@ -121,8 +121,7 @@ PartInstance* Balancing::findFloor(bool existingFloor)
 
 		for (int x = -1; x <= 1; x += 2) {
 			for (int z = -1; z <= 1; z += 2) {
-				offset.x = x * halfSize.x;
-				offset.z = z * halfSize.z;
+				offset = G3D::Vector3(x * halfSize.x, -halfSize.y, z * halfSize.z);
 				pointOnTorso = torsoCoord.pointToWorldSpace(offset);
 				tryRay = G3D::Ray::fromOriginAndDirection(pointOnTorso, -G3D::Vector3::unitY());
 
