@@ -326,7 +326,7 @@ void Workspace::handleFallenParts(const G3D::Array<boost::shared_ptr<PartInstanc
 	}
 }
 
-// STUB: WEBSERVICE 0x1006c9e0
+// FUNCTION: WEBSERVICE 0x1006c9e0
 // STUB: ROBLOX 0x005b5fa0
 void Workspace::setMouseCommand(MouseCommand* newMouseCommand)
 {

@@ -72,7 +72,7 @@ DECOMP_SIZE_ASSERT(ArrowToolBase, 0x24)
 class ArrowTool : public Named<ArrowToolBase, sArrowTool>
 {
 public:
-	ArrowTool(Workspace* workspace) : Named<ArrowToolBase, sArrowTool>(workspace) {}
+	__forceinline ArrowTool(Workspace* workspace) : Named<ArrowToolBase, sArrowTool>(workspace) {}
 
 	// FUNCTION: WEBSERVICE 0x1006a710
 	// FUNCTION: ROBLOX 0x005b4930
