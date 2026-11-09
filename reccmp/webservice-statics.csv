@@ -1140,3 +1140,4 @@ address,type,name,module
 0x10300fbc,global,attached_thread_count,tss_hooks.obj.obj
 0x10300f88,global,tss_data_once,tss.obj.obj
 0x10300fa0,global,threadmon_mutex,tss_hooks.obj.obj
+0x1024cc04,global,png_digit,pngerror.obj

@@ -23,3 +23,5 @@ address,type,symbol,name
 0x101e5260,library,_zcalloc,
 0x101e5280,library,_inflate_fast,
 0x101d4d70,library,_inflateInit2_@16,
+0x101d3040,library,,crc32_little
+0x101e4380,library,,compress_block
