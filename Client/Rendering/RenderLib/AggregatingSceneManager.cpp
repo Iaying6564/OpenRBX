@@ -274,7 +274,8 @@ void AggregatingSceneManager::Bucket::optimize(AggregatingSceneManager& sceneMan
 		return;
 	}
 
-	Clusterer clusterer(std::max(1U, queue.size() / aggregationSize));
+	unsigned int clusterCount = std::max(1U, queue.size() / aggregationSize);
+	Clusterer clusterer(clusterCount);
 
 	clusterer.addSamples(queue.begin(), queue.end());
 	queue.clear();

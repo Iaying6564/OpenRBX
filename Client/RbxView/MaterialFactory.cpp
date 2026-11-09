@@ -44,7 +44,8 @@ G3D::ReferenceCountedPointer<G3D::Texture> MegaTextureProxy::resolve(G3D::Render
 		unsigned int maxColors = std::min(numStrips, BrickColor::colorPalette().size());
 
 		G3D::GImage image(filename, G3D::GImage::AUTODETECT);
-		G3D::GImage strip(image.width * numStrips, image.height, 3);
+		unsigned int stripWidth = image.width * numStrips;
+		G3D::GImage strip(stripWidth, image.height, 3);
 
 		for (unsigned int i = 0; i < maxColors; ++i) {
 			G3D::Color3uint8 tint = BrickColor::colorPalette()[i].color3();
