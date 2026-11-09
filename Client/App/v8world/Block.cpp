@@ -79,15 +79,15 @@ Matrix3 Block::getMomentHollow(float mass) const
 	float area = 2.0f * ((y + x) * z + y * x);
 
 	Vector3 I(
-		mass / (2 * area) *
-			(z * z * y * x + z * y * y * y / 3 + z * z * z * x / 3 + z * y * y * x + y * y * y * x / 3 +
-			 z * z * z * y / 3),
-		mass / (2 * area) *
-			(x * x * x * y / 3 + z * z * x * z / 3 + x * x * z * y + z * z * x * y + x * x * x * z / 3 +
-			 z * z * z * y / 3),
-		mass / (2 * area) *
-			(y * y * y * z / 3 + y * x * x * z + y * x * x * x / 3 + y * y * z * x + x * x * x * z / 3 +
-			 y * y * y * x / 3)
+		mass / (2.0f * area) * ((z * z) * y * x + (z * y * y) * y / 3 +
+				(z * z * z) * x / 3 + (z * y * y) * x + (y * y * y) * x / 3 +
+				(z * z * z) * y / 3),
+		mass / (2.0f * area) * ((z * z * x) * y +
+				((x * x * z) * y + (z * z * x) * z / 3 + (x * x * x) * y / 3) +
+				(x * x * x) * z / 3 + (z * z * z) * y / 3),
+		mass / (2.0f * area) * ((y * y * z) * x + ((y * x) * x) * x / 3 +
+				((y * x) * x) * z + (y * y * y) * z / 3 + (x * x * x) * z / 3 +
+				(y * y * y) * x / 3)
 	);
 
 	return Math::fromDiagonal(I);
