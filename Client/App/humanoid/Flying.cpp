@@ -11,7 +11,7 @@ const char sFlying[] = "Flying";
 
 const float Flying::turnSpeed = 6.0f;
 const float Flying::kTurnP = 7500.0f;
-const float Flying::kTurnAccelMax = 120000.0f;
+const float Flying::kTurnAccelMax = kTurnP * 16.0f; // 120000.0f; literal folds
 
 // FUNCTION: WEBSERVICE 0x1012a200
 // FUNCTION: ROBLOX 0x00669c10
