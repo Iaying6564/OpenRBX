@@ -28,7 +28,7 @@ const float Running::kAltitudeP = 10000.0f;
 const float Running::kAltitudeD = 1250.0f;
 const G3D::Vector3 Running::maxMoveAccelerationGrid(1000.0f, 10000.0f, 200.0f);
 
-// STUB: WEBSERVICE 0x10106260
+// FUNCTION: WEBSERVICE 0x10106260
 // STUB: ROBLOX 0x006408d0
 void Running::onComputeForce(const float dt)
 {
@@ -93,9 +93,10 @@ void Running::onComputeForce(const float dt)
 		desiredVelocity.y > 0.0f ? (desiredVelocity.y - currentVelocity.linear.y) * kAltitudeD : currentAccel.y;
 	float accelZ = (desiredVelocityInWorldZ - currentVelocity.linear.z) * kAltitudeD;
 
-	G3D::Vector3 deltaAccel =
-		(G3D::Vector3(accelX, accelY, accelZ) - currentAccel)
-			.clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z), maxMoveAccelerationGrid);
+	G3D::Vector3 desiredAccel(accelX, accelY, accelZ);
+	G3D::Vector3 deltaAccel = (desiredAccel - currentAccel)
+								  .clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z),
+										 maxMoveAccelerationGrid);
 
 	G3D::Vector3 deltaForce = deltaAccel * mass;
 
@@ -212,7 +213,7 @@ void Running::render3dAdorn(Adorn* adorn)
 {
 }
 
-// STUB: WEBSERVICE 0x10106f80
+// FUNCTION: WEBSERVICE 0x10106f80
 // STUB: ROBLOX 0x00641600
 void Running::updateGoals(Controller& controller)
 {
@@ -227,10 +228,12 @@ void Running::updateGoals(Controller& controller)
 
 		if (isFacingLadder(true)) {
 			climbing = true;
-			float speed = desiredVelocity.magnitude();
-			desiredVelocity.x *= 0.7f;
-			desiredVelocity.y = speed * 0.7f;
-			desiredVelocity.z *= 0.7f;
+			float climbSpeed = desiredVelocity.magnitude() * 0.7f;
+			float scaledX = desiredVelocity.x * 0.7f;
+			float scaledZ = desiredVelocity.z * 0.7f;
+			desiredVelocity.x = scaledX;
+			desiredVelocity.y = climbSpeed;
+			desiredVelocity.z = scaledZ;
 		}
 	}
 
