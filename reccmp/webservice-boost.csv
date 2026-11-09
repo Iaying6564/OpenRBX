@@ -1560,7 +1560,7 @@ address,size,type,symbol,name
 0x101ea900,,library,?reset@connection@signals@boost@@AAEXPAUbasic_connection@detail@23@@Z,
 0x101ebb90,,library,?insert@named_slot_map@detail@signals@boost@@QAE?AVnamed_slot_map_iterator@234@ABVstored_group@234@ABVconnection@34@ABVany@4@W4connect_position@34@@Z,
 0x101ebe60,,library,?remove_disconnected_slots@named_slot_map@detail@signals@boost@@QAEXXZ,
-0x101e64c0,,library,?_Xlen@?$vector@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@V?$allocator@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@@std@@@std@@KAXXZ,
+0x101e64c0,,library,?_Xlen@?$vector@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@V?$allocator@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@@std@@@std@@KAXXZ,"std::vector<void *,std::allocator<void *> >::_Xlen"
 0x101e6e50,,library,?insert@?$vector@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@V?$allocator@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@@std@@@std@@QAE?AV?$_Vector_iterator@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@V?$allocator@PAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@@std@@@2@V32@ABQAV?$function1@XPAXV?$allocator@Vfunction_base@boost@@@std@@@boost@@@Z,
 0x101e91f0,,library,??1connection_slot_pair@detail@signals@boost@@QAE@XZ,
 0x101e9420,,library,?clear@?$list@Uconnection_slot_pair@detail@signals@boost@@V?$allocator@Uconnection_slot_pair@detail@signals@boost@@@std@@@std@@QAEXXZ,
