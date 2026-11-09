@@ -11,8 +11,8 @@ namespace RBX {
 
 char sToolMouseCommand[] = "ToolMouseCommand";
 
-// STUB: WEBSERVICE 0x101171e0
-// STUB: ROBLOX 0x00656970
+// FUNCTION: WEBSERVICE 0x101171e0
+// FUNCTION: ROBLOX 0x00656970
 void ToolMouseCommand::updateTargetPoint(const UIEvent& uiEvent)
 {
 	G3D::Vector3 hitWorld(0, 0, 0);
@@ -21,7 +21,9 @@ void ToolMouseCommand::updateTargetPoint(const UIEvent& uiEvent)
 		if (!getPartByLocalCharacter(uiEvent, hitWorld)) {
 			G3D::Ray ray = getSearchRay(uiEvent);
 			hitWorld = humanoid->getHead() ? humanoid->getHead()->getCoordinateFrame().translation : ray.origin;
-			hitWorld += ray.direction;
+			hitWorld.x = hitWorld.x + ray.direction.x;
+			hitWorld.y = hitWorld.y + ray.direction.y;
+			hitWorld.z = hitWorld.z + ray.direction.z;
 		}
 
 		humanoid->setTargetPoint(hitWorld);

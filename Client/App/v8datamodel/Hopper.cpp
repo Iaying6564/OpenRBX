@@ -62,8 +62,8 @@ Hopper::Hopper()
 	yLocation = Rect::BOTTOM;
 }
 
-// STUB: WEBSERVICE 0x100c7b90
-// STUB: ROBLOX 0x005e1da0
+// FUNCTION: WEBSERVICE 0x100c7b90
+// FUNCTION: ROBLOX 0x005e1da0
 void StarterPackService::render2d(Adorn* adorn)
 {
 	Hopper::render2d(adorn);
@@ -74,7 +74,9 @@ void StarterPackService::render2d(Adorn* adorn)
 		int fontSize = GuiRoot::normalizedFontSize(12);
 		G3D::Vector2 pos2d = viewPort.x0y1() + G3D::Vector2(4, -4);
 
-		adorn->drawFont2D(
+		Adorn& target = *adorn;
+
+		target.drawFont2D(
 			"StarterPack - these items will be given to each new player",
 			pos2d,
 			fontSize,
