@@ -272,11 +272,18 @@ Vector2 Block::getProjectedVertex(const Vector3& vertex, NormalId normalID)
 	return answer;
 }
 
-// STUB: WEBSERVICE 0x10109630
+// FUNCTION: WEBSERVICE 0x10109630
 // STUB: ROBLOX 0x00649270
 int Block::getClosestEdge(const Matrix3& rotation, NormalId normalID, Vector3& crossAxis)
 {
-	Vector3 axisInBody = crossAxis * rotation;
+	Vector3 axisInBody(
+		crossAxis.x * rotation[0][0] +
+			(crossAxis.y * rotation[1][0] + crossAxis.z * rotation[2][0]),
+		crossAxis.x * rotation[0][1] +
+			(crossAxis.y * rotation[1][1] + crossAxis.z * rotation[2][1]),
+		crossAxis.x * rotation[0][2] +
+			(crossAxis.y * rotation[1][2] + crossAxis.z * rotation[2][2])
+	);
 
 	Vector2 projected = getProjectedVertex(axisInBody, normalID);
 
