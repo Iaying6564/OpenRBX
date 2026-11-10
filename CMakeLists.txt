@@ -122,7 +122,6 @@ set(OPENRBX_APP_SOURCES
   Client/App/v8tree/enumproperty.cpp
   Client/App/v8xml/XmlElement.cpp
   Client/App/v8xml/SerializerV2.cpp
-  Client/App/v8xml/XmlSerializer.cpp
   Client/App/util/IRenderable.cpp
   Client/App/v8tree/Instance.cpp
   Client/App/v8tree/Verb.cpp
@@ -143,6 +142,7 @@ set(OPENRBX_APP_SOURCES
   Client/App/util/NormalId.cpp
   Client/App/util/Quaternion.cpp
   Client/App/util/ContentProvider.cpp
+  Client/App/v8xml/XmlSerializer.cpp
   Client/App/util/Utilities.cpp
   Client/App/util/Profiling.cpp
   Client/App/util/Rect.cpp
