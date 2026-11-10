@@ -8354,3 +8354,4 @@ address,type,symbol
 0x10299f34,global,??_R1A@?0A@EA@CWin32Heap@ATL@@8
 0x1029a3a4,global,??_R4?$PerThreadWrapper@VCWebService@Roblox@@@ATL@@6B@
 0x102f5228,global,methods___ATL::_CSDLGenerator::GetReplacementMethodMap
+0x1002ab70,global,??_9IRequestHandler@ATL@@$BBI@AE
