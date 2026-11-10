@@ -365,8 +365,8 @@ void Accoutrement::setBackendAccoutrementState(int value)
 	}
 }
 
-// STUB: WEBSERVICE 0x100dcfe0
-// STUB: ROBLOX 0x005bc310
+// FUNCTION: WEBSERVICE 0x100dcfe0
+// FUNCTION: ROBLOX 0x005bc310
 void Accoutrement::setDesiredState(AccoutrementState desiredState, const ServiceProvider* serviceProvider)
 {
 	do {
