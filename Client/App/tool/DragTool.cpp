@@ -6,8 +6,8 @@
 
 namespace RBX {
 
-// STUB: WEBSERVICE 0x101160e0
-// STUB: ROBLOX 0x00662410
+// FUNCTION: WEBSERVICE 0x101160e0
+// FUNCTION: ROBLOX 0x00662410
 MouseCommand* DragTool::onMouseDown(
 	PartInstance* hitPart,
 	const G3D::Vector3& hitWorld,
@@ -19,15 +19,16 @@ MouseCommand* DragTool::onMouseDown(
 	std::vector<boost::weak_ptr<PartInstance> > partArray;
 	DragUtilities::instancesToParts(dragInstances, partArray);
 
-	MouseCommand* dragger;
 	if (partArray.size() == 1) {
-		dragger = new PartDragTool(hitPart, hitWorld, workspace);
+		MouseCommand* dragger = new PartDragTool(hitPart, hitWorld, workspace);
+
+		return dragger->onMouseDown(uiEvent);
 	}
 	else {
-		dragger = new GroupDragTool(hitPart, hitWorld, partArray, workspace);
-	}
+		MouseCommand* dragger = new GroupDragTool(hitPart, hitWorld, partArray, workspace);
 
-	return dragger->onMouseDown(uiEvent);
+		return dragger->onMouseDown(uiEvent);
+	}
 }
 
 } // namespace RBX
