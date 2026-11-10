@@ -491,8 +491,8 @@ inline void Tool::downFrom_HasHandle()
 	handleTouched.disconnect();
 }
 
-// STUB: WEBSERVICE 0x100cc4b0
-// STUB: ROBLOX 0x00611080
+// FUNCTION: WEBSERVICE 0x100cc4b0
+// FUNCTION: ROBLOX 0x00611080
 void Tool::setDesiredState(ToolState desiredState, const ServiceProvider* serviceProvider)
 {
 	do {
