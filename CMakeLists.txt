@@ -370,10 +370,16 @@ set(OPENRBX_APPDRAW_SOURCES
   Client/Rendering/AppDraw/AdornG3D.cpp
   Client/Rendering/AppDraw/Draw.cpp
   Client/Rendering/AppDraw/DrawAdorn.cpp
-  Client/Rendering/AppDraw/DrawPrimitives.cpp
   Client/Rendering/AppDraw/Fonts.cpp
   Client/Rendering/AppDraw/HitTest.cpp
   Client/Rendering/AppDraw/Textures.cpp
+)
+
+# DrawPrimitives.cpp alone, so its copy of the shared template instantiations
+# reaches the link before the app block's. See the note beside its
+# add_engine_library.
+set(OPENRBX_APPDRAW_HEAD_SOURCES
+  Client/Rendering/AppDraw/DrawPrimitives.cpp
 )
 
 set(OPENRBX_ENGINE_INCLUDE_DIRS
@@ -455,6 +461,18 @@ add_engine_library(lua
   DEFINITIONS _CRT_SECURE_NO_WARNINGS _RELEASE
   OPTIONS /O2 /Ob2 /Oi /Oy /GF /GS- /fp:fast /TP /EHsc
   SOURCES ${OPENRBX_LUA_SOURCES}
+)
+
+# DrawPrimitives.cpp, compiled with appdraw's own flags but linked ahead of app.
+# It instantiates Rect2D::xyxy and the Array comparator family; the linker keeps
+# the FIRST object that defines a duplicate COMDAT name, and app's Hopper.cpp
+# reaches it with a 117-byte /fp:fast body where appdraw's is the original's
+# 155-byte one. Linking appdraw first as a block is not enough, because app
+# precedes it, so this one source has to come out.
+add_engine_library(appdraw_head
+  DEFINITIONS _RELEASE
+  OPTIONS /O2 /GS-
+  SOURCES ${OPENRBX_APPDRAW_HEAD_SOURCES}
 )
 
 if (MSVC_FOR_DECOMP)
@@ -706,7 +724,7 @@ if (MSVC_FOR_DECOMP)
   )
 
   set(OPENRBX_CLIENT_ENGINE_LIBRARIES)
-  foreach(lib rbxview renderlib rbxviewnew renderlibnew network app app_client appdraw lua)
+  foreach(lib rbxview renderlib rbxviewnew renderlibnew network app app_client appdraw appdraw_head lua)
     if (TARGET ${lib})
       list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${lib})
     endif()
