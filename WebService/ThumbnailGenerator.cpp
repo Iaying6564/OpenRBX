@@ -417,7 +417,7 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 
 		double s = renderDevice.getLightSaturation();
 		if (s != 1.0) {
-			G3D::uint8 L[255];
+			G3D::uint8 L[256];
 			for (int i = 255; i >= 0; --i) {
 				L[i] = std::min(G3D::iRound(i * s), 255);
 			}

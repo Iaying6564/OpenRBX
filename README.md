@@ -37,7 +37,7 @@ cmake --build build
 
 This gives you `build\WebService.dll` and `build\Roblox.exe`. Stick with `RelWithDebInfo`, comparing your build against the original needs the debug symbols it produces.
 
-CMake finds RTM in `msvc800rtm/VC/bin`, `msvc800-rtm/VC/bin`, or the build directory's `msvc800-rtm/VC/bin`. For another local cache location, pass `-DOPENRBX_MSVC_RTM_COMPILER=C:/path/to/msvc800/VC/bin/cl.exe`. Ninja works with the same option. Current MSVC builds keep their regular compiler for every source.
+CMake finds RTM in `msvc800rtm/VC/bin`, `msvc800-rtm/VC/bin`, or the build directory's `msvc800-rtm/VC/bin`. For another local cache location, pass `-DOPENRBX_MSVC_RTM_COMPILER=C:/path/to/msvc800/VC/bin/cl.exe`. The SP1 and RTM compilers share one program database, so this build must run serially; upstream CI builds it with NMake, which is serial by default. Current MSVC builds keep their regular compiler for every source.
 
 The original zlib library carried no debug records. We keep `/Zi` for the rebuilt objects because it preserves private helper names for comparison and produces identical machine code with this compiler.
 
