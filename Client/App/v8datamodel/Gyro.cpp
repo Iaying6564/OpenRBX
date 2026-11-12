@@ -174,7 +174,8 @@ Vector3 Rocket::turn(Body* body, const Vector3& targetDir)
 		torqueBody.y += desiredTorqueY;
 	}
 
-	Vector3 angVelBody = body->getPV().position.vectorToObjectSpace(body->getPV().velocity.rotational);
+	const PV& velocityPV = body->getPV();
+	Vector3 angVelBody = body->getPV().position.vectorToObjectSpace(velocityPV.velocity.rotational);
 
 	torqueBody.x -= kTurnD * (root->getBranchIBodyV3().x * angVelBody.x);
 	torqueBody.y -= kTurnD * (root->getBranchIBodyV3().y * angVelBody.y);
@@ -217,7 +218,7 @@ void BodyGyro::computeOrientation(Body* body)
 	}
 }
 
-// STUB: WEBSERVICE 0x100eaaf0
+// FUNCTION: WEBSERVICE 0x100eaaf0
 // STUB: ROBLOX 0x00629bb0
 void BodyGyro::computeBalance(Body* body)
 {
@@ -247,7 +248,8 @@ void BodyGyro::computeBalance(Body* body)
 			torqueBody.z += desiredTorqueZ;
 		}
 
-		Vector3 angVelBody = body->getPV().position.vectorToObjectSpace(body->getPV().velocity.rotational);
+		const Vector3& angVelWorld = body->getPV().velocity.rotational;
+		Vector3 angVelBody = body->getPV().position.vectorToObjectSpace(angVelWorld);
 
 		torqueBody.x -= kD * root->getBranchIBodyV3().x * angVelBody.x;
 		torqueBody.z -= kD * root->getBranchIBodyV3().z * angVelBody.z;
@@ -258,7 +260,7 @@ void BodyGyro::computeBalance(Body* body)
 	}
 }
 
-// STUB: WEBSERVICE 0x100eaf60
+// FUNCTION: WEBSERVICE 0x100eaf60
 // STUB: ROBLOX 0x0062a020
 void BodyPosition::computeForce(float dt, bool throttling)
 {
@@ -266,7 +268,8 @@ void BodyPosition::computeForce(float dt, bool throttling)
 
 	Vector3 pAccel = (position - body->getPV().position.translation) * kP;
 
-	lastForce = body->getRoot()->getBranchMass() * (pAccel + body->getPV().velocity.linear * -kD);
+	pAccel = pAccel + body->getPV().velocity.linear * -kD;
+	lastForce = body->getRoot()->getBranchMass() * pAccel;
 
 	lastForce = lastForce.clamp(-maxForce, maxForce);
 
@@ -307,7 +310,7 @@ void BodyThrust::computeForce(float dt, bool throttling)
 	body->accumulateForce(worldForce, worldPos);
 }
 
-// STUB: WEBSERVICE 0x100ebb10
+// FUNCTION: WEBSERVICE 0x100ebb10
 // STUB: ROBLOX 0x0062abc0
 void Rocket::computeForce(float dt, bool throttling)
 {
@@ -315,12 +318,13 @@ void Rocket::computeForce(float dt, bool throttling)
 		Body* body = part->getPrimitive()->getBody();
 
 		Vector3 targetPos = target ? target->getCoordinateFrame().pointToWorldSpace(targetOffset) : targetOffset;
-		targetPos -= body->getPV().position.translation;
+		targetPos = targetPos - body->getPV().position.translation;
 
 		Body* root = body->getRoot();
 
 		Vector3 targetDir = targetPos.direction();
-		Vector3 pAccel = targetPos * kThrustP;
+		Vector3 pAccel;
+		pAccel = targetPos * kThrustP;
 
 		Vector3 force = pAccel * root->getBranchMass();
 

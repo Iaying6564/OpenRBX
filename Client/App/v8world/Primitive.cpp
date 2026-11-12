@@ -332,13 +332,11 @@ void Primitive::setSurfaceType(NormalId id, SurfaceType newSurfaceType)
 // FUNCTION: ROBLOX 0x005f6730
 Extents Primitive::computeFuzzyExtents() const
 {
-	const Matrix3& rotation = body->getCoordinateFrame().rotation;
-	const Vector3& translation = body->getCoordinateFrame().translation;
-
-	Extents extents = Extents::fromCenterCorner(translation, geometry->getCenterToCorner(rotation));
-	extents.expand(0.01f);
-
-	return extents;
+	Extents answer = Extents::fromCenterCorner(
+		getBody()->getPos(), geometry->getCenterToCorner(getBody()->getCoordinateFrame().rotation)
+	);
+	answer.expand(0.01f);
+	return answer;
 }
 
 // FUNCTION: WEBSERVICE 0x100a7f40

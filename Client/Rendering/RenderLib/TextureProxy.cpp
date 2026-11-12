@@ -19,7 +19,7 @@ void TextureProxy::shadePixel(const G3D::Color3uint8& base, G3D::Color3uint8& li
 		float color = base[i];
 
 		if (shade > 130) {
-			float a = std::min((float)(double)(float((shade - 128.0) / 128.0)), 1.0f);
+			float a = std::min((float) (double) (float((shade - 128.0) / 128.0)), 1.0f);
 			color = (1.0 - a) * color + 255.0 * a;
 		}
 		else if (shade < 126) {

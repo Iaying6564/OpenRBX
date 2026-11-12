@@ -1,8 +1,10 @@
 if (MSVC)
   set(CMAKE_CXX_FLAGS "/nologo")
   set(CMAKE_C_FLAGS "/nologo")
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/Zi")
-  set(CMAKE_C_FLAGS_RELWITHDEBINFO "/Zi")
+  # CMake supplies /Zi through MSVC_DEBUG_INFORMATION_FORMAT. Keep it out of
+  # these flags so individual targets can reproduce the original debug format.
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
   set(CMAKE_CXX_FLAGS_RELEASE "")
   set(CMAKE_C_FLAGS_RELEASE "")
 endif()
@@ -21,12 +23,6 @@ set(OPENRBX_GRAPHICS3D_SOURCES
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Log.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/debugAssert.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bmp.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_tga.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_png.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_jpeg.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_ppm.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bayer.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/System.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/BinaryOutput.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Matrix4.cpp"
@@ -198,11 +194,10 @@ file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" ${OPENRBX_ZLIB_SOURCES})
 # exactly 1.0000, no regressions, +0.3558 accuracy-units. Probe diffs for all
 # twelve candidates are in build/probe/Vendored/.
 #
-# The four files whose __LINE__ also differs are a separate cause and this
-# directive does not fix it: RenderDevice.cpp is uniformly -2, System.cpp +2 and
-# Table.h +1, so the original's copies are a commit or two from ours, while
-# GImage.cpp is a genuinely larger file (the original reaches line 2932 where
-# ours has 1000) and is not closable without substituting upstream source.
+# Source coordinates also depend on the original revisions. Table.h and the
+# monolithic GImage.cpp have been recovered from upstream CVS; GImage includes
+# the reference build's JPEG error callback. The split GImage sources are not
+# compiled alongside that monolith.
 #
 # The original built zlib as its own project, in ..\..\temp\zlib\Release, and not
 # inside glg3d, so its ten objects carry /O2's own /Ob2 and not the /Ob1 glg3d
@@ -216,6 +211,39 @@ endif()
 
 add_library(graphics3d OBJECT ${OPENRBX_GRAPHICS3D_SOURCES})
 add_library(glg3d STATIC ${OPENRBX_GLG3D_SOURCES})
+
+if (MSVC_FOR_DECOMP)
+  set(OPENRBX_MSVC_RTM_COMPILER "" CACHE FILEPATH "MSVC 8.0 RTM cl.exe used only for zlib")
+  if (NOT OPENRBX_MSVC_RTM_COMPILER)
+    find_program(_OPENRBX_MSVC_RTM_COMPILER NAMES cl.exe
+      PATHS
+        "${PROJECT_SOURCE_DIR}/msvc800rtm/VC/bin"
+        "${PROJECT_SOURCE_DIR}/msvc800-rtm/VC/bin"
+        "${PROJECT_BINARY_DIR}/msvc800-rtm/VC/bin"
+      NO_DEFAULT_PATH NO_CACHE)
+    if (_OPENRBX_MSVC_RTM_COMPILER)
+      set(OPENRBX_MSVC_RTM_COMPILER "${_OPENRBX_MSVC_RTM_COMPILER}" CACHE FILEPATH "MSVC 8.0 RTM cl.exe used only for zlib" FORCE)
+    endif()
+  endif()
+  if (NOT EXISTS "${OPENRBX_MSVC_RTM_COMPILER}")
+    message(FATAL_ERROR "Set OPENRBX_MSVC_RTM_COMPILER to MSVC 8.0 RTM VC/bin/cl.exe; see README.md")
+  endif()
+  execute_process(COMMAND "${OPENRBX_MSVC_RTM_COMPILER}"
+    OUTPUT_VARIABLE _rtm_output ERROR_VARIABLE _rtm_error)
+  if (NOT "${_rtm_output}${_rtm_error}" MATCHES "14\\.00\\.50727\\.42")
+    message(FATAL_ERROR "OPENRBX_MSVC_RTM_COMPILER must be MSVC 8.0 RTM 14.00.50727.42")
+  endif()
+
+  # The original zlib project used RTM. Keep the configured SP1 compiler for
+  # the engine and other sources.
+  # A C-only launcher preserves glg3d's archive order and leaves its C++ build
+  # untouched. The launcher also checks the source path before selecting RTM.
+  set(_rtm_launcher "${PROJECT_SOURCE_DIR}/cmake/msvc-rtm-launcher.cmake")
+  set_property(TARGET glg3d PROPERTY C_COMPILER_LAUNCHER
+    "${CMAKE_COMMAND};-DOPENRBX_MSVC_RTM_COMPILER:FILEPATH=${OPENRBX_MSVC_RTM_COMPILER};-DOPENRBX_ZLIB_SOURCE_DIR:PATH=${G3D}/zlib;-P;${_rtm_launcher};--")
+  set_property(SOURCE ${OPENRBX_ZLIB_SOURCES} APPEND PROPERTY OBJECT_DEPENDS
+    "${_rtm_launcher}" "${OPENRBX_MSVC_RTM_COMPILER}")
+endif()
 
 foreach(name graphics3d glg3d)
   target_include_directories(${name} PRIVATE
@@ -257,6 +285,11 @@ add_library(boost_thread STATIC
   "${BOOST}/libs/thread/src/xtime.cpp"
 )
 target_compile_definitions(boost_thread PRIVATE BOOST_THREAD_BUILD_LIB=1)
+if (MSVC_FOR_DECOMP)
+  # Every boost_thread object recorded in the reference PDB was built without
+  # debug information. This also preserves the original COMDAT folding.
+  set_property(TARGET boost_thread PROPERTY MSVC_DEBUG_INFORMATION_FORMAT "")
+endif()
 
 add_library(boost_date_time STATIC
   "${BOOST}/libs/date_time/src/gregorian/greg_month.cpp"

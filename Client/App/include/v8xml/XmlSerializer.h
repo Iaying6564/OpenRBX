@@ -10,6 +10,7 @@
 #include <iosfwd>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <set>
 #include <stack>
 #include <string>
@@ -64,6 +65,26 @@ public:
 protected:
 	void writeOpenTag(const XmlElement* element, int depth, const XmlAttribute* extraAttribute);
 	void writeCloseTag(const XmlElement* element, int depth);
+
+	void writeText(const std::string& text, bool encode)
+	{
+		if (encode) {
+			encodedWrite(stream, text);
+		}
+		else {
+			stream << text;
+		}
+	}
+
+	void writeText(const char* text, bool encode)
+	{
+		if (encode) {
+			encodedWrite(stream, text);
+		}
+		else {
+			stream << text;
+		}
+	}
 
 	void serialize(const XmlElement* xmlNode, int depth);
 

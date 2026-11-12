@@ -509,13 +509,6 @@ TreeStage::TreeStage(IStage* upstream, World* world)
 {
 }
 
-// FUNCTION: WEBSERVICE 0x10108040 FOLDED
-// FUNCTION: ROBLOX 0x006a0740 FOLDED
-IStage::StageType ClumpStage::getStageType()
-{
-	return CLUMP_STAGE;
-}
-
 // FUNCTION: WEBSERVICE 0x1011c200
 // FUNCTION: ROBLOX 0x00645bb0
 void TreeStage::rebuildClump(Joint* joint, Primitive* parent)

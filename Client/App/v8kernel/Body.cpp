@@ -9,19 +9,6 @@
 
 namespace RBX {
 
-// FUNCTION: WEBSERVICE 0x1009ad20
-// FUNCTION: ROBLOX 0x005ad760
-void Body::updatePV() const
-{
-	if (parent != NULL && stateIndex != root->getStateIndex()) {
-		const PV& parentPv = parent->getPV();
-
-		pv = parentPv.pvAtLocalCoord(link != NULL ? link->getChildInParent() : meInParent);
-
-		stateIndex = root->getStateIndex();
-	}
-}
-
 // FUNCTION: WEBSERVICE 0x101049f0
 // FUNCTION: ROBLOX 0x0061e950
 int Body::getNextStateIndex()
@@ -218,7 +205,8 @@ Matrix3 Body::getBranchIWorldAtPoint(const Vector3& point) const
 // FUNCTION: ROBLOX 0x0061f020
 float Body::kineticEnergy() const
 {
-	return ((getIWorld() * pv.velocity.rotational).dot(pv.velocity.rotational) +
+	const Vector3& rotational = pv.velocity.rotational;
+	return ((getIWorld() * rotational).dot(pv.velocity.rotational) +
 			pv.velocity.linear.dot(pv.velocity.linear) * mass) *
 		   0.5f;
 }

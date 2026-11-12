@@ -79,7 +79,7 @@ static bool FUN_00617200(Instance* first, Instance* second)
 		   (dynamic_cast<Hole*>(second) && dynamic_cast<MotorFeature*>(first));
 }
 
-// STUB: WEBSERVICE 0x100e3e30
+// FUNCTION: WEBSERVICE 0x100e3e30
 // STUB: ROBLOX 0x006174a0
 CoordinateFrame Feature::computeLocalCoordinateFrame() const
 {
@@ -115,8 +115,9 @@ CoordinateFrame Feature::computeLocalCoordinateFrame() const
 
 	switch (inOut) {
 	case INSET:
-		uv.x = Math::sign(uv.x) * std::max(0.0f, fabs(uv.x) - 1.0f);
-		uv.y = Math::sign(uv.y) * std::max(0.0f, fabs(uv.y) - 1.0f);
+		for (int i = 0; i < 2; ++i) {
+			uv[i] = Math::sign(uv[i]) * std::max(0.0f, fabs(uv[i]) - 1.0f);
+		}
 		break;
 	case CENTER_IO:
 		uv.x = 0.0f;

@@ -313,10 +313,9 @@ address,type,name,module
 0x10252d98,global,fuzzyEpsilon,LightingParameters.obj
 0x10252e68,global,crc_table,crc32.obj
 0x10254ea0,global,configuration_table,deflate.obj
-0x10254f20,global,lenfix,inflate.obj
-0x10255720,global,distfix,inflate.obj
 0x102557a0,global,order,inflate.obj
 0x10255988,global,fuzzyEpsilon,Sky.obj
+0x10255af0,global,hack,Sky.obj
 0x10255b08,global,fuzzyEpsilon,VAR.obj
 0x10255bd8,global,fuzzyEpsilon,VARArea.obj
 0x10255c18,global,fuzzyEpsilon,TextureFormat.obj
@@ -338,6 +337,7 @@ address,type,name,module
 0x10259520,global,static_dtree,trees.obj
 0x10259798,global,_length_code,trees.obj
 0x10259898,global,base_length,trees.obj
+0x10259910,global,base_dist,trees.obj
 0x10259a60,global,lbase,inftrees.obj
 0x10259aa0,global,lext,inftrees.obj
 0x10259ae0,global,dbase,inftrees.obj
@@ -363,14 +363,9 @@ address,type,name,module
 0x1025a198,global,fuzzyEpsilon,Chunk.obj
 0x1025a1c8,global,fuzzyEpsilon,Clusterer.obj
 0x1025a1d0,global,fuzzyEpsilon,ToneMap.obj
-0x10261824,global,_entries,WebService.obj
 0x10261878,global,_entries,WebService.obj
 0x10262390,global,s_chBase64EncodingTable,
 0x10262404,global,s_chHexChars,
-0x10262440,global,s_Errors,
-0x10262444,global,s_Errors,WebService.obj
-0x10262840,global,_entries,WebService.obj
-0x102632b8,global,methods,WebService.obj
 0x102c7000,global,_bad_alloc_Message,AdornG3D.obj
 0x102c707c,global,_bad_alloc_Message,DrawPrimitives.obj
 0x102c709c,global,_bad_alloc_Message,Fonts.obj
@@ -920,7 +915,6 @@ address,type,name,module
 0x102fa980,global,prop_AttachmentRight,
 0x102fa99c,global,prop_AttachmentPoint,
 0x102fa9b8,global,prop_AttachmentForward,
-0x102faa70,global,step,
 0x102faa78,global,y90,
 0x102faaf0,global,z_neg,
 0x102fab14,global,y_neg,
@@ -1131,15 +1125,15 @@ address,type,name,module
 0x10239488,global,co_funcs,lbaselib.obj
 0x10239800,global,iolib,liolib.obj
 0x10239860,global,flib,liolib.obj
-0x10300f8c,global,tss_data_mutex,tss.obj.obj
-0x10300f90,global,tss_data_cleanup_handlers,tss.obj.obj
-0x10300f94,global,tss_data_use,tss.obj.obj
-0x102f1b98,global,tss_data_native_key,tss.obj.obj
-0x10300fb8,global,once_init_threadmon_mutex,tss_hooks.obj.obj
-0x102f1bac,global,tls_key,tss_hooks.obj.obj
-0x10300fbc,global,attached_thread_count,tss_hooks.obj.obj
-0x10300f88,global,tss_data_once,tss.obj.obj
-0x10300fa0,global,threadmon_mutex,tss_hooks.obj.obj
+0x10300f8c,global,class boost::mutex *`anonymous namespace'::tss_data_mutex,
+0x10300f90,global,"class std::vector<class boost::function1<void, void *, class std::allocator<class boost::function_base>> *, class std::allocator<class boost::function1<void, void *, class std::allocator<class boost::function_base>> *>> *`anonymous namespace'::tss_data_cleanup_handlers",
+0x10300f94,global,int `anonymous namespace'::tss_data_use,
+0x102f1b98,global,unsigned long `anonymous namespace'::tss_data_native_key,
+0x10300fb8,global,long `anonymous namespace'::once_init_threadmon_mutex,
+0x102f1bac,global,unsigned long `anonymous namespace'::tls_key,
+0x10300fbc,global,unsigned long `anonymous namespace'::attached_thread_count,
+0x10300f88,global,long `anonymous namespace'::tss_data_once,
+0x10300fa0,global,struct _RTL_CRITICAL_SECTION `anonymous namespace'::threadmon_mutex,
 0x1024cc04,global,png_digit,pngerror.obj
 0x10252da8,global,solarYear,LightingParameters.obj
 0x10252db0,global,halfSolarYear,LightingParameters.obj

@@ -130,7 +130,7 @@ void Bridge<T, Tag>::registerClass(lua_State* L)
 // clang-format on
 template <class T, int Tag>
 template <class U>
-U* Bridge<T, Tag>::pushNewObject(lua_State* L, U param1)
+inline U* Bridge<T, Tag>::pushNewObject(lua_State* L, U param1)
 {
 	U* data = static_cast<U*>(lua_newuserdata(L, sizeof(U)));
 

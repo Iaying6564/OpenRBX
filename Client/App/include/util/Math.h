@@ -50,18 +50,7 @@ public:
 	static int iFloor(float);
 	static float polarity(float);
 
-	static float sign(float value)
-	{
-		if (value > 0.0f) {
-			return 1.0f;
-		}
-
-		if (value < 0.0f) {
-			return -1.0f;
-		}
-
-		return 0.0f;
-	}
+	static float sign(float value) { return value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f); }
 
 	static bool isDenormal(float value);
 	static bool isNanInfDenorm(float value);

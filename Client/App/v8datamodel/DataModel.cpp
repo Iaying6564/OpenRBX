@@ -2,6 +2,7 @@
 
 #include "compat.h"
 #include "gui/GUI.h"
+#include "humanoid/Humanoid.h"
 #include "network/Players.h"
 #include "reflection/reflection.h"
 #include "reflection/signal.h"
@@ -23,6 +24,8 @@
 #include "v8datamodel/LocalBackpack.h"
 #include "v8datamodel/Teams.h"
 #include "v8datamodel/TimeState.h"
+#include "v8datamodel/Tool.h"
+#include "v8datamodel/UserController.h"
 #include "v8datamodel/Workspace.h"
 #include "v8kernel/Kernel.h"
 #include "v8tree/Service.h"

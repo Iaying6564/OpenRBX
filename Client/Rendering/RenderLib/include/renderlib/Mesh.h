@@ -13,8 +13,6 @@
 #include <GLG3D/VAR.h>
 #include <vector>
 
-class ThumbnailGenerator;
-
 namespace RBX {
 namespace Render {
 
@@ -31,12 +29,17 @@ public:
 	class Level : public G3D::ReferenceCountedObject
 	{
 	public:
+		void appendVertex(const G3D::Vector3& vertex, const G3D::Vector3& normal, const G3D::Vector2& tex)
+		{
+			indexArray.append(Mesh::allocVertex(vertex, normal, tex, false));
+		}
+
 		G3D::Array<IndexType> indexArray;       // 0x0c
 		G3D::RenderDevice::Primitive primitive; // 0x18
 
 		Level();
 
-		// STUB: WEBSERVICE 0x10167b50
+		// FUNCTION: WEBSERVICE 0x10167b50
 		// FUNCTION: ROBLOX 0x00484130
 		Level(G3D::RenderDevice::Primitive primitive) : primitive(primitive) {}
 
@@ -64,8 +67,6 @@ public:
 	static void setShadowVertex(const G3D::Vector3&);
 
 private:
-	friend class ::ThumbnailGenerator;
-
 	static G3D::MeshAlg::Geometry visibleGeometry;
 	static G3D::Array<G3D::Vector2> texCoordArray;
 	static G3D::Array<G3D::Vector3> tangentArray;
@@ -193,7 +194,11 @@ public:
 	// STUB: ROBLOX 0x0048b590
 	// `dynamic atexit destructor for 'RBX::Render::Mesh::vertexVAR''
 	// clang-format on
-	static void flushVAR();
+	static void flushVAR()
+	{
+		makeVAR();
+		varDirty = true;
+	}
 };
 
 DECOMP_SIZE_ASSERT(Mesh, 0x50)

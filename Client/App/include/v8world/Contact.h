@@ -147,6 +147,7 @@ private:
 	virtual bool stepContact();                            // vtable+0x18
 	virtual bool computeIsColliding(float overlapIgnored); // vtable+0x1c
 
+	bool computeIsColliding(bool& planeContact, float overlapIgnored);
 	bool getBestPlaneEdge(bool& temp, float overlapIgnored);
 
 	ContactConnector* matchContactConnector(Body* b0, Body* b1, GeoPairType _pairType, int param0, int param1);

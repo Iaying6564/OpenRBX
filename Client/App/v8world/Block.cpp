@@ -70,26 +70,25 @@ DECOMP_SIZE_ASSERT(BlockTemplate, 0x60)
 // GLOBAL: ROBLOX 0x00960f80
 BlockTemplate::BlockTemplates BlockTemplate::blockTemplates;
 
-// STUB: WEBSERVICE 0x101090b0
+// FUNCTION: WEBSERVICE 0x101090b0
 // STUB: ROBLOX 0x00648cf0
 Matrix3 Block::getMomentHollow(float mass) const
 {
-	float x = gridSize.x, y = gridSize.y, z = gridSize.z;
+	G3D::Vector3 size = gridSize;
 
-	float area = 2.0f * ((y + x) * z + y * x);
+	float area = 2 * (size.x * size.y + size.y * size.z + size.z * size.x);
+	G3D::Vector3 I;
+	for (int i = 0; i < 3; i++) {
+		int j = (i + 1) % 3;
+		int k = (i + 2) % 3;
+		float x = size[i]; // main axis;
+		float y = size[j];
+		float z = size[k];
 
-	Vector3 I(
-		mass / (2.0f * area) * ((z * z) * y * x + (z * y * y) * y / 3 +
-				(z * z * z) * x / 3 + (z * y * y) * x + (y * y * y) * x / 3 +
-				(z * z * z) * y / 3),
-		mass / (2.0f * area) * ((z * z * x) * y +
-				((x * x * z) * y + (z * z * x) * z / 3 + (x * x * x) * y / 3) +
-				(x * x * x) * z / 3 + (z * z * z) * y / 3),
-		mass / (2.0f * area) * ((y * y * z) * x + ((y * x) * x) * x / 3 +
-				((y * x) * x) * z + (y * y * y) * z / 3 + (x * x * x) * z / 3 +
-				(y * y * y) * x / 3)
-	);
-
+		float Ix = (mass / (2.0f * area)) * ((y * y * y * z / 3.0f) + (y * z * z * z / 3.0f) + (x * y * z * z) +
+											 (x * y * y * y / 3.0f) + (x * y * y * z) + (x * z * z * z / 3.0f));
+		I[i] = Ix;
+	}
 	return Math::fromDiagonal(I);
 }
 
@@ -277,12 +276,9 @@ Vector2 Block::getProjectedVertex(const Vector3& vertex, NormalId normalID)
 int Block::getClosestEdge(const Matrix3& rotation, NormalId normalID, Vector3& crossAxis)
 {
 	Vector3 axisInBody(
-		crossAxis.x * rotation[0][0] +
-			(crossAxis.y * rotation[1][0] + crossAxis.z * rotation[2][0]),
-		crossAxis.x * rotation[0][1] +
-			(crossAxis.y * rotation[1][1] + crossAxis.z * rotation[2][1]),
-		crossAxis.x * rotation[0][2] +
-			(crossAxis.y * rotation[1][2] + crossAxis.z * rotation[2][2])
+		crossAxis.x * rotation[0][0] + (crossAxis.y * rotation[1][0] + crossAxis.z * rotation[2][0]),
+		crossAxis.x * rotation[0][1] + (crossAxis.y * rotation[1][1] + crossAxis.z * rotation[2][1]),
+		crossAxis.x * rotation[0][2] + (crossAxis.y * rotation[1][2] + crossAxis.z * rotation[2][2])
 	);
 
 	Vector2 projected = getProjectedVertex(axisInBody, normalID);

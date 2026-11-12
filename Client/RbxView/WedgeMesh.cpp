@@ -107,8 +107,8 @@ public:
 		else {
 			vertex.y += inset;
 		}
-		normal.y = radius.z;
 		normal.z = radius.y;
+		normal.y = radius.z;
 	}
 };
 

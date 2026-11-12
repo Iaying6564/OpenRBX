@@ -1888,7 +1888,7 @@ void Replicator::receiveData(Packet* packet)
 	}
 }
 
-// STUB: WEBSERVICE 0x101a9220
+// FUNCTION: WEBSERVICE 0x101a9220
 // STUB: ROBLOX 0x004d2260
 PluginReceiveResult Replicator::OnReceive(RakPeerInterface* peer, Packet* packet)
 {
@@ -1906,13 +1906,13 @@ PluginReceiveResult Replicator::OnReceive(RakPeerInterface* peer, Packet* packet
 				);
 				event_Disconnection.fire(this, packet->systemAddress.ToString(), true);
 				disconnected = true;
-				break;
+				return RR_CONTINUE_PROCESSING;
 
 			case ID_DISCONNECTION_NOTIFICATION:
 				StandardOut::singleton()->print(MESSAGE_INFO, "Disconnect from %s", packet->systemAddress.ToString());
 				event_Disconnection.fire(this, packet->systemAddress.ToString(), false);
 				disconnected = true;
-				break;
+				return RR_CONTINUE_PROCESSING;
 
 			case ID_DATA:
 				receiveData(packet);

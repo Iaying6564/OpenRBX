@@ -13,6 +13,8 @@ reccmp-build.yml
 /env.bak/
 /venv.bak/
 /build*
+/msvc800rtm/
+/msvc800-rtm/
 *.swp
 WEBSERVICEPROGRESS.*
 *.pyc

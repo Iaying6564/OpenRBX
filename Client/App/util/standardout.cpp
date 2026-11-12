@@ -12,13 +12,6 @@ namespace RBX {
 DECOMP_SIZE_ASSERT(StandardOut, 0x28)
 DECOMP_SIZE_ASSERT(StandardOutMessage, 0x28)
 
-// FUNCTION: WEBSERVICE 0x100010d0
-// FUNCTION: ROBLOX 0x00413eb0
-void StandardOut::print(MessageType type, const std::exception& exp)
-{
-	print(type, exp.what());
-}
-
 // FUNCTION: WEBSERVICE 0x10031e40
 // FUNCTION: ROBLOX 0x00582c60
 void StandardOut::print(MessageType type, const char* format, ...)

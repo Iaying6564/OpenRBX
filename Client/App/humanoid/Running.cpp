@@ -6,6 +6,7 @@
 #include "util/Math.h"
 #include "util/Name.h"
 #include "v8datamodel/GeometryService.h"
+#include "v8datamodel/PartInstance.h"
 #include "v8kernel/Body.h"
 #include "v8kernel/SimBody.h"
 #include "v8world/Geometry.h"
@@ -94,9 +95,9 @@ void Running::onComputeForce(const float dt)
 	float accelZ = (desiredVelocityInWorldZ - currentVelocity.linear.z) * kAltitudeD;
 
 	G3D::Vector3 desiredAccel(accelX, accelY, accelZ);
-	G3D::Vector3 deltaAccel = (desiredAccel - currentAccel)
-								  .clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z),
-										 maxMoveAccelerationGrid);
+	G3D::Vector3 deltaAccel =
+		(desiredAccel - currentAccel)
+			.clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z), maxMoveAccelerationGrid);
 
 	G3D::Vector3 deltaForce = deltaAccel * mass;
 

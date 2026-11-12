@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "reflection/property.h"
+#include "script/ScriptContext.h"
 #include "util/ContentProvider.h"
 #include "v8tree/Instance.h"
 

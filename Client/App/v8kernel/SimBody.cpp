@@ -47,10 +47,11 @@ inline Vector3 computeRotVel(const Matrix3& rot, const Vector3& momentRecip, con
 
 	Vector3 rotVel;
 
+	const Vector3& momentum = angMomentum;
 	for (int r = 0; r < 3; ++r) {
-		float sum = iWorldInv[r][0] * angMomentum[0] + iWorldInv[r][1] * angMomentum[1];
+		float sum = iWorldInv[r][0] * momentum[0] + iWorldInv[r][1] * momentum[1];
 
-		rotVel[r] = sum + iWorldInv[r][2] * angMomentum[2];
+		rotVel[r] = sum + iWorldInv[r][2] * momentum[2];
 	}
 
 	return rotVel;

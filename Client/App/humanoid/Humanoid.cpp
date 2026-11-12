@@ -8,13 +8,16 @@
 #include "reflection/property.h"
 #include "util/Color.h"
 #include "util/NormalId.h"
+#include "v8datamodel/Accoutrement.h"
 #include "v8datamodel/Camera.h"
 #include "v8datamodel/ForceField.h"
 #include "v8datamodel/JointInstance.h"
 #include "v8datamodel/ModelInstance.h"
+#include "v8datamodel/PartInstance.h"
 #include "v8datamodel/Selection.h"
 #include "v8datamodel/Teams.h"
 #include "v8datamodel/Tool.h"
+#include "v8datamodel/Visit.h"
 #include "v8datamodel/Workspace.h"
 #include "v8kernel/Body.h"
 #include "v8kernel/Kernel.h"
@@ -951,6 +954,13 @@ void Humanoid::setTorso(PartInstance* value)
 		torso = shared_from(value);
 		raisePropertyChanged(propTorso);
 	}
+}
+
+inline Primitive* Humanoid::getHeadPrimitive()
+{
+	PartInstance* part = getHead();
+
+	return part != NULL ? part->getPrimitive() : NULL;
 }
 
 // FUNCTION: WEBSERVICE 0x100a5640
