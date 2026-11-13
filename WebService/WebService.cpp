@@ -1,5 +1,7 @@
+#ifndef OPENRBX_WEBSERVICE_PCH
 #define _WIN32_WINNT 0x0400
 #define _WIN32_DCOM
+#endif
 
 #include "WebService.h"
 
@@ -14,9 +16,9 @@ class DataModel;
 #include "LogManager.h"
 #include "ThumbnailGenerator.h"
 #include "VersionInfo.h"
-#include "ViewBase.h"
 #include "decomp.h"
 #include "network/API.h"
+#include "rbxview/View.h"
 #include "reflection/type.h"
 #include "script/ScriptContext.h"
 #include "util/ContentProvider.h"
@@ -50,11 +52,8 @@ template const RBX::Name& RBX::Name::doDeclare<RBX::sWorkspace>();
 
 boost::once_flag flagInitRoblox = BOOST_ONCE_INIT;
 static bool initRobloxFailed;
-static std::string dotVersion;
 
 extern "C" BOOL WINAPI TerminateExtension(DWORD flags);
-
-static boost::scoped_ptr<MainLogManager> mainLogManager;
 
 // VTABLE: WEBSERVICE 0x10261998
 // SIZE 0x28
@@ -74,8 +73,8 @@ public:
 		RBX::startListening(standardOut, this);
 	}
 
-	// STUB: WEBSERVICE 0x1000d110
-	virtual ~StandardOutLog()
+	// FUNCTION: WEBSERVICE 0x1000d110
+	~StandardOutLog()
 	{
 		boost::mutex::scoped_lock lock(RBX::StandardOut::singleton()->sync);
 		RBX::stopListening(standardOut, this);
@@ -97,7 +96,9 @@ protected:
 
 DECOMP_SIZE_ASSERT(StandardOutLog, 0x28)
 
+static boost::scoped_ptr<MainLogManager> mainLogManager;
 static boost::scoped_ptr<StandardOutLog> standardOutLog;
+static std::string dotVersion;
 
 // STUB: WEBSERVICE 0x1000d380
 static void initRoblox()
@@ -124,7 +125,8 @@ static void initRoblox()
 		RBX::ContentProvider::singleton();
 
 		char szPath[MAX_PATH] = "";
-		if (SHGetFolderPathAndSubDir(NULL, CSIDL_COMMON_APPDATA, NULL, 0, "Roblox\\content\\", szPath) != S_OK) {
+		HRESULT hr = SHGetFolderPathAndSubDir(NULL, CSIDL_COMMON_APPDATA, NULL, 0, "Roblox\\content\\", szPath);
+		if (hr != S_OK) {
 			RBX::StandardOut::singleton()->print(
 				RBX::MESSAGE_ERROR, "Unable to find CSIDL_COMMON_APPDATA\\Roblox\\content"
 			);
@@ -243,13 +245,6 @@ BOOL WINAPI DllMain(DLLMAIN_HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserv
 #pragma comment(linker, "/EXPORT:DllCanUnloadNow,PRIVATE")
 #endif
 
-namespace Roblox {
-
-CWebService::Jobs CWebService::jobs;
-boost::mutex CWebService::sync;
-
-} // namespace Roblox
-
 // SIZE 0x328
 class CRbxIsapiExtension : public ATL::CIsapiExtension<>
 {
@@ -289,6 +284,9 @@ extern "C" BOOL WINAPI TerminateExtension(DWORD dwFlags)
 }
 
 namespace Roblox {
+
+CWebService::Jobs CWebService::jobs;
+boost::mutex CWebService::sync;
 
 // FUNCTION: WEBSERVICE 0x1000e3b0
 HRESULT CWebService::ReportException(const std::exception& e)
@@ -470,8 +468,9 @@ HRESULT __stdcall CWebService::CloseAllJobs()
 	try {
 		boost::mutex::scoped_lock lock(sync);
 
+		Jobs::iterator iter = jobs.begin();
 		Jobs::iterator end = jobs.end();
-		for (Jobs::iterator iter = jobs.begin(); iter != end; ++iter) {
+		for (; iter != end; ++iter) {
 			RBX::DataModel::closeDataModel(iter->second.dataModel, true);
 			RBX::StandardOut::singleton()->print(RBX::MESSAGE_INFO, "Closed Job %s", iter->first.c_str());
 		}
