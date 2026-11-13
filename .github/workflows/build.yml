@@ -151,7 +151,8 @@ jobs:
     - name: Install python packages
       shell: bash
       run: |
-        pip install -r tools/requirements.txt
+        python tools/install_reccmp.py
+        python -m unittest discover -s tools/tests -v
 
     - name: Detect binaries
       id: detection
@@ -306,7 +307,8 @@ jobs:
       - name: Install python libraries
         id: install
         run: |
-          pip install -r tools/requirements.txt
+          python tools/install_reccmp.py
+          python -m unittest discover -s tools/tests -v
 
       - name: Run decomplint
         if: ${{ steps.install.conclusion == 'success' && always() }}
