@@ -187,7 +187,7 @@ std::string DebugSettings::glVendor() const
 	return Render::SpecData().glVendor;
 }
 
-// STUB: WEBSERVICE 0x100b2fc0
+// FUNCTION: WEBSERVICE 0x100b2fc0
 // STUB: ROBLOX 0x0057ada0
 std::string DebugSettings::gfxcard() const
 {
@@ -196,7 +196,7 @@ std::string DebugSettings::gfxcard() const
 	displayDevice.cb = sizeof(displayDevice);
 	EnumDisplayDevices(NULL, 0, &displayDevice, 0);
 
-	SP_CLASSIMAGELIST_DATA _spImageData = {0};
+	SP_CLASSIMAGELIST_DATA _spImageData = {};
 	SetupDiDestroyClassImageList(&_spImageData);
 	ZeroMemory(&_spImageData, sizeof(SP_CLASSIMAGELIST_DATA));
 	_spImageData.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);

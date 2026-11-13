@@ -73,7 +73,8 @@ void Explosion::doBlast(const G3D::Array<Primitive*>& primitives)
 void Explosion::render3dAdorn(Adorn* adorn)
 {
 	adorn->setObjectToWorldMatrix(CoordinateFrame(position));
-	G3D::Sphere sphere(G3D::Vector3::zero(), blastRadius);
+	float radius = blastRadius;
+	G3D::Sphere sphere(G3D::Vector3::zero(), radius);
 
 	adorn->explosion(sphere, G3D::Color4(G3D::Color3::red()), G3D::Color4::clear());
 }

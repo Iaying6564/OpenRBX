@@ -6,6 +6,7 @@
 #include "util/NavKeys.h"
 #include "util/UserInputBase.h"
 #include "v8datamodel/ModelInstance.h"
+#include "v8datamodel/PartInstance.h"
 #include "v8datamodel/UserController.h"
 #include "v8datamodel/Workspace.h"
 #include "v8tree/Service.h"

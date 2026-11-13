@@ -4,6 +4,7 @@
 #include "network/Player.h"
 #include "network/Players.h"
 #include "reflection/property.h"
+#include "tool/DragUtilities.h"
 #include "util/RunStateOwner.h"
 #include "v8datamodel/FlagStand.h"
 #include "v8datamodel/PartInstance.h"

@@ -497,39 +497,49 @@ void Accoutrement::setAttachmentForward(const G3D::Vector3& v)
 	setAttachmentPoint(c);
 }
 
-// STUB: WEBSERVICE 0x100dd3a0
+// FUNCTION: WEBSERVICE 0x100dd3a0
 // STUB: ROBLOX 0x005bc6d0
 void Accoutrement::setAttachmentUp(const G3D::Vector3& v)
 {
-	CoordinateFrame c = getAttachmentPoint();
-	G3D::Vector3 oldX = c.rotation.getColumn(0);
-	const G3D::Vector3& oldZ = c.rotation.getColumn(2);
+	G3D::CoordinateFrame c = attachmentPoint;
+	G3D::Vector3 oldX = c.rightVector();
+	const G3D::Vector3& oldZ = -c.lookVector();
+
 	G3D::Vector3 y = v.direction();
+
 	G3D::Vector3 z = oldX.cross(y);
 	z.unitize();
+
 	G3D::Vector3 x = y.cross(z);
 	x.unitize();
+
 	c.rotation.setColumn(0, x);
 	c.rotation.setColumn(1, y);
 	c.rotation.setColumn(2, z);
+
 	setAttachmentPoint(c);
 }
 
-// STUB: WEBSERVICE 0x100dd510
+// FUNCTION: WEBSERVICE 0x100dd510
 // STUB: ROBLOX 0x005bc840
 void Accoutrement::setAttachmentRight(const G3D::Vector3& v)
 {
-	CoordinateFrame c = getAttachmentPoint();
-	G3D::Vector3 oldY = c.rotation.getColumn(1);
-	const G3D::Vector3& oldZ = c.rotation.getColumn(2);
+	G3D::CoordinateFrame c = attachmentPoint;
+	G3D::Vector3 oldY = c.upVector();
+	const G3D::Vector3& oldZ = -c.lookVector();
+
 	G3D::Vector3 x = v.direction();
+
 	G3D::Vector3 z = x.cross(oldY);
 	z.unitize();
+
 	G3D::Vector3 y = z.cross(x);
 	y.unitize();
+
 	c.rotation.setColumn(0, x);
 	c.rotation.setColumn(1, y);
 	c.rotation.setColumn(2, z);
+
 	setAttachmentPoint(c);
 }
 
