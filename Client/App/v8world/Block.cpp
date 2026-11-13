@@ -79,15 +79,15 @@ Matrix3 Block::getMomentHollow(float mass) const
 	float area = 2.0f * ((y + x) * z + y * x);
 
 	Vector3 I(
-		mass / (2.0f * area) * ((z * z) * y * x + (z * y * y) * y / 3 +
-				(z * z * z) * x / 3 + (z * y * y) * x + (y * y * y) * x / 3 +
-				(z * z * z) * y / 3),
-		mass / (2.0f * area) * ((z * z * x) * y +
-				((x * x * z) * y + (z * z * x) * z / 3 + (x * x * x) * y / 3) +
-				(x * x * x) * z / 3 + (z * z * z) * y / 3),
-		mass / (2.0f * area) * ((y * y * z) * x + ((y * x) * x) * x / 3 +
-				((y * x) * x) * z + (y * y * y) * z / 3 + (x * x * x) * z / 3 +
-				(y * y * y) * x / 3)
+		mass / (2.0f * area) *
+			((z * z) * y * x + (z * y * y) * y / 3 + (z * z * z) * x / 3 + (z * y * y) * x + (y * y * y) * x / 3 +
+			 (z * z * z) * y / 3),
+		mass / (2.0f * area) *
+			((z * z * x) * y + ((x * x * z) * y + (z * z * x) * z / 3 + (x * x * x) * y / 3) + (x * x * x) * z / 3 +
+			 (z * z * z) * y / 3),
+		mass / (2.0f * area) *
+			((y * y * z) * x + ((y * x) * x) * x / 3 + ((y * x) * x) * z + (y * y * y) * z / 3 + (x * x * x) * z / 3 +
+			 (y * y * y) * x / 3)
 	);
 
 	return Math::fromDiagonal(I);
@@ -277,12 +277,9 @@ Vector2 Block::getProjectedVertex(const Vector3& vertex, NormalId normalID)
 int Block::getClosestEdge(const Matrix3& rotation, NormalId normalID, Vector3& crossAxis)
 {
 	Vector3 axisInBody(
-		crossAxis.x * rotation[0][0] +
-			(crossAxis.y * rotation[1][0] + crossAxis.z * rotation[2][0]),
-		crossAxis.x * rotation[0][1] +
-			(crossAxis.y * rotation[1][1] + crossAxis.z * rotation[2][1]),
-		crossAxis.x * rotation[0][2] +
-			(crossAxis.y * rotation[1][2] + crossAxis.z * rotation[2][2])
+		crossAxis.x * rotation[0][0] + (crossAxis.y * rotation[1][0] + crossAxis.z * rotation[2][0]),
+		crossAxis.x * rotation[0][1] + (crossAxis.y * rotation[1][1] + crossAxis.z * rotation[2][1]),
+		crossAxis.x * rotation[0][2] + (crossAxis.y * rotation[1][2] + crossAxis.z * rotation[2][2])
 	);
 
 	Vector2 projected = getProjectedVertex(axisInBody, normalID);

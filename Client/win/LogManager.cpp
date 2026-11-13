@@ -57,6 +57,24 @@ std::string MainLogManager::getLogFileName()
 	return (LPCSTR) path;
 }
 
+// FUNCTION: ROBLOX 0x0042a780
+std::string MainLogManager::MakeLogFileName(const char* prefix)
+{
+	ATL::CPath path = GetLogPath();
+
+	std::string fileName = "log_";
+	fileName += guid;
+
+	fileName.erase(12);
+	fileName.erase(4, 3);
+	fileName += prefix;
+	fileName += ".txt";
+
+	path.Append(fileName.c_str());
+
+	return (LPCSTR) path;
+}
+
 // FUNCTION: WEBSERVICE 0x10001fd0
 // FUNCTION: ROBLOX 0x0042a250
 std::string ThreadLogManager::getLogFileName()
@@ -69,9 +87,13 @@ std::string ThreadLogManager::getLogFileName()
 }
 
 // FUNCTION: WEBSERVICE 0x100020c0
-// STUB: ROBLOX 0x0042a320
+// FUNCTION: ROBLOX 0x0042a320
 RBX::Log* LogManager::getLog()
 {
+	if (!logsEnabled) {
+		return NULL;
+	}
+
 	if (log == NULL) {
 		log = new RBX::Log(getLogFileName().c_str(), name.c_str());
 	}
@@ -245,7 +267,8 @@ struct DateCompare
 
 	DateCompare(const WIN32_FIND_DATA& data) : fileTime(data.ftCreationTime) {}
 
-	bool operator()(WIN32_FIND_DATA data) const { return fileTime < ATL::CFileTime(data.ftCreationTime); }
+	// FUNCTION: ROBLOX 0x0042a8e0
+	bool operator()(WIN32_FIND_DATA data) const { return fileTime < data.ftCreationTime; }
 };
 
 // FUNCTION: WEBSERVICE 0x10002c00
@@ -366,6 +389,12 @@ bool MainLogManager::handleG3DFailure(
 	return false;
 }
 
+// FUNCTION: ROBLOX 0x0042b3c0
+void FUN_0042b3c0(const std::exception& e)
+{
+	RBX::StandardOut::singleton()->print(RBX::MESSAGE_ERROR, e.what());
+}
+
 // FUNCTION: WEBSERVICE 0x100032e0
 // FUNCTION: ROBLOX 0x0042a970
 void LogManager::ReportEvent(WORD type, const char* message)
@@ -409,6 +438,12 @@ HRESULT LogManager::ReportCOMError(const GUID& guid, const char* message, HRESUL
 {
 	ReportEvent(EVENTLOG_ERROR_TYPE, message);
 	return AtlReportError(guid, message, GUID_NULL, hr);
+}
+
+// FUNCTION: ROBLOX 0x0042bfa0
+HRESULT LogManager::ReportExceptionAsCOMError(const GUID& guid, const std::exception& e)
+{
+	return ReportCOMError(guid, e.what(), S_OK);
 }
 
 namespace log_detail {

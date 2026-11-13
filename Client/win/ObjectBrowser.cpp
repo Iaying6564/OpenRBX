@@ -3,7 +3,37 @@
 #include "ClassTreeView.h"
 #include "DeclarationView.h"
 #include "MemberTreeView.h"
+#include "ReflectionMetadata.h"
 #include "StandardOutputView.h"
+#include "reflection/function.h"
+#include "reflection/property.h"
+#include "reflection/signal.h"
+
+#include <atlenc.h>
+#include <boost/bind.hpp>
+#include <boost/thread/recursive_mutex.hpp>
+
+inline const RBX::Reflection::SignatureDescriptor& RBX::Reflection::FunctionDescriptor::getSignature() const
+{
+	return signature;
+}
+
+inline const RBX::Reflection::SignatureDescriptor& RBX::Reflection::SignalDescriptor::getSignature() const
+{
+	return signature;
+}
+
+inline std::vector<RBX::Reflection::ClassDescriptor*>::const_iterator RBX::Reflection::ClassDescriptor::
+	derivedClasses_begin() const
+{
+	return derivedClasses.begin();
+}
+
+inline std::vector<RBX::Reflection::ClassDescriptor*>::const_iterator RBX::Reflection::ClassDescriptor::
+	derivedClasses_end() const
+{
+	return derivedClasses.end();
+}
 
 IMPLEMENT_DYNCREATE(CClassTreeView, CXTTreeView)
 
@@ -41,14 +71,63 @@ CObjectBrowser::~CObjectBrowser()
 {
 }
 
+// FUNCTION: ROBLOX 0x00437700
+static int FUN_00437700(const RBX::Reflection::Descriptor* descriptor)
+{
+	if (dynamic_cast<const RBX::Reflection::EnumDescriptor::Item*>(descriptor)) {
+		return 5;
+	}
+
+	if (dynamic_cast<const RBX::Reflection::EnumDescriptor*>(descriptor)) {
+		return 4;
+	}
+
+	if (dynamic_cast<const RBX::Reflection::SignalDescriptor*>(descriptor)) {
+		return 3;
+	}
+
+	if (dynamic_cast<const RBX::Reflection::PropertyDescriptor*>(descriptor)) {
+		return 2;
+	}
+
+	if (dynamic_cast<const RBX::Reflection::FunctionDescriptor*>(descriptor)) {
+		return 1;
+	}
+
+	return dynamic_cast<const RBX::Reflection::ClassDescriptor*>(descriptor) ? 0 : 100;
+}
+
+// FUNCTION: ROBLOX 0x004377d0
+static int CALLBACK FUN_004377d0(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
+{
+	const RBX::Reflection::Descriptor* descriptor1 = reinterpret_cast<const RBX::Reflection::Descriptor*>(lParam1);
+	const RBX::Reflection::Descriptor* descriptor2 = reinterpret_cast<const RBX::Reflection::Descriptor*>(lParam2);
+
+	int rank1 = FUN_00437700(descriptor1);
+	int rank2 = FUN_00437700(descriptor2);
+	if (rank1 != rank2) {
+		return rank1 - rank2;
+	}
+
+	return strcmp(descriptor1->name.c_str(), descriptor2->name.c_str());
+}
+
 // FUNCTION: ROBLOX 0x00437860
-CMemberTreeView::CMemberTreeView() : m_unk0xa8(1), m_unk0xac(0)
+CMemberTreeView::CMemberTreeView() : m_unk0xa8(true), m_unk0xac(NULL)
 {
 }
 
 // FUNCTION: ROBLOX 0x004378e0
 CMemberTreeView::~CMemberTreeView()
 {
+}
+
+// FUNCTION: ROBLOX 0x00437ab0
+static boost::recursive_mutex& FUN_00437ab0()
+{
+	static boost::recursive_mutex g_unk0x0095395c;
+
+	return g_unk0x0095395c;
 }
 
 // FUNCTION: ROBLOX 0x00437b30
@@ -75,6 +154,19 @@ void CObjectBrowser::OnSize(UINT nType, int cx, int cy)
 			m_unk0x170.RecalcLayout();
 		}
 	}
+}
+
+// FUNCTION: ROBLOX 0x00437d30
+static BOOL FUN_00437d30(CImageList& imageList, UINT nIDResource)
+{
+	if (!imageList.Create(16, 16, ILC_COLOR24 | ILC_MASK, 0, 1)) {
+		return FALSE;
+	}
+
+	CBitmap bitmap;
+	bitmap.LoadBitmap(nIDResource);
+	imageList.Add(&bitmap, CXTPImageManager::GetBitmapMaskColor(bitmap, CPoint(0, 0)));
+	return TRUE;
 }
 
 // FUNCTION: ROBLOX 0x00437e10
@@ -112,17 +204,158 @@ int CObjectBrowser::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-// STUB: ROBLOX 0x00438290
+// FUNCTION: ROBLOX 0x00437f90
+void CClassTreeView::FUN_00437f90(const RBX::Reflection::EnumDescriptor* descriptor)
+{
+	CString text;
+	text.Format("%s", descriptor->name.c_str());
+
+	HTREEITEM item = GetTreeCtrl().InsertItem(text, 9, 9);
+	GetTreeCtrl().SetItemData(item, reinterpret_cast<DWORD_PTR>(descriptor));
+}
+
+// FUNCTION: ROBLOX 0x004380e0
+void CMemberTreeView::FUN_004380e0(const RBX::Reflection::EnumDescriptor::Item* item)
+{
+	HTREEITEM treeItem = GetTreeCtrl().InsertItem(item->name.c_str(), 10, 10);
+	GetTreeCtrl().SetItemData(treeItem, reinterpret_cast<DWORD_PTR>(item));
+}
+
+// FUNCTION: ROBLOX 0x00438130 FOLDED
+void CMemberTreeView::FUN_00438130(HTREEITEM item, RBX::Reflection::Metadata::Item* metadata)
+{
+	if (metadata) {
+		if (metadata->deprecated) {
+			CXTLogFont logFont;
+			if (GetFont()->GetLogFont(&logFont)) {
+				logFont.lfStrikeOut = TRUE;
+				SetItemFont(item, logFont);
+			}
+		}
+
+		if (metadata->preliminary) {
+			CXTLogFont logFont;
+			if (GetFont()->GetLogFont(&logFont)) {
+				logFont.lfItalic = TRUE;
+				SetItemFont(item, logFont);
+			}
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00438130 FOLDED
+void CClassTreeView::FUN_00438130(HTREEITEM item, RBX::Reflection::Metadata::Item* metadata)
+{
+	if (metadata) {
+		if (metadata->deprecated) {
+			CXTLogFont logFont;
+			if (GetFont()->GetLogFont(&logFont)) {
+				logFont.lfStrikeOut = TRUE;
+				SetItemFont(item, logFont);
+			}
+		}
+
+		if (metadata->preliminary) {
+			CXTLogFont logFont;
+			if (GetFont()->GetLogFont(&logFont)) {
+				logFont.lfItalic = TRUE;
+				SetItemFont(item, logFont);
+			}
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00438290
 int CMemberTreeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	STUB(0x438290);
+	if (CXTTreeView::OnCreate(lpCreateStruct) == -1) {
+		return -1;
+	}
+	if (!FUN_00437d30(m_unk0xa0, 196)) {
+		return -1;
+	}
+	GetTreeCtrl().SetImageList(&m_unk0xa0, TVSIL_NORMAL);
 	return 0;
 }
 
+// FUNCTION: ROBLOX 0x00438290 FOLDED
 int CClassTreeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	STUB(0x438290);
+	if (CXTTreeView::OnCreate(lpCreateStruct) == -1) {
+		return -1;
+	}
+	if (!FUN_00437d30(m_unk0xa0, 196)) {
+		return -1;
+	}
+	GetTreeCtrl().SetImageList(&m_unk0xa0, TVSIL_NORMAL);
 	return 0;
+}
+
+// FUNCTION: ROBLOX 0x00438300
+void CMemberTreeView::FUN_00438300(const RBX::Reflection::PropertyDescriptor* descriptor)
+{
+	if (m_unk0xa8 || &descriptor->owner == m_unk0xac) {
+		RBX::Reflection::Metadata::Member* metadata =
+			RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446920(descriptor);
+		if ((!metadata || metadata->browsable) && descriptor->isPublic()) {
+			HTREEITEM item = GetTreeCtrl().InsertItem(descriptor->name.c_str(), 6, 6);
+			GetTreeCtrl().SetItemData(item, reinterpret_cast<DWORD_PTR>(descriptor));
+			FUN_00438130(item, metadata);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00438420
+void CMemberTreeView::FUN_00438420(const RBX::Reflection::SignalDescriptor* descriptor)
+{
+	if (m_unk0xa8 || &descriptor->owner == m_unk0xac) {
+		RBX::Reflection::Metadata::Member* metadata =
+			RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_004469c0(descriptor);
+		if (!metadata || metadata->browsable) {
+			HTREEITEM item = GetTreeCtrl().InsertItem(descriptor->name.c_str(), 8, 8);
+			GetTreeCtrl().SetItemData(item, reinterpret_cast<DWORD_PTR>(descriptor));
+			FUN_00438130(item, metadata);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00438530
+void CDeclarationView::FUN_00438530(
+	RBX::Reflection::Metadata::Item* metadata, const char* declaration, const char* owner
+)
+{
+	if (m_unk0xf4) {
+		m_unk0xf4->put_innerHTML(CComBSTR(declaration ? declaration : ""));
+	}
+
+	if (m_unk0xf8) {
+		CComPtr<IHTMLStyle> style;
+		m_unk0xf8->get_style(&style);
+		style->put_display(owner ? CComBSTR("block") : CComBSTR("none"));
+		m_unk0xfc->put_innerHTML(CComBSTR(owner));
+	}
+
+	if (m_unk0x100) {
+		CString summary(metadata ? metadata->summary.c_str() : "");
+		CComPtr<IHTMLStyle> style;
+		m_unk0x100->get_style(&style);
+		style->put_display(!summary.IsEmpty() ? CComBSTR("block") : CComBSTR("none"));
+		if (!summary.IsEmpty()) {
+			m_unk0x104->put_innerHTML(CComBSTR(summary));
+		}
+	}
+
+	if (m_unk0x108) {
+		CComPtr<IHTMLStyle> style;
+		m_unk0x108->get_style(&style);
+		style->put_display(metadata && metadata->deprecated ? CComBSTR("block") : CComBSTR("none"));
+	}
+
+	if (m_unk0x10c) {
+		CComPtr<IHTMLStyle> style;
+		m_unk0x10c->get_style(&style);
+		style->put_display(metadata && metadata->preliminary ? CComBSTR("block") : CComBSTR("none"));
+	}
 }
 
 IMPLEMENT_DYNCREATE(CDeclarationView, CHtmlView)
@@ -147,16 +380,317 @@ CDeclarationView::~CDeclarationView()
 {
 }
 
-// STUB: ROBLOX 0x0043a240
-void CMemberTreeView::FUN_0043a240(NMHDR* pNMHDR, LRESULT* pResult)
+// FUNCTION: ROBLOX 0x00438ce0
+void CDeclarationView::OnDocumentComplete(LPCTSTR lpszURL)
 {
-	STUB(0x43a240);
+	m_unk0xf0 = GetHtmlDocument();
+	if (m_unk0xf0) {
+		CComPtr<IHTMLElementCollection> all;
+		m_unk0xf0->get_all(&all);
+
+		CComPtr<IDispatch> dispatch;
+		all->item(CComVariant("Declaration"), CComVariant(), &dispatch);
+		m_unk0xf4 = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("OwnerDiv"), CComVariant(), &dispatch);
+		m_unk0xf8 = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("Owner"), CComVariant(), &dispatch);
+		m_unk0xfc = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("DeprecatedElement"), CComVariant(), &dispatch);
+		m_unk0x108 = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("PreliminaryElement"), CComVariant(), &dispatch);
+		m_unk0x10c = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("SummaryDiv"), CComVariant(), &dispatch);
+		m_unk0x100 = dispatch;
+		dispatch.Release();
+
+		all->item(CComVariant("Summary"), CComVariant(), &dispatch);
+		m_unk0x104 = dispatch;
+	}
+	else {
+		m_unk0xf4.Release();
+		m_unk0xf8.Release();
+		m_unk0xfc.Release();
+		m_unk0x100.Release();
+		m_unk0x104.Release();
+		m_unk0x108.Release();
+		m_unk0x10c.Release();
+	}
+
+	FUN_00438530(NULL, NULL, NULL);
 }
 
-// STUB: ROBLOX 0x0043a280
+// FUNCTION: ROBLOX 0x00439690
+void CClassTreeView::FUN_00439690(const RBX::Reflection::ClassDescriptor* descriptor)
+{
+	RBX::Reflection::Metadata::Class* metadata =
+		RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446220(descriptor, false);
+	if (!metadata || metadata->browsable) {
+		HTREEITEM item = GetTreeCtrl().InsertItem(descriptor->name.c_str(), 3, 3);
+		GetTreeCtrl().SetItemData(item, reinterpret_cast<DWORD_PTR>(descriptor));
+		FUN_00438130(item, metadata);
+	}
+
+	std::for_each(
+		descriptor->derivedClasses_begin(),
+		descriptor->derivedClasses_end(),
+		boost::bind(&CClassTreeView::FUN_00439690, this, _1)
+	);
+}
+
+// FUNCTION: ROBLOX 0x004397f0
+void CMemberTreeView::FUN_004397f0(const RBX::Reflection::EnumDescriptor* descriptor)
+{
+	GetTreeCtrl().DeleteAllItems();
+	m_unk0xac = descriptor;
+
+	boost::recursive_mutex::scoped_lock lock(FUN_00437ab0());
+	std::for_each(descriptor->begin(), descriptor->end(), boost::bind(&CMemberTreeView::FUN_004380e0, this, _1));
+
+	TVSORTCB sort;
+	sort.hParent = TVI_ROOT;
+	sort.lpfnCompare = FUN_004377d0;
+	GetTreeCtrl().SortChildrenCB(&sort);
+}
+
+// FUNCTION: ROBLOX 0x00439910
+static void FUN_00439910(int* count, std::string* text, const RBX::Reflection::SignatureDescriptor::Item& argument)
+{
+	if (*count > 0) {
+		*text += ", ";
+	}
+
+	*text += argument.name->c_str();
+	++*count;
+}
+
+// FUNCTION: ROBLOX 0x00439990
+static void FUN_00439990(int* count, std::string* text, const RBX::Reflection::SignatureDescriptor::Item& argument)
+{
+	if (*count > 0) {
+		*text += ", ";
+	}
+
+	*text += argument.type->name.c_str();
+	*text += " ";
+	*text += argument.name->c_str();
+	if (&argument.defaultValue.type() == argument.type) {
+		*text += " = ";
+		*text += argument.defaultValue.get<std::string>();
+	}
+
+	++*count;
+}
+
+// FUNCTION: ROBLOX 0x00439a70
+void CMemberTreeView::FUN_00439a70(const RBX::Reflection::FunctionDescriptor* descriptor)
+{
+	if (m_unk0xa8 || &descriptor->owner == m_unk0xac) {
+		RBX::Reflection::Metadata::Member* metadata =
+			RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446970(descriptor);
+		if (!metadata || metadata->browsable) {
+			std::string text = descriptor->name.toString();
+			text += "(";
+
+			int count = 0;
+			std::for_each(
+				descriptor->getSignature().arguments.begin(),
+				descriptor->getSignature().arguments.end(),
+				boost::bind(FUN_00439910, &count, &text, _1)
+			);
+			text += ")";
+
+			int image = descriptor->security == RBX::Reflection::FunctionDescriptor::NeedTrustedCaller ? 5 : 4;
+			HTREEITEM item = GetTreeCtrl().InsertItem(text.c_str(), image, image);
+			GetTreeCtrl().SetItemData(item, reinterpret_cast<DWORD_PTR>(descriptor));
+			FUN_00438130(item, metadata);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00439c30
+void CDeclarationView::FUN_00439c30(const RBX::Reflection::Descriptor* descriptor)
+{
+	if (!descriptor) {
+		FUN_00438530(NULL, NULL, NULL);
+		return;
+	}
+
+	std::string declaration;
+	RBX::Reflection::Metadata::Item* metadata = NULL;
+	const RBX::Reflection::ClassDescriptor* owner = NULL;
+
+	const RBX::Reflection::FunctionDescriptor* function =
+		dynamic_cast<const RBX::Reflection::FunctionDescriptor*>(descriptor);
+	if (function) {
+		declaration = function->getSignature().resultType->name.toString();
+		declaration += " ";
+		declaration += function->name.toString();
+		declaration += "(";
+
+		int count = 0;
+		std::for_each(
+			function->getSignature().arguments.begin(),
+			function->getSignature().arguments.end(),
+			boost::bind(FUN_00439990, &count, &declaration, _1)
+		);
+		declaration += ")";
+
+		owner = &function->owner;
+		metadata = RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446970(function);
+	}
+	else {
+		const RBX::Reflection::PropertyDescriptor* property =
+			dynamic_cast<const RBX::Reflection::PropertyDescriptor*>(descriptor);
+		if (property) {
+			declaration = property->type.name.toString();
+			declaration += " ";
+			declaration += property->name.toString();
+
+			owner = &property->owner;
+			metadata = RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446920(property);
+		}
+		else {
+			const RBX::Reflection::SignalDescriptor* signal =
+				dynamic_cast<const RBX::Reflection::SignalDescriptor*>(descriptor);
+			if (signal) {
+				declaration = "event ";
+				declaration += signal->name.toString();
+				declaration += "(";
+
+				int count = 0;
+				std::for_each(
+					signal->getSignature().arguments.begin(),
+					signal->getSignature().arguments.end(),
+					boost::bind(FUN_00439990, &count, &declaration, _1)
+				);
+				declaration += ")";
+
+				owner = &signal->owner;
+				metadata = RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_004469c0(signal);
+			}
+			else {
+				const RBX::Reflection::EnumDescriptor::Item* item =
+					dynamic_cast<const RBX::Reflection::EnumDescriptor::Item*>(descriptor);
+				if (item) {
+					declaration = G3D::format("%d: %s", item->value, item->name.c_str());
+				}
+				else {
+					const RBX::Reflection::ClassDescriptor* classDescriptor =
+						dynamic_cast<const RBX::Reflection::ClassDescriptor*>(descriptor);
+					if (classDescriptor) {
+						declaration = classDescriptor->name.toString();
+						metadata =
+							RBX::Reflection::Metadata::Reflection::FUN_004480c0()->FUN_00446220(classDescriptor, false);
+					}
+					else {
+						declaration = descriptor->name.toString();
+					}
+				}
+			}
+		}
+	}
+
+	FUN_00438530(metadata, declaration.c_str(), owner ? owner->name.c_str() : NULL);
+}
+
+// FUNCTION: ROBLOX 0x0043a060
+void CMemberTreeView::FUN_0043a060(const RBX::Reflection::ClassDescriptor* descriptor)
+{
+	GetTreeCtrl().DeleteAllItems();
+	m_unk0xac = descriptor;
+
+	boost::recursive_mutex::scoped_lock lock(FUN_00437ab0());
+	std::for_each(
+		descriptor
+			->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>::descriptors_begin(),
+		descriptor->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::PropertyDescriptor>::descriptors_end(),
+		boost::bind(&CMemberTreeView::FUN_00438300, this, _1)
+	);
+	std::for_each(
+		descriptor
+			->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>::descriptors_begin(),
+		descriptor->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::FunctionDescriptor>::descriptors_end(),
+		boost::bind(&CMemberTreeView::FUN_00439a70, this, _1)
+	);
+	std::for_each(
+		descriptor->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::SignalDescriptor>::descriptors_begin(),
+		descriptor->RBX::Reflection::MemberDescriptorContainer<RBX::Reflection::SignalDescriptor>::descriptors_end(),
+		boost::bind(&CMemberTreeView::FUN_00438420, this, _1)
+	);
+
+	TVSORTCB sort;
+	sort.hParent = TVI_ROOT;
+	sort.lpfnCompare = FUN_004377d0;
+	GetTreeCtrl().SortChildrenCB(&sort);
+}
+
+// FUNCTION: ROBLOX 0x0043a240
+void CMemberTreeView::FUN_0043a240(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTREEVIEW* pNMTreeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+	if (m_unk0xb0) {
+		m_unk0xb0->FUN_00439c30(reinterpret_cast<const RBX::Reflection::Descriptor*>(pNMTreeView->itemNew.lParam));
+	}
+
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x0043a280
 void CClassTreeView::FUN_0043a280(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	STUB(0x43a280);
+	NMTREEVIEW* pNMTreeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+	const RBX::Reflection::Descriptor* descriptor =
+		reinterpret_cast<const RBX::Reflection::Descriptor*>(pNMTreeView->itemNew.lParam);
+
+	if (m_unk0xa8) {
+		const RBX::Reflection::ClassDescriptor* classDescriptor =
+			dynamic_cast<const RBX::Reflection::ClassDescriptor*>(descriptor);
+		if (classDescriptor) {
+			m_unk0xa8->FUN_0043a060(classDescriptor);
+		}
+		else {
+			const RBX::Reflection::EnumDescriptor* enumDescriptor =
+				dynamic_cast<const RBX::Reflection::EnumDescriptor*>(descriptor);
+			if (enumDescriptor) {
+				m_unk0xa8->FUN_004397f0(enumDescriptor);
+			}
+		}
+	}
+
+	if (m_unk0xac) {
+		m_unk0xac->FUN_00439c30(descriptor);
+	}
+
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x0043a320
+void CClassTreeView::OnInitialUpdate()
+{
+	CXTTreeView::OnInitialUpdate();
+
+	boost::recursive_mutex::scoped_lock lock(FUN_00437ab0());
+	FUN_00439690(&RBX::Reflection::ClassDescriptor::rootDescriptor());
+	std::for_each(
+		RBX::Reflection::EnumDescriptor::enumsBegin(),
+		RBX::Reflection::EnumDescriptor::enumsEnd(),
+		boost::bind(&CClassTreeView::FUN_00437f90, this, _1)
+	);
+
+	TVSORTCB sort;
+	sort.hParent = TVI_ROOT;
+	sort.lpfnCompare = FUN_004377d0;
+	GetTreeCtrl().SortChildrenCB(&sort);
 }
 
 void CObjectBrowser::OnDraw(CDC* pDC)
@@ -169,6 +703,30 @@ IMPLEMENT_DYNCREATE(CStandardOutputView, COutputView)
 BEGIN_MESSAGE_MAP(CStandardOutputView, COutputView)
 ON_MESSAGE(WM_USER + 101, FUN_0043b8a0)
 END_MESSAGE_MAP()
+
+// FUNCTION: ROBLOX 0x0043a470
+void COutputView::OnInitialUpdate()
+{
+	CSecureHtmlView::OnInitialUpdate();
+	LoadFromResource(134);
+}
+
+// FUNCTION: ROBLOX 0x0043a800
+void COutputView::OnDocumentComplete(LPCTSTR lpszURL)
+{
+	m_unk0x108 = GetHtmlDocument();
+	if (m_unk0x108) {
+		CComPtr<IHTMLElementCollection> all;
+		m_unk0x108->get_all(&all);
+
+		CComPtr<IDispatch> dispatch;
+		all->item(CComVariant("output"), CComVariant(), &dispatch);
+		m_unk0x10c = dispatch;
+	}
+	else {
+		m_unk0x10c.Release();
+	}
+}
 
 // FUNCTION: ROBLOX 0x0043ae20
 CStandardOutputView::~CStandardOutputView()
@@ -190,6 +748,68 @@ void CStandardOutputView::onEvent(const RBX::StandardOut* source, RBX::StandardO
 	}
 }
 
+// FUNCTION: ROBLOX 0x0043b300
+void COutputView::FUN_0043b300(IHTMLElement* element)
+{
+	CComQIPtr<IHTMLDOMNode> node(element);
+	CComPtr<IHTMLDOMNode> appended;
+	if (m_unk0x10c->appendChild(node, &appended) == S_OK) {
+		element->scrollIntoView(CComVariant(VARIANT_FALSE));
+		m_unk0xf4.push_back(node);
+		if (m_unk0xf4.size() > 300) {
+			CComPtr<IHTMLDOMNode> removed;
+			m_unk0x10c->removeChild(m_unk0xf4.front(), &removed);
+			m_unk0xf4.pop_front();
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x0043b490
+void COutputView::FUN_0043b490(RBX::MessageType type, const char* text, __time64_t time)
+{
+	CStringW message(text);
+	CStringW escaped;
+	int length = EscapeXML(message, message.GetLength(), NULL, 0);
+	EscapeXML(message, message.GetLength(), escaped.GetBufferSetLength(length), length);
+	escaped.ReleaseBuffer();
+
+	CStringW html;
+	if (type != RBX::MESSAGE_OUTPUT && time != 0) {
+		char buffer[32];
+		_ctime64_s(buffer, sizeof(buffer), &time);
+		html = buffer;
+		html += " - ";
+	}
+
+	switch (type) {
+	case RBX::MESSAGE_INFO:
+		html += "<FONT color=\"blue\">";
+		html += escaped;
+		html += "</FONT>";
+		break;
+	case RBX::MESSAGE_WARNING:
+		html += "<STRONG><FONT color=\"orange\">";
+		html += escaped;
+		html += "</FONT>";
+		break;
+	case RBX::MESSAGE_ERROR:
+		html += "<STRONG><FONT color=\"red\">";
+		html += escaped;
+		html += "</FONT>";
+		break;
+	case RBX::MESSAGE_OUTPUT:
+		html += escaped;
+		break;
+	}
+
+	CComPtr<IHTMLElement> element;
+	if (m_unk0x108) {
+		m_unk0x108->createElement(CComBSTR("DIV"), &element);
+		element->put_innerHTML(CComBSTR(html));
+		FUN_0043b300(element);
+	}
+}
+
 // FUNCTION: ROBLOX 0x0043b720
 CStandardOutputView::CStandardOutputView()
 {
@@ -201,6 +821,24 @@ CStandardOutputView::CStandardOutputView()
 // STUB: ROBLOX 0x0043b8a0
 LRESULT CStandardOutputView::FUN_0043b8a0(WPARAM wParam, LPARAM lParam)
 {
-	STUB(0x43b8a0);
+	while (true) {
+		std::string message;
+		RBX::MessageType type;
+		__int64 time;
+		{
+			boost::mutex::scoped_lock lock(m_unk0x128);
+			if (m_unk0x114.empty()) {
+				break;
+			}
+
+			type = m_unk0x114.front().type;
+			message = m_unk0x114.front().message;
+			time = m_unk0x114.front().time;
+			m_unk0x114.pop_front();
+		}
+
+		FUN_0043b490(type, message.c_str(), time);
+	}
+
 	return 0;
 }

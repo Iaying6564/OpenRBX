@@ -173,8 +173,11 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+	friend class CRbxChildFrame;
 	friend class DxUserInput;
 	friend class ExitCommand;
+	friend class ToggleFullscreenVerb;
+	friend class ToggleIDEModeVerb;
 
 private:
 	bool m_unk0xe0;                                   // 0xe0

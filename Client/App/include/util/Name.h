@@ -83,37 +83,37 @@ private:
 	// TEMPLATE: ROBLOX 0x004023e0
 	// RBX::Name::doDeclare<&RBX::sRunService>
 	// TEMPLATE: WEBSERVICE 0x1000b260
-	// STUB: ROBLOX 0x004022e0
+	// TEMPLATE: ROBLOX 0x004022e0
 	// RBX::Name::doDeclare<&RBX::sModel>
 	// TEMPLATE: WEBSERVICE 0x1000b2f0
 	// TEMPLATE: ROBLOX 0x00402360
 	// RBX::Name::doDeclare<&RBX::sSelection>
 	// TEMPLATE: WEBSERVICE 0x1000b380
-	// STUB: ROBLOX 0x00402460
+	// TEMPLATE: ROBLOX 0x00402460
 	// RBX::Name::doDeclare<&RBX::sScriptContext>
 	// TEMPLATE: WEBSERVICE 0x1000b410
-	// STUB: ROBLOX 0x004024e0
+	// TEMPLATE: ROBLOX 0x004024e0
 	// RBX::Name::doDeclare<&RBX::sScript>
 	// TEMPLATE: WEBSERVICE 0x1000b4a0
-	// STUB: ROBLOX 0x00402560
+	// TEMPLATE: ROBLOX 0x00402560
 	// RBX::Name::doDeclare<&RBX::sLocalScript>
 	// TEMPLATE: WEBSERVICE 0x1000b530
 	// TEMPLATE: ROBLOX 0x004a5090
 	// RBX::Name::doDeclare<&RBX::sWorkspace>
 	// TEMPLATE: WEBSERVICE 0x1001c980
-	// STUB: ROBLOX 0x0043c360
+	// TEMPLATE: ROBLOX 0x0043c360
 	// RBX::Name::doDeclare<&RBX::Soundscape::sSoundService>
 	// TEMPLATE: WEBSERVICE 0x1001ca10
-	// STUB: ROBLOX 0x0043c3e0
+	// TEMPLATE: ROBLOX 0x0043c3e0
 	// RBX::Name::doDeclare<&RBX::Soundscape::sSoundChannel>
 	// TEMPLATE: WEBSERVICE 0x100428c0
 	// TEMPLATE: ROBLOX 0x00474830
 	// RBX::Name::doDeclare<&RBX::sSky>
 	// TEMPLATE: WEBSERVICE 0x10059e20
-	// STUB: ROBLOX 0x0041e800
+	// TEMPLATE: ROBLOX 0x0041e800
 	// RBX::Name::doDeclare<&RBX::sPart>
 	// TEMPLATE: WEBSERVICE 0x10059e90
-	// STUB: ROBLOX 0x004a5710
+	// TEMPLATE: ROBLOX 0x004a5710
 	// RBX::Name::doDeclare<&RBX::sHumanoid>
 	// TEMPLATE: WEBSERVICE 0x1005f300
 	// TEMPLATE: ROBLOX 0x0045f810
@@ -122,28 +122,28 @@ private:
 	// TEMPLATE: ROBLOX 0x0045ac30
 	// RBX::Name::doDeclare<&RBX::Stats::sStats>
 	// TEMPLATE: WEBSERVICE 0x1005f3e0
-	// STUB: ROBLOX 0x004077a0
+	// TEMPLATE: ROBLOX 0x004077a0
 	// RBX::Name::doDeclare<&RBX::sDebugSettings>
 	// TEMPLATE: WEBSERVICE 0x100689c0
-	// STUB: ROBLOX 0x0040d870
+	// TEMPLATE: ROBLOX 0x0040d870
 	// RBX::Name::doDeclare<&RBX::sTeam>
 	// TEMPLATE: WEBSERVICE 0x10068a30
 	// TEMPLATE: ROBLOX 0x0040d8f0
 	// RBX::Name::doDeclare<&RBX::Network::sPlayer>
 	// TEMPLATE: WEBSERVICE 0x1006a1e0
-	// STUB: ROBLOX 0x0045f790
+	// TEMPLATE: ROBLOX 0x0045f790
 	// RBX::Name::doDeclare<&RBX::sControllerService>
 	// TEMPLATE: WEBSERVICE 0x1006a250
-	// STUB: ROBLOX 0x0045f890
+	// TEMPLATE: ROBLOX 0x0045f890
 	// RBX::Name::doDeclare<&RBX::sCamera>
 	// TEMPLATE: WEBSERVICE 0x1006a2c0
-	// STUB: ROBLOX 0x004a5110
+	// TEMPLATE: ROBLOX 0x004a5110
 	// RBX::Name::doDeclare<&RBX::sHopperBin>
 	// TEMPLATE: WEBSERVICE 0x1006a330
 	// TEMPLATE: ROBLOX 0x004a5190
 	// RBX::Name::doDeclare<&RBX::sStarterPackService>
 	// TEMPLATE: WEBSERVICE 0x1006a3a0
-	// STUB: ROBLOX 0x004a5210
+	// TEMPLATE: ROBLOX 0x004a5210
 	// RBX::Name::doDeclare<&RBX::sLegacyHopperService>
 	// TEMPLATE: WEBSERVICE 0x1006a410
 	// TEMPLATE: ROBLOX 0x0058ef40
@@ -164,37 +164,37 @@ private:
 	// TEMPLATE: ROBLOX 0x0058eed0
 	// RBX::Name::doDeclare<&RBX::sLocalBackpack>
 	// TEMPLATE: WEBSERVICE 0x10071db0
-	// STUB: ROBLOX 0x004c2a60
+	// TEMPLATE: ROBLOX 0x004c2a60
 	// RBX::Name::doDeclare<&RBX::sSnap>
 	// TEMPLATE: WEBSERVICE 0x10071e20
-	// STUB: ROBLOX 0x004c2ae0
+	// TEMPLATE: ROBLOX 0x004c2ae0
 	// RBX::Name::doDeclare<&RBX::sWeld>
 	// TEMPLATE: WEBSERVICE 0x10071e90
-	// STUB: ROBLOX 0x004c2b60
+	// TEMPLATE: ROBLOX 0x004c2b60
 	// RBX::Name::doDeclare<&RBX::sGlue>
 	// TEMPLATE: WEBSERVICE 0x10071f00
-	// STUB: ROBLOX 0x004c2be0
+	// TEMPLATE: ROBLOX 0x004c2be0
 	// RBX::Name::doDeclare<&RBX::sRotate>
 	// TEMPLATE: WEBSERVICE 0x10071f70
-	// STUB: ROBLOX 0x004c2c60
+	// TEMPLATE: ROBLOX 0x004c2c60
 	// RBX::Name::doDeclare<&RBX::sRotateP>
 	// TEMPLATE: WEBSERVICE 0x10071fe0
-	// STUB: ROBLOX 0x004c2ce0
+	// TEMPLATE: ROBLOX 0x004c2ce0
 	// RBX::Name::doDeclare<&RBX::sRotateV>
 	// TEMPLATE: WEBSERVICE 0x10072050
-	// STUB: ROBLOX 0x004c2d60
+	// TEMPLATE: ROBLOX 0x004c2d60
 	// RBX::Name::doDeclare<&RBX::sMotor>
 	// TEMPLATE: WEBSERVICE 0x100720c0
-	// STUB: ROBLOX 0x004a5290
+	// TEMPLATE: ROBLOX 0x004a5290
 	// RBX::Name::doDeclare<&RBX::sBackpack>
 	// TEMPLATE: WEBSERVICE 0x10072130
 	// TEMPLATE: ROBLOX 0x004a5610
 	// RBX::Name::doDeclare<&RBX::sTeams>
 	// TEMPLATE: WEBSERVICE 0x100721a0
-	// STUB: ROBLOX 0x004330d0
+	// TEMPLATE: ROBLOX 0x004330d0
 	// RBX::Name::doDeclare<&RBX::sAccoutrement>
 	// TEMPLATE: WEBSERVICE 0x10072210
-	// STUB: ROBLOX 0x00433150
+	// TEMPLATE: ROBLOX 0x00433150
 	// RBX::Name::doDeclare<&RBX::sHat>
 	// TEMPLATE: WEBSERVICE 0x10072280
 	// TEMPLATE: ROBLOX 0x0040d970
@@ -203,22 +203,22 @@ private:
 	// TEMPLATE: ROBLOX 0x00594150
 	// RBX::Name::doDeclare<&RBX::sDataModel>
 	// TEMPLATE: WEBSERVICE 0x1007d1c0
-	// STUB: ROBLOX 0x0044dfe0
+	// TEMPLATE: ROBLOX 0x0044dfe0
 	// RBX::Name::doDeclare<&RBX::sGameSettings>
 	// TEMPLATE: WEBSERVICE 0x1007d230
 	// TEMPLATE: ROBLOX 0x005c10e0
 	// RBX::Name::doDeclare<&sStockSound>
 	// TEMPLATE: WEBSERVICE 0x10087f80
-	// STUB: ROBLOX 0x004a5410
+	// TEMPLATE: ROBLOX 0x004a5410
 	// RBX::Name::doDeclare<&RBX::sShirtGraphic>
 	// TEMPLATE: WEBSERVICE 0x10087ff0
-	// STUB: ROBLOX 0x004a5490
+	// TEMPLATE: ROBLOX 0x004a5490
 	// RBX::Name::doDeclare<&RBX::sShirt>
 	// TEMPLATE: WEBSERVICE 0x10088060
-	// STUB: ROBLOX 0x004a5510
+	// TEMPLATE: ROBLOX 0x004a5510
 	// RBX::Name::doDeclare<&RBX::sBodyColors>
 	// TEMPLATE: WEBSERVICE 0x100880d0
-	// STUB: ROBLOX 0x004a5590
+	// TEMPLATE: ROBLOX 0x004a5590
 	// RBX::Name::doDeclare<&RBX::sSkin>
 	// TEMPLATE: WEBSERVICE 0x10088140
 	// TEMPLATE: ROBLOX 0x005c9a90
@@ -272,7 +272,7 @@ private:
 	// TEMPLATE: ROBLOX 0x005ca040
 	// RBX::Name::doDeclare<&RBX::sObjectValue>
 	// TEMPLATE: WEBSERVICE 0x100888b0
-	// STUB: ROBLOX 0x00453fa0
+	// TEMPLATE: ROBLOX 0x00453fa0
 	// RBX::Name::doDeclare<&RBX::sVisit>
 	// TEMPLATE: WEBSERVICE 0x10088920
 	// TEMPLATE: ROBLOX 0x005ca0b0
@@ -284,16 +284,16 @@ private:
 	// TEMPLATE: ROBLOX 0x005ca120
 	// RBX::Name::doDeclare<&RBX::sSeat>
 	// TEMPLATE: WEBSERVICE 0x10088a70
-	// STUB: ROBLOX 0x004a5310
+	// TEMPLATE: ROBLOX 0x004a5310
 	// RBX::Name::doDeclare<&RBX::sSpawnLocation>
 	// TEMPLATE: WEBSERVICE 0x10088ae0
 	// TEMPLATE: ROBLOX 0x004a5390
 	// RBX::Name::doDeclare<&RBX::sSpawnerService>
 	// TEMPLATE: WEBSERVICE 0x100aafc0
-	// STUB: ROBLOX 0x0041e700
+	// TEMPLATE: ROBLOX 0x0041e700
 	// RBX::Name::doDeclare<&RBX::sDecal>
 	// TEMPLATE: WEBSERVICE 0x100ab030
-	// STUB: ROBLOX 0x0041e780
+	// TEMPLATE: ROBLOX 0x0041e780
 	// RBX::Name::doDeclare<&RBX::sTexture>
 	// TEMPLATE: WEBSERVICE 0x100b71d0
 	// TEMPLATE: ROBLOX 0x00582690
@@ -368,7 +368,7 @@ private:
 	// TEMPLATE: ROBLOX 0x00662860
 	// RBX::Name::doDeclare<&RBX::sPartDragTool>
 	// TEMPLATE: WEBSERVICE 0x10129ca0
-	// STUB: ROBLOX 0x0041e880
+	// TEMPLATE: ROBLOX 0x0041e880
 	// RBX::Name::doDeclare<&RBX::sSpecialShape>
 	// TEMPLATE: WEBSERVICE 0x1012a450
 	// TEMPLATE: ROBLOX 0x00669e60
@@ -388,6 +388,56 @@ private:
 	// TEMPLATE: WEBSERVICE 0x101a9ff0
 	// TEMPLATE: ROBLOX 0x004d3130
 	// RBX::Name::doDeclare<&RBX::Network::sReplicator>
+	// TEMPLATE: ROBLOX 0x005cfd40
+	// RBX::Name::doDeclare<&RBX::sFillTool>
+	// TEMPLATE: ROBLOX 0x005cfdb0
+	// RBX::Name::doDeclare<&RBX::sDropperTool>
+	// TEMPLATE: ROBLOX 0x005cfe20
+	// RBX::Name::doDeclare<&RBX::sModelSetPrimaryPartTool>
+	// TEMPLATE: ROBLOX 0x005d03d0
+	// RBX::Name::doDeclare<&RBX::sSlingshotTool>
+	// TEMPLATE: ROBLOX 0x005d0440
+	// RBX::Name::doDeclare<&RBX::sRocketTool>
+	// TEMPLATE: ROBLOX 0x005d04b0
+	// RBX::Name::doDeclare<&RBX::sResizeTool>
+	// TEMPLATE: ROBLOX 0x005d0520
+	// RBX::Name::doDeclare<&RBX::sHammerTool>
+	// TEMPLATE: ROBLOX 0x005d0590
+	// RBX::Name::doDeclare<&RBX::sLaserTool>
+	// TEMPLATE: ROBLOX 0x005cfe90
+	// RBX::Name::doDeclare<&RBX::sFlatTool>
+	// TEMPLATE: ROBLOX 0x005cff00
+	// RBX::Name::doDeclare<&RBX::sGlueTool>
+	// TEMPLATE: ROBLOX 0x005cff70
+	// RBX::Name::doDeclare<&RBX::sWeldTool>
+	// TEMPLATE: ROBLOX 0x005cffe0
+	// RBX::Name::doDeclare<&RBX::sStudsTool>
+	// TEMPLATE: ROBLOX 0x005d0050
+	// RBX::Name::doDeclare<&RBX::sInletTool>
+	// TEMPLATE: ROBLOX 0x005d00c0
+	// RBX::Name::doDeclare<&RBX::sHingeTool>
+	// TEMPLATE: ROBLOX 0x005d0130
+	// RBX::Name::doDeclare<&RBX::sRightMotorTool>
+	// TEMPLATE: ROBLOX 0x005d01a0
+	// RBX::Name::doDeclare<&RBX::sLeftMotorTool>
+	// TEMPLATE: ROBLOX 0x005d0210
+	// RBX::Name::doDeclare<&RBX::sOscillateMotorTool>
+	// TEMPLATE: ROBLOX 0x005d0280
+	// RBX::Name::doDeclare<&RBX::sModelSetFrontTool>
+	// TEMPLATE: ROBLOX 0x005d02f0
+	// RBX::Name::doDeclare<&RBX::sAnchorTool>
+	// TEMPLATE: ROBLOX 0x005d0360
+	// RBX::Name::doDeclare<&RBX::sLockTool>
+	// TEMPLATE: ROBLOX 0x005d06e0
+	// RBX::Name::doDeclare<&RBX::sNullTool>
+	// TEMPLATE: ROBLOX 0x005d0600
+	// RBX::Name::doDeclare<&RBX::sGrabTool>
+	// TEMPLATE: ROBLOX 0x005d0670
+	// RBX::Name::doDeclare<&RBX::sCloneTool>
+	// TEMPLATE: ROBLOX 0x005d0750
+	// RBX::Name::doDeclare<&RBX::sGameTool>
+	// TEMPLATE: ROBLOX 0x005d07c0
+	// RBX::Name::doDeclare<&RBX::sAxisMoveTool>
 	template <const char* name>
 	static const Name& doDeclare()
 	{
@@ -713,6 +763,56 @@ private:
 	// TEMPLATE: WEBSERVICE 0x101aa0c0
 	// TEMPLATE: ROBLOX 0x004d31f0
 	// RBX::Name::callDoDeclare<&RBX::Network::sReplicator>
+	// TEMPLATE: ROBLOX 0x005d08b0
+	// RBX::Name::callDoDeclare<&RBX::sFillTool>
+	// TEMPLATE: ROBLOX 0x005d08c0
+	// RBX::Name::callDoDeclare<&RBX::sDropperTool>
+	// TEMPLATE: ROBLOX 0x005d08d0
+	// RBX::Name::callDoDeclare<&RBX::sModelSetPrimaryPartTool>
+	// TEMPLATE: ROBLOX 0x005d09a0
+	// RBX::Name::callDoDeclare<&RBX::sSlingshotTool>
+	// TEMPLATE: ROBLOX 0x005d09b0
+	// RBX::Name::callDoDeclare<&RBX::sRocketTool>
+	// TEMPLATE: ROBLOX 0x005d09c0
+	// RBX::Name::callDoDeclare<&RBX::sResizeTool>
+	// TEMPLATE: ROBLOX 0x005d09d0
+	// RBX::Name::callDoDeclare<&RBX::sHammerTool>
+	// TEMPLATE: ROBLOX 0x005d09e0
+	// RBX::Name::callDoDeclare<&RBX::sLaserTool>
+	// TEMPLATE: ROBLOX 0x005d08e0
+	// RBX::Name::callDoDeclare<&RBX::sFlatTool>
+	// TEMPLATE: ROBLOX 0x005d08f0
+	// RBX::Name::callDoDeclare<&RBX::sGlueTool>
+	// TEMPLATE: ROBLOX 0x005d0900
+	// RBX::Name::callDoDeclare<&RBX::sWeldTool>
+	// TEMPLATE: ROBLOX 0x005d0910
+	// RBX::Name::callDoDeclare<&RBX::sStudsTool>
+	// TEMPLATE: ROBLOX 0x005d0920
+	// RBX::Name::callDoDeclare<&RBX::sInletTool>
+	// TEMPLATE: ROBLOX 0x005d0930
+	// RBX::Name::callDoDeclare<&RBX::sHingeTool>
+	// TEMPLATE: ROBLOX 0x005d0940
+	// RBX::Name::callDoDeclare<&RBX::sRightMotorTool>
+	// TEMPLATE: ROBLOX 0x005d0950
+	// RBX::Name::callDoDeclare<&RBX::sLeftMotorTool>
+	// TEMPLATE: ROBLOX 0x005d0960
+	// RBX::Name::callDoDeclare<&RBX::sOscillateMotorTool>
+	// TEMPLATE: ROBLOX 0x005d0970
+	// RBX::Name::callDoDeclare<&RBX::sModelSetFrontTool>
+	// TEMPLATE: ROBLOX 0x005d0980
+	// RBX::Name::callDoDeclare<&RBX::sAnchorTool>
+	// TEMPLATE: ROBLOX 0x005d0990
+	// RBX::Name::callDoDeclare<&RBX::sLockTool>
+	// TEMPLATE: ROBLOX 0x005d0a10
+	// RBX::Name::callDoDeclare<&RBX::sNullTool>
+	// TEMPLATE: ROBLOX 0x005d09f0
+	// RBX::Name::callDoDeclare<&RBX::sGrabTool>
+	// TEMPLATE: ROBLOX 0x005d0a00
+	// RBX::Name::callDoDeclare<&RBX::sCloneTool>
+	// TEMPLATE: ROBLOX 0x005d0a20
+	// RBX::Name::callDoDeclare<&RBX::sGameTool>
+	// TEMPLATE: ROBLOX 0x005d0a30
+	// RBX::Name::callDoDeclare<&RBX::sAxisMoveTool>
 	template <const char* name>
 	static void callDoDeclare()
 	{
@@ -802,6 +902,56 @@ public:
 	// TEMPLATE: WEBSERVICE 0x1012a650
 	// TEMPLATE: ROBLOX 0x0066a060
 	// RBX::Named<RBX::Flying,&RBX::sFreefall>::getName
+	// TEMPLATE: ROBLOX 0x005d1a30
+	// RBX::Named<RBX::PartTool,&RBX::sModelSetPrimaryPartTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1ca0
+	// RBX::Named<RBX::PartTool,&RBX::sFillTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1e20
+	// RBX::Named<RBX::PartTool,&RBX::sDropperTool>::getName
+	// TEMPLATE: ROBLOX 0x005d22b0
+	// RBX::Named<RBX::MouseCommand,&RBX::sHammerTool>::getName
+	// TEMPLATE: ROBLOX 0x005d23e0
+	// RBX::Named<RBX::ShootTool,&RBX::sSlingshotTool>::getName
+	// TEMPLATE: ROBLOX 0x005d2510
+	// RBX::Named<RBX::ShootTool,&RBX::sRocketTool>::getName
+	// TEMPLATE: ROBLOX 0x005d26e0
+	// RBX::Named<RBX::MouseCommand,&RBX::sLaserTool>::getName
+	// TEMPLATE: ROBLOX 0x005d0f40
+	// RBX::Named<RBX::SurfaceTool,&RBX::sFlatTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1090
+	// RBX::Named<RBX::SurfaceTool,&RBX::sGlueTool>::getName
+	// TEMPLATE: ROBLOX 0x005d11e0
+	// RBX::Named<RBX::SurfaceTool,&RBX::sWeldTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1350
+	// RBX::Named<RBX::SurfaceTool,&RBX::sStudsTool>::getName
+	// TEMPLATE: ROBLOX 0x005d14a0
+	// RBX::Named<RBX::SurfaceTool,&RBX::sInletTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1610
+	// RBX::Named<RBX::SurfaceTool,&RBX::sHingeTool>::getName
+	// TEMPLATE: ROBLOX 0x005d16d0
+	// RBX::Named<RBX::SurfaceTool,&RBX::sRightMotorTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1790
+	// RBX::Named<RBX::SurfaceTool,&RBX::sLeftMotorTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1880
+	// RBX::Named<RBX::SurfaceTool,&RBX::sOscillateMotorTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1970
+	// RBX::Named<RBX::SurfaceTool,&RBX::sModelSetFrontTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1b00
+	// RBX::Named<RBX::ModelTool,&RBX::sAnchorTool>::getName
+	// TEMPLATE: ROBLOX 0x005d1bc0
+	// RBX::Named<RBX::ModelTool,&RBX::sLockTool>::getName
+	// TEMPLATE: ROBLOX 0x00622b80
+	// RBX::Named<RBX::MouseCommand,&RBX::sNullTool>::getName
+	// TEMPLATE: ROBLOX 0x0063be80
+	// RBX::Named<RBX::MouseCommand,&RBX::sGrabTool>::getName
+	// TEMPLATE: ROBLOX 0x0063c080
+	// RBX::Named<RBX::MouseCommand,&RBX::sCloneTool>::getName
+	// TEMPLATE: ROBLOX 0x0063c5a0
+	// RBX::Named<RBX::MouseCommand,&RBX::sGameTool>::getName
+	// TEMPLATE: ROBLOX 0x005d0cc0
+	// RBX::Named<RBX::ArrowToolBase,&RBX::sResizeTool>::getName
+	// TEMPLATE: ROBLOX 0x0063c8a0
+	// RBX::Named<RBX::ArrowToolBase,&RBX::sAxisMoveTool>::getName
 	// clang-format on
 };
 

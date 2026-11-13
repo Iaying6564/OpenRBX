@@ -1,0 +1,61 @@
+#ifndef APPDRAW_RBXFONT_H
+#define APPDRAW_RBXFONT_H
+
+#include "decomp.h"
+#include "rbxgraphics/Adorn.h"
+
+#include <G3D/BinaryInput.h>
+#include <G3D/Color4.h>
+#include <OgreTexture.h>
+#include <OgreVector2.h>
+#include <string>
+
+namespace Ogre {
+
+class VisualEngine;
+
+// SIZE 0x218
+class RbxFont
+{
+public:
+	RbxFont(const std::string& filename, G3D::BinaryInput& in);
+
+	Vector2 FUN_0067de70(
+		const std::string& s,
+		double x,
+		double y,
+		double width,
+		double height,
+		RBX::Adorn::Spacing spacing,
+		Vector2* quads
+	);
+	Vector2 FUN_0067e0f0(const std::string& s, double size, RBX::Adorn::Spacing spacing);
+	Vector2 FUN_0067e1e0(
+		VisualEngine* engine,
+		const std::string& s,
+		const Vector2& position,
+		double size,
+		const G3D::Color4& color,
+		const G3D::Color4& outline,
+		RBX::Adorn::XAlign xAlign,
+		RBX::Adorn::YAlign yAlign,
+		RBX::Adorn::Spacing spacing
+	);
+
+	static SharedPtr<RbxFont> FUN_0067e9d0(const std::string& filename);
+
+private:
+	int m_unk0x00[128];    // 0x00
+	int m_unk0x200;        // 0x200
+	int m_unk0x204;        // 0x204
+	int m_unk0x208;        // 0x208
+	TexturePtr m_unk0x20c; // 0x20c
+};
+
+DECOMP_SIZE_ASSERT(RbxFont, 0x218)
+
+extern int g_unk0x00961434;
+
+} // namespace Ogre
+
+#endif // APPDRAW_RBXFONT_H

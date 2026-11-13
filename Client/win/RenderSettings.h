@@ -9,8 +9,11 @@
 
 extern const char sRenderSettings[];
 
+extern const float g_unk0x008094f8;
+extern const float g_unk0x008094fc;
+extern const float g_unk0x00809500;
+extern const float g_unk0x00809504;
 extern G3D::Vector2int16 g_unk0x0091a2ec;
-extern undefined4 g_unk0x00953ae0;
 
 class CRenderSettings;
 
@@ -53,7 +56,7 @@ class CRenderSettings;
 // RBX::GlobalSettingsItem<CRenderSettings,&sRenderSettings>::~GlobalSettingsItem<CRenderSettings,&sRenderSettings>
 // TEMPLATE: ROBLOX 0x004494a0
 // RBX::Reflection::EnumDesc<enum CRenderSettings::AASamples>::~EnumDesc<enum CRenderSettings::AASamples>
-// STUB: ROBLOX 0x00449660
+// TEMPLATE: ROBLOX 0x00449660
 // RBX::Reflection::EnumDesc<enum CRenderSettings::ShadowMode>::addPair
 // TEMPLATE: ROBLOX 0x004498a0
 // RBX::Reflection::EnumDesc<enum CRenderSettings::GraphicsMode>::~EnumDesc<enum CRenderSettings::GraphicsMode>
@@ -241,10 +244,18 @@ public:
 
 	CRenderSettings();
 
-	float FUN_00448290() const;
-	float FUN_004482a0() const;
-	float FUN_004482b0() const;
-	float FUN_004482c0() const;
+	// FUNCTION: ROBLOX 0x00448290
+	float FUN_00448290() const { return m_unk0x10c; }
+
+	// FUNCTION: ROBLOX 0x004482a0
+	float FUN_004482a0() const { return m_unk0x110; }
+
+	// FUNCTION: ROBLOX 0x004482b0
+	float FUN_004482b0() const { return m_unk0x114; }
+
+	// FUNCTION: ROBLOX 0x004482c0
+	float FUN_004482c0() const { return m_unk0x118; }
+
 	BevelMode FUN_004482d0() const;
 	AntialiasingMode FUN_004482e0() const;
 	AASamples FUN_004482f0() const;
@@ -260,18 +271,12 @@ public:
 	void FUN_0044cfe0(float p_unk0x04);
 	void FUN_0044d050(int p_unk0x04);
 	void FUN_0044d0b0(GraphicsMode p_unk0x04);
+	void FUN_0044d1b0(bool p_unk0x04);
 	void FUN_0044d0e0(FrameRateManagerMode p_unk0x04);
 	void FUN_0044d110(BevelMode p_unk0x04);
 	void FUN_0044d140(AntialiasingMode p_unk0x04);
 	void FUN_0044d170(ShadowMode p_unk0x04);
-	// FUNCTION: ROBLOX 0x0044d430
-	undefined4 FUN_0044d430()
-	{
-		if (g_unk0x00953ae0 == 0) {
-			g_unk0x00953ae0 = m_unk0xf8;
-		}
-		return g_unk0x00953ae0;
-	}
+	GraphicsMode FUN_0044d430();
 
 	// clang-format off
 	// SYNTHETIC: ROBLOX 0x0044cd20
@@ -300,6 +305,19 @@ public:
 };
 
 DECOMP_SIZE_ASSERT(CRenderSettings, 0x144)
+
+extern CRenderSettings::GraphicsMode g_unk0x00953ae0;
+
+// FUNCTION: ROBLOX 0x0044d430
+inline CRenderSettings::GraphicsMode CRenderSettings::FUN_0044d430()
+{
+	if (g_unk0x00953ae0 == 0) {
+		g_unk0x00953ae0 = m_unk0xf8;
+	}
+	return g_unk0x00953ae0;
+}
+
+extern RBX::Reflection::BoundProp<bool, 1> g_unk0x00953c68;
 
 extern CRenderSettings::AASamples g_unk0x0091a2e8;
 

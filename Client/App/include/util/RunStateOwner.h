@@ -115,36 +115,23 @@ public:
 
 	virtual ~RunService();
 
-	void setRunState(RunState state)
-	{
-		if (runState == state) {
-			return;
-		}
-
-		RunTransition transition(runState, state);
-
-		runState = state;
-		Notifier<RunService, RunState>::raise(state);
-		Notifier<RunService, RunTransition>::raise(transition);
-	}
+	void setRunState(RunState state);
 
 	// FUNCTION: WEBSERVICE 0x100550f0
+	// FUNCTION: ROBLOX 0x00453e00
 	void run()
 	{
-		if (!runDisabled && (isEditState() || isPauseState())) {
+		if (!runDisabled) {
 			setRunState(RS_RUNNING);
 		}
 	}
 
 	// FUNCTION: WEBSERVICE 0x10055140
-	void pause()
-	{
-		if (isRunState()) {
-			setRunState(RS_PAUSED);
-		}
-	}
+	// FUNCTION: ROBLOX 0x00453e20
+	void pause() { setRunState(RS_PAUSED); }
 
 	// FUNCTION: WEBSERVICE 0x10055180
+	// FUNCTION: ROBLOX 0x00453e30
 	void reset() { setRunState(RS_NORMAL); }
 
 	void endRunThread(bool join);

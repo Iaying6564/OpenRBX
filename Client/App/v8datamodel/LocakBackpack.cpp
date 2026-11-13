@@ -173,6 +173,27 @@ void LocalBackpack::clearLocalBackpack()
 	lastRemovedIndex = -1;
 }
 
+// FUNCTION: ROBLOX 0x0060d7d0
+bool LocalBackpack::onKey(int key)
+{
+	if (key <= numChildren()) {
+		onClick(static_cast<LocalBackpackItem*>(getChild(key - 1)));
+		return true;
+	}
+
+	return false;
+}
+
+// FUNCTION: ROBLOX 0x00751160 FOLDED
+void LocalBackpack::cycleUp()
+{
+}
+
+// FUNCTION: ROBLOX 0x00751160 FOLDED
+void LocalBackpack::cycleDown()
+{
+}
+
 // FUNCTION: WEBSERVICE 0x100d6740
 // FUNCTION: ROBLOX 0x0060d840
 void LocalBackpack::onEvent(const Instance* source, ChildRemoved event)
@@ -221,7 +242,7 @@ LocalBackpack::~LocalBackpack()
 }
 
 // FUNCTION: WEBSERVICE 0x100d6ce0
-// STUB: ROBLOX 0x0060ddc0
+// FUNCTION: ROBLOX 0x0060ddc0
 void LocalBackpack::onLocalCharacterAdded(Instance* added)
 {
 	localCharacter = shared_from(added);

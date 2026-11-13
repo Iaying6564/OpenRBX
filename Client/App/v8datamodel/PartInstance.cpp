@@ -12,9 +12,13 @@
 #include "v8kernel/Body.h"
 #include "v8world/Assembly2.h"
 #include "v8world/Geometry.h"
+#include "v8world/MotorJoint.h"
+#include "v8world/RigidJoint.h"
 #include "v8world/World.h"
 
 #include <G3D/AABox.h>
+#include <G3D/CollisionDetection.h>
+#include <G3D/Ray.h>
 #include <G3D/Sphere.h>
 
 namespace RBX {
@@ -22,6 +26,7 @@ namespace RBX {
 char sPart[] = "Part";
 
 // GLOBAL: WEBSERVICE 0x102d4568
+// GLOBAL: ROBLOX 0x009340f0
 const char* category_Part = "Part";
 
 bool PartInstance::highlightSleepParts;
@@ -179,6 +184,12 @@ void PartInstance::onChildAdded(Instance* child)
 	PVInstance::onChildAdded(child);
 }
 
+// FUNCTION: ROBLOX 0x005ad310
+void PartInstance::writeResizeData(XmlState* state)
+{
+	state->addProperty(Reflection::Property(prop_Size, this));
+}
+
 // FUNCTION: WEBSERVICE 0x1009a8e0 FOLDED
 // FUNCTION: ROBLOX 0x005ad340 FOLDED
 Surfaces& PartInstance::getSurfaces()
@@ -205,6 +216,27 @@ void PartInstance::setName(const std::string& value)
 	else {
 		getPrimitive()->setSizeMultiplier(1);
 	}
+}
+
+// FUNCTION: ROBLOX 0x005ad880
+bool PartInstance::lockedInPlace() const
+{
+	bool top = false;
+	bool bottom = false;
+	for (Joint* joint = primitive->getFirstJoint(); joint; joint = primitive->getNextJoint(joint)) {
+		if (RigidJoint::isRigidJoint(joint) || MotorJoint::isMotorJoint(joint)) {
+			NormalId normalId = primitive.get() == joint->getPrimitive(0)
+									? Matrix3ToNormalId(joint->getJointCoord(0).rotation)
+									: normalIdOpposite(Matrix3ToNormalId(joint->getJointCoord(1).rotation));
+			if (normalId == NORM_Y) {
+				top = true;
+			}
+			else if (normalId == NORM_Y_NEG) {
+				bottom = true;
+			}
+		}
+	}
+	return top && bottom;
 }
 
 // FUNCTION: WEBSERVICE 0x1009ae40
@@ -431,6 +463,31 @@ Extents PartInstance::getExtentsLocal() const
 	const Vector3 corner = primitive->getGeometry()->getGridSize() * 0.5f;
 
 	return Extents(-corner, corner);
+}
+
+// FUNCTION: ROBLOX 0x005add10
+Surface* PartInstance::getSurface(const G3D::Ray& worldRay, int& surfaceId)
+{
+	const CoordinateFrame& cframe = primitive->getCoordinateFrame();
+	G3D::Ray localRay = cframe.toObjectSpace(worldRay);
+	const Vector3 corner = primitive->getGeometry()->getGridSize() * 0.5f;
+	Extents extents(-corner, corner);
+	Vector3 location;
+	G3D::CollisionDetection::collisionLocationForMovingPointFixedAABox(
+		localRay.origin, localRay.direction, G3D::AABox(extents.min(), extents.max()), location
+	);
+
+	for (int i = 0; i < 3; i++) {
+		if (location[i] == extents.max()[i]) {
+			surfaceId = i;
+			return &surfaces[(NormalId) i];
+		}
+		if (location[i] == extents.min()[i]) {
+			surfaceId = i + 3;
+			return &surfaces[(NormalId) (i + 3)];
+		}
+	}
+	return NULL;
 }
 
 Vector3 PartInstance::xmlToUiSize(const Vector3& size) const
@@ -974,6 +1031,19 @@ void PartInstance::setPartLocked(bool value)
 	}
 }
 
+// FUNCTION: ROBLOX 0x005b2640
+void PartInstance::setLocked(Instance* instance, bool value)
+{
+	if (PartInstance* part = dynamic_cast<PartInstance*>(instance)) {
+		part->setPartLocked(value);
+	}
+	else {
+		for (unsigned int i = 0; i < instance->numChildren(); i++) {
+			setLocked(instance->getChild(i), value);
+		}
+	}
+}
+
 // FUNCTION: WEBSERVICE 0x1009fbb0
 // FUNCTION: ROBLOX 0x005b26e0
 void PartInstance::setTransparency(float value)
@@ -1068,6 +1138,45 @@ void PartInstance::setElasticity(float elasticity)
 		primitive->setElasticity(elasticity);
 		raisePropertyChanged(prop_Elasticity);
 	}
+}
+
+// STUB: ROBLOX 0x005b2990
+bool PartInstance::resize(NormalId p_unk0x04, int p_unk0x08)
+{
+	if (p_unk0x08 != 0) {
+		Vector3 oldSizeXml = getPartSizeXml();
+		CoordinateFrame oldCoord = getCoordinateFrame();
+		Vector3 deltaSizeUi;
+		float posNeg = p_unk0x04 < 3 ? 1.0f : -1.0f;
+
+		if (partType == Part::BLOCK_PART) {
+			deltaSizeUi[p_unk0x04 % 3] = (float) p_unk0x08;
+		}
+		else {
+			deltaSizeUi = Vector3((float) p_unk0x08, (float) p_unk0x08, (float) p_unk0x08);
+		}
+
+		Vector3 newSizeUi = xmlToUiSize(oldSizeXml) + deltaSizeUi;
+		Vector3 newSizeXml = uiToXmlSize(newSizeUi);
+		Vector3 deltaSizeXml = newSizeXml - oldSizeXml;
+		Vector3 offset = oldCoord.rotation * deltaSizeXml;
+		Vector3 newTranslation = offset * 0.5f * posNeg + oldCoord.translation;
+		CoordinateFrame newCoord(oldCoord.rotation, newTranslation);
+
+		setCoordinateFrame(newCoord);
+		Vector3 sizeXml = uiToXmlSize(newSizeUi);
+		setPartSizeXml(sizeXml);
+		safeMove();
+
+		if (Math::fuzzyEq(getCoordinateFrame(), newCoord, 0.00001f, 0.00001f)) {
+			return true;
+		}
+
+		setCoordinateFrame(oldCoord);
+		setPartSizeXml(oldSizeXml);
+	}
+
+	return false;
 }
 
 // FUNCTION: WEBSERVICE 0x1009fe60

@@ -2,27 +2,35 @@
 
 #include "compat.h"
 #include "gui/GUI.h"
+#include "gui/GuiEvent.h"
 #include "network/Players.h"
+#include "rbxgraphics/Adorn.h"
 #include "reflection/reflection.h"
 #include "reflection/signal.h"
 #include "script/ScriptContext.h"
 #include "util/ContentProvider.h"
 #include "util/Http.h"
 #include "util/IMetric.h"
+#include "util/IRenderable.h"
 #include "util/Log.h"
 #include "util/Name.h"
 #include "util/Sound.h"
+#include "util/UserInputBase.h"
 #include "util/boost.hpp"
 #include "util/standardout.h"
 #include "v8datamodel/Accoutrement.h"
 #include "v8datamodel/Backpack.h"
 #include "v8datamodel/Camera.h"
+#include "v8datamodel/GuiBuilder.h"
 #include "v8datamodel/JointInstance.h"
 #include "v8datamodel/JointsService.h"
 #include "v8datamodel/Lighting.h"
 #include "v8datamodel/LocalBackpack.h"
+#include "v8datamodel/MouseCommand.h"
 #include "v8datamodel/Teams.h"
 #include "v8datamodel/TimeState.h"
+#include "v8datamodel/Tool.h"
+#include "v8datamodel/UserController.h"
 #include "v8datamodel/Workspace.h"
 #include "v8kernel/Kernel.h"
 #include "v8tree/Service.h"
@@ -142,6 +150,13 @@ static std::string report(const G3D::Stopwatch& timer)
 	return Log::formatTime(timer.smoothElapsedTime());
 }
 
+// FUNCTION: ROBLOX 0x0058f010
+void DataModel::buildGui(Adorn* adorn)
+{
+	GuiBuilder builder;
+	builder.buildGui(adorn, this, workspace.get());
+}
+
 // FUNCTION: WEBSERVICE 0x100725c0
 // FUNCTION: ROBLOX 0x0058f080
 void DataModel::onChildAdded(Instance* child)
@@ -218,6 +233,128 @@ void DataModel::onEvent(const RunService* source, RunTransition event)
 float DataModel::getSimTime() const
 {
 	return timeState->totalVirtualTime;
+}
+
+// FUNCTION: ROBLOX 0x0058f110
+bool DataModel::canDelaySwapBuffer() const
+{
+	return runService->isRunState();
+}
+
+// FUNCTION: ROBLOX 0x0058f350
+GuiResponse DataModel::processAccelerators(const GuiEvent& event)
+{
+	Verb* verb = NULL;
+
+	switch (event.eventType) {
+	case UIEvent::MOUSE_WHEEL_FORWARD:
+		verb = workspace->getVerb("CameraZoomIn");
+		break;
+	case UIEvent::MOUSE_WHEEL_BACKWARD:
+		verb = workspace->getVerb("CameraZoomOut");
+		break;
+	case UIEvent::KEY_DOWN:
+		if (event.key > SDLK_0 && event.key <= SDLK_9) {
+			if (localBackpack->onKey(event.key - SDLK_0)) {
+				return GuiResponse::used();
+			}
+		}
+		else {
+			switch (event.key) {
+			case SDLK_ESCAPE:
+				runService->pause();
+				break;
+			case SDLK_BACKSPACE:
+				if (ModelInstance* character = Network::Players::findLocalCharacter(this)) {
+					Tool::dropAll(character);
+				}
+				break;
+			case SDLK_COMMA:
+				verb = workspace->getVerb("CameraPanLeft");
+				break;
+			case SDLK_o:
+				verb = workspace->getVerb("CameraZoomOut");
+				break;
+			case SDLK_PERIOD:
+				verb = workspace->getVerb("CameraPanRight");
+				break;
+			case SDLK_PAGEUP:
+				verb = workspace->getVerb("CameraTiltDown");
+				break;
+			case SDLK_PAGEDOWN:
+				verb = workspace->getVerb("CameraTiltUp");
+				break;
+			case SDLK_EQUALS:
+				if (ModelInstance* character = Network::Players::findLocalCharacter(this)) {
+					Accoutrement::dropAll(character);
+				}
+				break;
+			case SDLK_RIGHTBRACKET:
+				localBackpack->cycleUp();
+				break;
+			case SDLK_LEFTBRACKET:
+				localBackpack->cycleDown();
+				break;
+			case SDLK_F1:
+				if (event.mod == KMOD_NONE) {
+					verb = getVerb("Help");
+				}
+				else {
+					verb = getVerb("Stats");
+				}
+				break;
+			case SDLK_i:
+				verb = workspace->getVerb("CameraZoomIn");
+				break;
+			}
+		}
+		break;
+	}
+
+	if (verb && verb->isEnabled()) {
+		verb->doIt(this);
+		return GuiResponse::used();
+	}
+
+	return GuiResponse::notUsed();
+}
+
+static G3D::Vector2 g_unk0x0095a91c;
+
+// STUB: ROBLOX 0x0058f660
+void DataModel::processEvent(const UIEvent& event)
+{
+	if (event.isMouseEvent()) {
+		g_unk0x0095a91c = G3D::Vector2(event.mousePosition.x, event.mousePosition.y);
+	}
+
+	GuiEvent guiEvent(event, this);
+
+	GuiResponse response = guiTarget ? guiTarget->process(guiEvent) : GuiResponse::notUsed();
+	if (response.wasNotUsed()) {
+		response = static_cast<GuiTarget*>(guiHooks.get())->process(guiEvent);
+	}
+	if (response.wasNotUsed()) {
+		response = static_cast<GuiTarget*>(guiRoot.get())->process(guiEvent);
+	}
+	if (response.wasNotUsed()) {
+		response = static_cast<GuiTarget*>(localBackpack.get())->process(guiEvent);
+	}
+	if (response.wasNotUsed()) {
+		response = processAccelerators(guiEvent);
+	}
+
+	forceArrowCursor = response.wasUsed() && guiTarget != static_cast<GuiTarget*>(workspace.get());
+
+	if (response.wasNotUsed()) {
+		response = static_cast<GuiTarget*>(workspace.get())->process(guiEvent);
+	}
+
+	if (event.isMouseEvent() || event.eventType == UIEvent::KEY_DOWN) {
+		Network::Player::onLocalPlayerNotIdle(this);
+	}
+
+	guiTarget = response.getTarget();
 }
 
 // FUNCTION: WEBSERVICE 0x10072860
@@ -348,14 +485,26 @@ DataModel::Lock::~Lock()
 	delete lock;
 }
 
-// STUB: ROBLOX 0x00590fd0
+// FUNCTION: ROBLOX 0x00590fd0
 void DataModel::processGui(const UIEvent& event)
 {
-	STUB(0x590fd0);
+	if (isInitialized) {
+		if (event.eventType != UIEvent::NO_EVENT) {
+			processEvent(event);
+		}
+
+		switch (runService->getRunState()) {
+		case RS_RUNNING:
+			break;
+		default:
+			workspace->raiseDrawChanged();
+			break;
+		}
+	}
 }
 
 // FUNCTION: WEBSERVICE 0x10079120
-// STUB: ROBLOX 0x00592490
+// FUNCTION: ROBLOX 0x00592490
 void DataModel::initializeContents()
 {
 	workspace->setParent(this);
@@ -379,6 +528,21 @@ void DataModel::initializeContents()
 	startListening(runService, this);
 
 	create<JointsService>();
+}
+
+// FUNCTION: ROBLOX 0x00592680
+void DataModel::renderPass3dAdorn(Adorn* adorn)
+{
+	drawId++;
+	if (adorn) {
+		workspace->render3dAdorn(adorn);
+		if (JointsService* joints = find<JointsService>()) {
+			joints->render3dAdornItems(adorn);
+		}
+		if (!forceArrowCursor) {
+			workspace->getCurrentMouseCommand()->render3dAdorn(adorn);
+		}
+	}
 }
 
 // FUNCTION: WEBSERVICE 0x100793b0
@@ -444,6 +608,76 @@ boost::shared_ptr<const std::vector<boost::shared_ptr<Instance> > > DataModel::g
 	serializer.loadInstances(root.get(), *result);
 
 	return result;
+}
+
+// STUB: ROBLOX 0x00592dc0
+void DataModel::renderPass2d(Adorn* adorn, IMetric* metric)
+{
+	if (adorn && metric) {
+		tempMetric = metric;
+
+		workspace->render2d(adorn);
+		GuiRoot::render2dItem(
+			adorn,
+			Network::Players::findLocalPlayer(this) ? static_cast<GuiItem*>(localBackpack.get())
+													: static_cast<GuiItem*>(starterPackService.get())
+		);
+		guiRoot->render2d(adorn);
+
+		Network::Player* player = create<Network::Players>()->getLocalPlayer();
+		if (player) {
+			for (unsigned int i = 0; i < player->numChildren(); i++) {
+				IRenderable* renderable = dynamic_cast<IRenderable*>(player->getChild(i));
+				if (renderable) {
+					renderable->render2d(adorn);
+				}
+			}
+		}
+
+		std::string text;
+		if (uiMessage == "[[[progress]]]") {
+			text = "Bricks: " + evaluate("numPrimitives") + "   Snaps: " + evaluate("numJoints");
+		}
+		else {
+			text = uiMessage;
+		}
+
+		if (!text.empty()) {
+			G3D::Rect2D viewport = adorn->getViewport();
+			G3D::Vector2 center = viewport.center();
+			float width = viewport.width();
+			int fontSize = (int) width * 0.02f;
+			G3D::Vector2 halfSize(width * 0.3f, width * 0.3f * 0.3f);
+
+			adorn->rect2d(G3D::Rect2D::xyxy(center - halfSize, center + halfSize), GuiItem::translucentBackdrop());
+			adorn->outlineRect2d(
+				G3D::Rect2D::xyxy(center - halfSize, center + halfSize), 2.0f, G3D::Color4(G3D::Color3::gray(), 1.0f)
+			);
+			adorn->drawFont2D(
+				text,
+				center,
+				fontSize,
+				G3D::Color4(G3D::Color3::white(), 1.0f),
+				G3D::Color4::clear(),
+				Adorn::XALIGN_CENTER,
+				Adorn::YALIGN_CENTER,
+				Adorn::PROPORTIONAL_SPACING
+			);
+		}
+
+		UserInputBase* userInput = create<ControllerService>()->getHardwareDevice();
+		if (userInput) {
+			if (forceArrowCursor) {
+				userInput->setCursorId(adorn, ContentId::fromAssets("Textures\\ArrowCursor.png"));
+			}
+			else {
+				workspace->setCursor(adorn);
+			}
+			userInput->renderGameCursor(adorn);
+		}
+
+		tempMetric = NULL;
+	}
 }
 
 void DataModel::raiseClose()

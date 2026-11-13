@@ -2,13 +2,16 @@
 
 #include "rbxgraphics/Adorn.h"
 #include "tool/DragTool.h"
+#include "tool/MegaDragger.h"
 #include "util/ISelectable3d.h"
 #include "util/Name.h"
 #include "util/UIEvent.h"
 #include "util/UserInputBase.h"
 #include "v8datamodel/Camera.h"
+#include "v8datamodel/DataModel.h"
 #include "v8datamodel/PartInstance.h"
 #include "v8datamodel/Workspace.h"
+#include "v8xml/SerializerV2.h"
 
 #include <algorithm>
 

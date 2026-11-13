@@ -90,30 +90,31 @@ public:
 	// FUNCTION: ROBLOX 0x00406890
 	// RBX::Creatable<RBX::Instance>::create<RBX::RunService>
 	// TEMPLATE: WEBSERVICE 0x10009570
-	// STUB: ROBLOX 0x00406370
+	// TEMPLATE: ROBLOX 0x00406370
 	// RBX::Creatable<RBX::Instance>::create<RBX::ModelInstance>
 	// FUNCTION: WEBSERVICE 0x10009600
 	// FUNCTION: ROBLOX 0x00406600
 	// RBX::Creatable<RBX::Instance>::create<RBX::Selection>
 	// FUNCTION: WEBSERVICE 0x10009690
-	// STUB: ROBLOX 0x00406b20
+	// FUNCTION: ROBLOX 0x00406b20
 	// RBX::Creatable<RBX::Instance>::create<RBX::ScriptContext>
 	// FUNCTION: WEBSERVICE 0x10009720
-	// STUB: ROBLOX 0x00406db0
+	// FUNCTION: ROBLOX 0x00406db0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Script>
 	// FUNCTION: WEBSERVICE 0x100097b0
-	// STUB: ROBLOX 0x00407040
+	// FUNCTION: ROBLOX 0x00407040
 	// RBX::Creatable<RBX::Instance>::create<RBX::LocalScript>
 	// STUB: WEBSERVICE 0x10019d00
-	// STUB: ROBLOX 0x004417f0
+	// TEMPLATE: ROBLOX 0x004417f0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Soundscape::SoundChannel>
 	// TEMPLATE: WEBSERVICE 0x10045340
 	// TEMPLATE: ROBLOX 0x004763e0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Sky>
 	// TEMPLATE: WEBSERVICE 0x1005b840
+	// TEMPLATE: ROBLOX 0x0041f120
 	// RBX::Creatable<RBX::Instance>::create<RBX::PartInstance>
 	// FUNCTION: WEBSERVICE 0x1005bab0
-	// STUB: ROBLOX 0x004aa520
+	// FUNCTION: ROBLOX 0x004aa520
 	// RBX::Creatable<RBX::Instance>::create<RBX::Humanoid>
 	// TEMPLATE: WEBSERVICE 0x10062870
 	// RBX::Creatable<RBX::Instance>::create<RBX::DebugSettings>
@@ -121,7 +122,12 @@ public:
 	// TEMPLATE: ROBLOX 0x005726b0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::Item,char const *>
 	// TEMPLATE: WEBSERVICE 0x100659d0
+	// TEMPLATE: ROBLOX 0x0045cb00
 	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::StatsService>
+	// TEMPLATE: ROBLOX 0x004633b0
+	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::TypedStatsItem<G3D::Stopwatch>,G3D::Stopwatch const *>
+	// TEMPLATE: ROBLOX 0x00463440
+	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::TypedStatsItem<int>,int const *>
 	// TEMPLATE: WEBSERVICE 0x100666f0
 	// TEMPLATE: ROBLOX 0x004ceb30
 	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::TypedStatsItem<bool>,bool const *>
@@ -129,24 +135,25 @@ public:
 	// TEMPLATE: ROBLOX 0x00572f70
 	// RBX::Creatable<RBX::Instance>::create<RBX::Stats::TypedStatsItem<int>,boost::function0<int,std::allocator<boost::function_base> > >
 	// TEMPLATE: WEBSERVICE 0x100691f0
-	// STUB: ROBLOX 0x0040ed10
+	// TEMPLATE: ROBLOX 0x0040ed10
 	// RBX::Creatable<RBX::Instance>::create<RBX::Team>
 	// TEMPLATE: WEBSERVICE 0x10069460
 	// TEMPLATE: ROBLOX 0x0040efa0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Network::Player>
 	// TEMPLATE: WEBSERVICE 0x1006bd80
-	// STUB: ROBLOX 0x00461df0
+	// TEMPLATE: ROBLOX 0x00461df0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Camera>
 	// TEMPLATE: WEBSERVICE 0x1006be50
+	// TEMPLATE: ROBLOX 0x00460a70
 	// RBX::Creatable<RBX::Instance>::create<RBX::ControllerService>
 	// TEMPLATE: WEBSERVICE 0x1006bed0
 	// TEMPLATE: ROBLOX 0x004a8c60
 	// RBX::Creatable<RBX::Instance>::create<RBX::StarterPackService>
 	// TEMPLATE: WEBSERVICE 0x1006db70
-	// STUB: ROBLOX 0x004a89d0
+	// TEMPLATE: ROBLOX 0x004a89d0
 	// RBX::Creatable<RBX::Instance>::create<RBX::HopperBin>
 	// TEMPLATE: WEBSERVICE 0x1006de90
-	// STUB: ROBLOX 0x004a8ef0
+	// TEMPLATE: ROBLOX 0x004a8ef0
 	// RBX::Creatable<RBX::Instance>::create<RBX::LegacyHopperService>
 	// TEMPLATE: WEBSERVICE 0x1006e120
 	// TEMPLATE: ROBLOX 0x00591db0
@@ -178,25 +185,25 @@ public:
 	// TEMPLATE: ROBLOX 0x00591a90
 	// RBX::Creatable<RBX::Instance>::create<RBX::LocalBackpackItem>
 	// TEMPLATE: WEBSERVICE 0x10076620
-	// STUB: ROBLOX 0x004ca7a0
+	// TEMPLATE: ROBLOX 0x004ca7a0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Snap>
 	// TEMPLATE: WEBSERVICE 0x10076890
-	// STUB: ROBLOX 0x004caa30
+	// TEMPLATE: ROBLOX 0x004caa30
 	// RBX::Creatable<RBX::Instance>::create<RBX::Weld>
 	// TEMPLATE: WEBSERVICE 0x10076b00
-	// STUB: ROBLOX 0x004cacc0
+	// TEMPLATE: ROBLOX 0x004cacc0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Glue>
 	// TEMPLATE: WEBSERVICE 0x10076d70
-	// STUB: ROBLOX 0x004caf50
+	// TEMPLATE: ROBLOX 0x004caf50
 	// RBX::Creatable<RBX::Instance>::create<RBX::Rotate>
 	// TEMPLATE: WEBSERVICE 0x10076fe0
-	// STUB: ROBLOX 0x004cb1e0
+	// TEMPLATE: ROBLOX 0x004cb1e0
 	// RBX::Creatable<RBX::Instance>::create<RBX::RotateP>
 	// TEMPLATE: WEBSERVICE 0x10077250
-	// STUB: ROBLOX 0x004cb470
+	// TEMPLATE: ROBLOX 0x004cb470
 	// RBX::Creatable<RBX::Instance>::create<RBX::RotateV>
 	// TEMPLATE: WEBSERVICE 0x100774c0
-	// STUB: ROBLOX 0x004cb700
+	// TEMPLATE: ROBLOX 0x004cb700
 	// RBX::Creatable<RBX::Instance>::create<RBX::Motor>
 	// TEMPLATE: WEBSERVICE 0x10077730
 	// TEMPLATE: ROBLOX 0x004a6d30
@@ -205,8 +212,10 @@ public:
 	// TEMPLATE: ROBLOX 0x004aa1a0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Teams>
 	// TEMPLATE: WEBSERVICE 0x10077c10
+	// TEMPLATE: ROBLOX 0x00436690
 	// RBX::Creatable<RBX::Instance>::create<RBX::Accoutrement>
 	// TEMPLATE: WEBSERVICE 0x10077e80
+	// TEMPLATE: ROBLOX 0x00436920
 	// RBX::Creatable<RBX::Instance>::create<RBX::Hat>
 	// TEMPLATE: WEBSERVICE 0x1007e750
 	// TEMPLATE: ROBLOX 0x0044fe80
@@ -218,16 +227,16 @@ public:
 	// TEMPLATE: ROBLOX 0x005c7820
 	// RBX::Creatable<RBX::Instance>::create<StockSound>
 	// TEMPLATE: WEBSERVICE 0x10089930
-	// STUB: ROBLOX 0x004a9760
+	// TEMPLATE: ROBLOX 0x004a9760
 	// RBX::Creatable<RBX::Instance>::create<RBX::ShirtGraphic>
 	// TEMPLATE: WEBSERVICE 0x10089ba0
-	// STUB: ROBLOX 0x004a99f0
+	// TEMPLATE: ROBLOX 0x004a99f0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Shirt>
 	// TEMPLATE: WEBSERVICE 0x10089e10
-	// STUB: ROBLOX 0x004a9c80
+	// TEMPLATE: ROBLOX 0x004a9c80
 	// RBX::Creatable<RBX::Instance>::create<RBX::BodyColors>
 	// TEMPLATE: WEBSERVICE 0x1008a080
-	// STUB: ROBLOX 0x004a9f10
+	// TEMPLATE: ROBLOX 0x004a9f10
 	// RBX::Creatable<RBX::Instance>::create<RBX::Skin>
 	// TEMPLATE: WEBSERVICE 0x1008a2f0
 	// TEMPLATE: ROBLOX 0x005cad70
@@ -266,7 +275,7 @@ public:
 	// TEMPLATE: ROBLOX 0x005cc0f0
 	// RBX::Creatable<RBX::Instance>::create<RBX::BodyPosition>
 	// TEMPLATE: WEBSERVICE 0x1008c030
-	// STUB: ROBLOX 0x005cc360 FOLDED
+	// TEMPLATE: ROBLOX 0x005cc360 FOLDED
 	// RBX::Creatable<RBX::Instance>::create<RBX::BodyVelocity>
 	// TEMPLATE: WEBSERVICE 0x1008c2a0
 	// TEMPLATE: ROBLOX 0x005cc5d0
@@ -275,6 +284,7 @@ public:
 	// TEMPLATE: ROBLOX 0x005cc840
 	// RBX::Creatable<RBX::Instance>::create<RBX::Message>
 	// TEMPLATE: WEBSERVICE 0x1008ce10
+	// TEMPLATE: ROBLOX 0x00457c70
 	// RBX::Creatable<RBX::Instance>::create<RBX::Visit>
 	// TEMPLATE: WEBSERVICE 0x1008d080
 	// TEMPLATE: ROBLOX 0x005cd140
@@ -286,10 +296,10 @@ public:
 	// FUNCTION: ROBLOX 0x005cd3b0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Seat>
 	// TEMPLATE: WEBSERVICE 0x1008d7d0
-	// STUB: ROBLOX 0x004a9240
+	// TEMPLATE: ROBLOX 0x004a9240
 	// RBX::Creatable<RBX::Instance>::create<RBX::SpawnLocation>
 	// TEMPLATE: WEBSERVICE 0x1008da40
-	// STUB: ROBLOX 0x004a94d0
+	// TEMPLATE: ROBLOX 0x004a94d0
 	// RBX::Creatable<RBX::Instance>::create<RBX::SpawnerService>
 	// TEMPLATE: WEBSERVICE 0x1008e7a0
 	// TEMPLATE: ROBLOX 0x005ce020
@@ -306,8 +316,10 @@ public:
 	// TEMPLATE: ROBLOX 0x005ea560
 	// RBX::Creatable<RBX::Instance>::create<RBX::FilteredSelection<RBX::PartInstance> >
 	// TEMPLATE: WEBSERVICE 0x100acde0
+	// TEMPLATE: ROBLOX 0x0041ec70
 	// RBX::Creatable<RBX::Instance>::create<RBX::Decal>
 	// TEMPLATE: WEBSERVICE 0x100ad050
+	// TEMPLATE: ROBLOX 0x0041ed00
 	// RBX::Creatable<RBX::Instance>::create<RBX::Texture>
 	// TEMPLATE: WEBSERVICE 0x100b2810
 	// TEMPLATE: ROBLOX 0x004cdf50
@@ -329,7 +341,7 @@ public:
 	// TEMPLATE: ROBLOX 0x005988e0
 	// RBX::Creatable<RBX::Instance>::create<RBX::FilteredSelection<RBX::ModelInstance> >
 	// TEMPLATE: WEBSERVICE 0x100cc1b0
-	// STUB: ROBLOX 0x00610d80 FOLDED
+	// TEMPLATE: ROBLOX 0x00610d80 FOLDED
 	// RBX::Creatable<RBX::Instance>::create<RBX::Mouse>
 	// TEMPLATE: WEBSERVICE 0x100dda40
 	// TEMPLATE: ROBLOX 0x005f5670
@@ -374,7 +386,7 @@ public:
 	// TEMPLATE: ROBLOX 0x006349e0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Value<RBX::BrickColor,&RBX::sBrickColorValue> >
 	// TEMPLATE: WEBSERVICE 0x10129ea0
-	// STUB: ROBLOX 0x0041f3b0
+	// TEMPLATE: ROBLOX 0x0041f3b0
 	// RBX::Creatable<RBX::Instance>::create<RBX::SpecialShape>
 	// TEMPLATE: WEBSERVICE 0x1018b8e0
 	// TEMPLATE: ROBLOX 0x004b82a0
@@ -558,28 +570,28 @@ public:
 	// FUNCTION: ROBLOX 0x004761f0
 	// RBX::FactoryProduct<RBX::Lighting,RBX::Instance,&RBX::sLighting>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10007be0
-	// STUB: ROBLOX 0x00406920
+	// FUNCTION: ROBLOX 0x00406920
 	// RBX::FactoryProduct<RBX::RunService,RBX::Instance,&RBX::sRunService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10007ca0
-	// STUB: ROBLOX 0x00406400
+	// TEMPLATE: ROBLOX 0x00406400
 	// RBX::FactoryProduct<RBX::ModelInstance,RBX::PVInstance,&RBX::sModel>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10007d60
-	// STUB: ROBLOX 0x00406690
+	// FUNCTION: ROBLOX 0x00406690
 	// RBX::FactoryProduct<RBX::Selection,RBX::Instance,&RBX::sSelection>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10007e20
-	// STUB: ROBLOX 0x00406bb0
+	// FUNCTION: ROBLOX 0x00406bb0
 	// RBX::FactoryProduct<RBX::ScriptContext,RBX::Instance,&RBX::sScriptContext>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10007ee0
-	// STUB: ROBLOX 0x00406e40
+	// FUNCTION: ROBLOX 0x00406e40
 	// RBX::FactoryProduct<RBX::Script,RBX::Instance,&RBX::sScript>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10007fa0
-	// STUB: ROBLOX 0x004070d0
+	// FUNCTION: ROBLOX 0x004070d0
 	// RBX::FactoryProduct<RBX::LocalScript,RBX::Script,&RBX::sLocalScript>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1000fdf0
 	// TEMPLATE: ROBLOX 0x004415f0
 	// RBX::FactoryProduct<RBX::Soundscape::SoundService,RBX::Instance,&RBX::Soundscape::sSoundService>::Creator::create
 	// STUB: WEBSERVICE 0x1000feb0
-	// STUB: ROBLOX 0x00441880
+	// TEMPLATE: ROBLOX 0x00441880
 	// RBX::FactoryProduct<RBX::Soundscape::SoundChannel,RBX::Instance,&RBX::Soundscape::sSoundChannel>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10008b90
 	// RBX::FactoryProduct<ThumbnailGenerator,RBX::Instance,&sThumbnailGenerator>::FactoryProduct<ThumbnailGenerator,RBX::Instance,&sThumbnailGenerator>
@@ -614,10 +626,10 @@ public:
 	// TEMPLATE: ROBLOX 0x00566190
 	// RBX::FactoryProduct<RBX::ModelInstance,RBX::PVInstance,&RBX::sModel>::getClassName
 	// TEMPLATE: WEBSERVICE 0x1005b8c0
-	// STUB: ROBLOX 0x0041f1b0
+	// TEMPLATE: ROBLOX 0x0041f1b0
 	// RBX::FactoryProduct<RBX::PartInstance,RBX::PVInstance,&RBX::sPart>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1005bb30
-	// STUB: ROBLOX 0x004aa5b0
+	// TEMPLATE: ROBLOX 0x004aa5b0
 	// RBX::FactoryProduct<RBX::Humanoid,RBX::Instance,&RBX::sHumanoid>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1005bfe0
 	// TEMPLATE: ROBLOX 0x00564dd0
@@ -649,7 +661,7 @@ public:
 	// TEMPLATE: ROBLOX 0x00460b00
 	// RBX::NonFactoryProduct<RBX::Instance,&RBX::Stats::sStatsItem>::getClassName
 	// FUNCTION: WEBSERVICE 0x10064700
-	// STUB: ROBLOX 0x00409dd0
+	// FUNCTION: ROBLOX 0x00409dd0
 	// RBX::FactoryProduct<RBX::DebugSettings,RBX::GlobalSettings::Item,&RBX::sDebugSettings>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10065740
 	// FUNCTION: ROBLOX 0x00572690
@@ -666,10 +678,10 @@ public:
 	// FUNCTION: WEBSERVICE 0x10068e80
 	// RBX::FactoryProduct<RBX::LocalScript,RBX::Script,&RBX::sLocalScript>::`scalar deleting destructor'
 	// TEMPLATE: WEBSERVICE 0x10069270
-	// STUB: ROBLOX 0x0040eda0
+	// TEMPLATE: ROBLOX 0x0040eda0
 	// RBX::FactoryProduct<RBX::Team,RBX::Instance,&RBX::sTeam>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100694e0
-	// STUB: ROBLOX 0x0040f030
+	// TEMPLATE: ROBLOX 0x0040f030
 	// RBX::FactoryProduct<RBX::Network::Player,RBX::Instance,&RBX::Network::sPlayer>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10069b80
 	// TEMPLATE: ROBLOX 0x00575ed0
@@ -678,19 +690,19 @@ public:
 	// TEMPLATE: ROBLOX 0x005b4c10
 	// RBX::NonFactoryProduct<RBX::RootInstance,&RBX::sWorkspace>::NonFactoryProduct<RBX::RootInstance,&RBX::sWorkspace>
 	// TEMPLATE: WEBSERVICE 0x1006d8d0
-	// STUB: ROBLOX 0x00461bf0
+	// TEMPLATE: ROBLOX 0x00461bf0
 	// RBX::FactoryProduct<RBX::ControllerService,RBX::Instance,&RBX::sControllerService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1006d980
-	// STUB: ROBLOX 0x00461e80
+	// TEMPLATE: ROBLOX 0x00461e80
 	// RBX::FactoryProduct<RBX::Camera,RBX::Instance,&RBX::sCamera>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1006dbf0
-	// STUB: ROBLOX 0x004a8a60
+	// TEMPLATE: ROBLOX 0x004a8a60
 	// RBX::FactoryProduct<RBX::HopperBin,RBX::BackpackItem,&RBX::sHopperBin>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1006dca0
-	// STUB: ROBLOX 0x004a8cf0
+	// TEMPLATE: ROBLOX 0x004a8cf0
 	// RBX::FactoryProduct<RBX::StarterPackService,RBX::Hopper,&RBX::sStarterPackService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1006df10
-	// STUB: ROBLOX 0x004a8f80
+	// TEMPLATE: ROBLOX 0x004a8f80
 	// RBX::FactoryProduct<RBX::LegacyHopperService,RBX::Hopper,&RBX::sLegacyHopperService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1006e1a0
 	// TEMPLATE: ROBLOX 0x00591e30
@@ -708,37 +720,37 @@ public:
 	// TEMPLATE: ROBLOX 0x00591bc0
 	// RBX::FactoryProduct<RBX::LocalBackpack,RBX::RelativePanel,&RBX::sLocalBackpack>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100766a0
-	// STUB: ROBLOX 0x004ca830
+	// TEMPLATE: ROBLOX 0x004ca830
 	// RBX::FactoryProduct<RBX::Snap,RBX::AutoJoint,&RBX::sSnap>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10076910
-	// STUB: ROBLOX 0x004caac0
+	// TEMPLATE: ROBLOX 0x004caac0
 	// RBX::FactoryProduct<RBX::Weld,RBX::AutoJoint,&RBX::sWeld>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10076b80
-	// STUB: ROBLOX 0x004cad50
+	// TEMPLATE: ROBLOX 0x004cad50
 	// RBX::FactoryProduct<RBX::Glue,RBX::AutoJoint,&RBX::sGlue>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10076df0
-	// STUB: ROBLOX 0x004cafe0
+	// TEMPLATE: ROBLOX 0x004cafe0
 	// RBX::FactoryProduct<RBX::Rotate,RBX::AutoJoint,&RBX::sRotate>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10077060
-	// STUB: ROBLOX 0x004cb270
+	// TEMPLATE: ROBLOX 0x004cb270
 	// RBX::FactoryProduct<RBX::RotateP,RBX::AutoJoint,&RBX::sRotateP>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100772d0
-	// STUB: ROBLOX 0x004cb500
+	// TEMPLATE: ROBLOX 0x004cb500
 	// RBX::FactoryProduct<RBX::RotateV,RBX::AutoJoint,&RBX::sRotateV>::Creator::create
 	// FUNCTION: WEBSERVICE 0x10077540
-	// STUB: ROBLOX 0x004cb790
+	// FUNCTION: ROBLOX 0x004cb790
 	// RBX::FactoryProduct<RBX::Motor,RBX::AutoJoint,&RBX::sMotor>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100777b0
-	// STUB: ROBLOX 0x004a9040
+	// TEMPLATE: ROBLOX 0x004a9040
 	// RBX::FactoryProduct<RBX::Backpack,RBX::Hopper,&RBX::sBackpack>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10077a20
-	// STUB: ROBLOX 0x004aa230
+	// TEMPLATE: ROBLOX 0x004aa230
 	// RBX::FactoryProduct<RBX::Teams,RBX::Instance,&RBX::sTeams>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10077c90
-	// STUB: ROBLOX 0x00436720
+	// TEMPLATE: ROBLOX 0x00436720
 	// RBX::FactoryProduct<RBX::Accoutrement,RBX::Instance,&RBX::sAccoutrement>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10077f00
-	// STUB: ROBLOX 0x004369b0
+	// TEMPLATE: ROBLOX 0x004369b0
 	// RBX::FactoryProduct<RBX::Hat,RBX::Accoutrement,&RBX::sHat>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1007b030
 	// TEMPLATE: ROBLOX 0x005941e0
@@ -759,10 +771,11 @@ public:
 	// TEMPLATE: ROBLOX 0x005c1ab0
 	// RBX::FactoryProduct<StockSound,RBX::Soundscape::SoundChannel,&sStockSound>::~FactoryProduct<StockSound,RBX::Soundscape::SoundChannel,&sStockSound>
 	// TEMPLATE: WEBSERVICE 0x1007e870
-	// TEMPLATE: ROBLOX 0x005c2310
 	// RBX::FactoryProduct<RBX::Soundscape::SoundChannel,RBX::Instance,&RBX::Soundscape::sSoundChannel>::getClassName
+	// TEMPLATE: ROBLOX 0x005c2310
+	// RBX::FactoryProduct<RBX::Soundscape::SoundChannel,RBX::Instance,&RBX::Soundscape::sSoundChannel>::Creator::getClassName
 	// TEMPLATE: WEBSERVICE 0x100815c0
-	// STUB: ROBLOX 0x00451a30
+	// TEMPLATE: ROBLOX 0x00451a30
 	// RBX::FactoryProduct<RBX::GameSettings,RBX::GlobalSettings::Item,&RBX::sGameSettings>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10083070
 	// TEMPLATE: ROBLOX 0x005c6c20
@@ -771,16 +784,16 @@ public:
 	// TEMPLATE: ROBLOX 0x005c7c60
 	// RBX::FactoryProduct<StockSound,RBX::Soundscape::SoundChannel,&sStockSound>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100899b0
-	// STUB: ROBLOX 0x004a97f0
+	// TEMPLATE: ROBLOX 0x004a97f0
 	// RBX::FactoryProduct<RBX::ShirtGraphic,RBX::CharacterAppearance,&RBX::sShirtGraphic>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10089c20
-	// STUB: ROBLOX 0x004a9a80
+	// TEMPLATE: ROBLOX 0x004a9a80
 	// RBX::FactoryProduct<RBX::Shirt,RBX::ShirtGraphic,&RBX::sShirt>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10089e90
-	// STUB: ROBLOX 0x004a9d10
+	// TEMPLATE: ROBLOX 0x004a9d10
 	// RBX::FactoryProduct<RBX::BodyColors,RBX::CharacterAppearance,&RBX::sBodyColors>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008a100
-	// STUB: ROBLOX 0x004a9fa0
+	// TEMPLATE: ROBLOX 0x004a9fa0
 	// RBX::FactoryProduct<RBX::Skin,RBX::CharacterAppearance,&RBX::sSkin>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008a370
 	// TEMPLATE: ROBLOX 0x005cadf0
@@ -849,22 +862,22 @@ public:
 	// FUNCTION: ROBLOX 0x005cdc30
 	// RBX::FactoryProduct<RBX::ObjectValue,RBX::Instance,&RBX::sObjectValue>::`scalar deleting destructor'
 	// TEMPLATE: WEBSERVICE 0x1008ce90
-	// STUB: ROBLOX 0x00457d00
+	// TEMPLATE: ROBLOX 0x00457d00
 	// RBX::FactoryProduct<RBX::Visit,RBX::Instance,&RBX::sVisit>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008d100
 	// TEMPLATE: ROBLOX 0x005cd1c0
 	// RBX::FactoryProduct<RBX::DebrisService,RBX::Instance,&RBX::sDebrisService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008d370
-	// STUB: ROBLOX 0x004aa2f0
+	// TEMPLATE: ROBLOX 0x004aa2f0
 	// RBX::FactoryProduct<RBX::TimerService,RBX::Instance,&RBX::sTimerService>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008d5e0
 	// TEMPLATE: ROBLOX 0x005cd430
 	// RBX::FactoryProduct<RBX::Seat,RBX::PartInstance,&RBX::sSeat>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008d850
-	// STUB: ROBLOX 0x004a92d0
+	// TEMPLATE: ROBLOX 0x004a92d0
 	// RBX::FactoryProduct<RBX::SpawnLocation,RBX::PartInstance,&RBX::sSpawnLocation>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x1008dac0
-	// STUB: ROBLOX 0x004a9560
+	// TEMPLATE: ROBLOX 0x004a9560
 	// RBX::FactoryProduct<RBX::SpawnerService,RBX::Instance,&RBX::sSpawnerService>::Creator::create
 	// FUNCTION: WEBSERVICE 0x1008e4b0
 	// RBX::FactoryProduct<RBX::Hint,RBX::Message,&RBX::sHint>::`scalar deleting destructor'
@@ -896,10 +909,10 @@ public:
 	// FUNCTION: ROBLOX 0x005e90a0
 	// RBX::FactoryProduct<RBX::Humanoid,RBX::Instance,&RBX::sHumanoid>::`scalar deleting destructor'
 	// TEMPLATE: WEBSERVICE 0x100ace60
-	// STUB: ROBLOX 0x0041ee60
+	// TEMPLATE: ROBLOX 0x0041ee60
 	// RBX::FactoryProduct<RBX::Decal,RBX::FaceInstance,&RBX::sDecal>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x100ad0d0
-	// STUB: ROBLOX 0x0041ef20
+	// TEMPLATE: ROBLOX 0x0041ef20
 	// RBX::FactoryProduct<RBX::Texture,RBX::Decal,&RBX::sTexture>::Creator::create
 	// FUNCTION: WEBSERVICE 0x100b3810
 	// FUNCTION: ROBLOX 0x0057b480
@@ -1393,7 +1406,7 @@ public:
 	// FUNCTION: WEBSERVICE 0x101004b0
 	// RBX::FactoryProduct<RBX::Texture,RBX::Decal,&RBX::sTexture>::`scalar deleting destructor'
 	// TEMPLATE: WEBSERVICE 0x10129f20
-	// STUB: ROBLOX 0x0041f440
+	// TEMPLATE: ROBLOX 0x0041f440
 	// RBX::FactoryProduct<RBX::SpecialShape,RBX::Instance,&RBX::sSpecialShape>::Creator::create
 	// FUNCTION: WEBSERVICE 0x1012c970
 	// FUNCTION: ROBLOX 0x005b3370

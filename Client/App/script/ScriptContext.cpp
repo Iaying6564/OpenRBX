@@ -68,6 +68,14 @@ void ScriptContext::sandboxThread(lua_State* thread)
 	lua_replace(thread, LUA_GLOBALSINDEX);
 }
 
+// FUNCTION: ROBLOX 0x0056bd70
+void ScriptContext::gc()
+{
+	if (globalState) {
+		lua_gc(globalState, LUA_GCCOLLECT, 0);
+	}
+}
+
 // FUNCTION: WEBSERVICE 0x1005eb00
 // FUNCTION: ROBLOX 0x0056bd90
 ScriptContext& ScriptContext::getContext(lua_State* thread)
@@ -287,7 +295,7 @@ void ScriptContext::disassociateState(Script* script)
 }
 
 // FUNCTION: WEBSERVICE 0x10064510
-// STUB: ROBLOX 0x00571b00
+// FUNCTION: ROBLOX 0x00571b00
 void ScriptContext::removeScript(Script* script)
 {
 	if (scripts.erase(script)) {
@@ -431,7 +439,7 @@ int ScriptContext::loadfile(lua_State* L)
 }
 
 // FUNCTION: WEBSERVICE 0x10066f20
-// STUB: ROBLOX 0x005734e0
+// FUNCTION: ROBLOX 0x005734e0
 int ScriptContext::stats(lua_State* L)
 {
 	Security::Context::current().requirePermission(Security::Administrator, "Stats");
@@ -465,7 +473,7 @@ int ScriptContext::dofile(lua_State* L)
 }
 
 // FUNCTION: WEBSERVICE 0x10067140
-// STUB: ROBLOX 0x00573700
+// FUNCTION: ROBLOX 0x00573700
 void ScriptContext::onServiceProvider(const ServiceProvider* oldProvider, const ServiceProvider* newProvider)
 {
 	stopListening<RunService, RunTransition>(runService, this);
@@ -796,6 +804,21 @@ void ScriptContext::executeInNewThread(
 	resume(thread, pushArguments, readResults);
 }
 
+// FUNCTION: ROBLOX 0x00574c00
+void ScriptContext::call(
+	const Lua::FunctionRef& function,
+	boost::function1<unsigned int, lua_State*> pushArguments,
+	boost::function2<void, lua_State*, unsigned int> readResults
+)
+{
+	if (!function.thread()) {
+		throw std::runtime_error("Cannot call a nil function");
+	}
+
+	lua_pushfunction(function.thread(), function);
+	resume(function.thread(), pushArguments, readResults);
+}
+
 // FUNCTION: WEBSERVICE 0x10068640
 // FUNCTION: ROBLOX 0x00574d60
 void ScriptContext::startPendingScripts()
@@ -818,7 +841,7 @@ void ScriptContext::onChangedScriptEnabled(const Reflection::PropertyDescriptor&
 }
 
 // FUNCTION: WEBSERVICE 0x10068780
-// STUB: ROBLOX 0x00574ea0
+// FUNCTION: ROBLOX 0x00574ea0
 void ScriptContext::addScript(Script* script)
 {
 	if (scripts.insert(script).second == true) {
@@ -826,6 +849,37 @@ void ScriptContext::addScript(Script* script)
 			startScript(shared_from(script));
 		}
 	}
+}
+
+static unsigned int FUN_00407390(lua_State* thread)
+{
+	return 0;
+}
+
+static void FUN_00751160(lua_State* thread, unsigned int count)
+{
+}
+
+// FUNCTION: ROBLOX 0x00574ef0
+void ScriptContext::executeInNewThread(Security::Identities identity, const char* script, const char* name)
+{
+	executeInNewThread(identity, script, name, boost::bind(&FUN_00407390, _1), boost::bind(&FUN_00751160, _1, _2));
+}
+
+// FUNCTION: ROBLOX 0x00574f60
+std::auto_ptr<std::vector<Reflection::Value> > ScriptContext::call(
+	const Lua::FunctionRef& function, const std::vector<Reflection::Value>& arguments
+)
+{
+	std::auto_ptr<std::vector<Reflection::Value> > result;
+
+	call(
+		function,
+		boost::bind(&pushArguments, boost::cref(arguments), _1),
+		boost::bind(&readResults, boost::ref(result), _1, _2)
+	);
+
+	return result;
 }
 
 // FUNCTION: WEBSERVICE 0x100687d0

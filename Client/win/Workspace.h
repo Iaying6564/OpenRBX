@@ -54,24 +54,43 @@ public:
 	STDMETHOD(ExecUrlScript)(BSTR url, VARIANT arg1, VARIANT arg2, VARIANT arg3, VARIANT arg4, SAFEARRAY** result);
 	STDMETHOD(Close)();
 
-	HRESULT FUN_0046fe10();
+	HRESULT FinalConstruct();
 
-	// FUNCTION: ROBLOX 0x0046edc0
-	boost::shared_ptr<RBX::DataModel> FUN_0046edc0() const { return m_unk0x24; }
+	boost::shared_ptr<RBX::DataModel> FUN_0046edc0() const;
+
+	RBX::Workspace* FUN_0046edf0() const;
+
+	void FUN_0046ef00(std::istream& stream);
+	void FUN_004702b0(RBX::ContentId contentId, bool p_unk0x20);
 
 protected:
 	virtual void onEvent(const RBX::Selection* source, RBX::SelectionChanged event);
 	virtual void onEvent(const RBX::Workspace* source, RBX::DrawChanged event);
 
 private:
+	friend class CRobloxDoc;
+
 	std::auto_ptr<XmlElement> FUN_0046f040();
 	void FUN_0046f420();
-	HRESULT FUN_004700b0(const XmlElement* root, std::ostream& stream);
+	std::auto_ptr<XmlElement> FUN_0046ffa0();
+	HRESULT FUN_004700b0(const XmlElement* root, std::ostream* stream);
+	HRESULT DoExecScript(LPCSTR script, VARIANT arg1, VARIANT arg2, VARIANT arg3, VARIANT arg4, SAFEARRAY** result);
 
 	boost::shared_ptr<RBX::DataModel> m_unk0x24;  // 0x24
 	boost::shared_ptr<RBX::RunService> m_unk0x2c; // 0x2c
 };
 
 DECOMP_SIZE_ASSERT(CWorkspace, 0x34)
+
+// clang-format off
+// TEMPLATE: ROBLOX 0x00403550
+// IObjectSafetyRobloxImpl<CWorkspace,1>::FUN_00408260
+// TEMPLATE: ROBLOX 0x00403e90
+// IObjectSafetyRobloxImpl<CWorkspace,1>::FUN_004085e0
+// TEMPLATE: ROBLOX 0x004050a0
+// IObjectSafetyRobloxImpl<CWorkspace,1>::GetInterfaceSafetyOptions
+// TEMPLATE: ROBLOX 0x00405130
+// IObjectSafetyRobloxImpl<CWorkspace,1>::SetInterfaceSafetyOptions
+// clang-format on
 
 #endif // WORKSPACE_H

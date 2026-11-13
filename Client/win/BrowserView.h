@@ -23,6 +23,8 @@ protected:
 public:
 	virtual ~CBrowserView();
 
+	static CBrowserView* FUN_0040b6d0(CRect rect, CWnd* parent, CString url, IDispatch* external);
+
 	// SYNTHETIC: ROBLOX 0x0040d320
 	// ??_ECBrowserView@@UAEPAXI@Z
 
@@ -32,6 +34,14 @@ protected:
 	virtual HRESULT OnGetHostInfo(DOCHOSTUIINFO* pInfo);
 	virtual void OnCommandStateChange(long nCommand, BOOL bEnable);
 	virtual void OnNavigateComplete2(LPCTSTR strURL);
+	virtual void OnBeforeNavigate2(
+		LPCTSTR lpszURL,
+		DWORD nFlags,
+		LPCTSTR lpszTargetFrameName,
+		CByteArray& baPostedData,
+		LPCTSTR lpszHeaders,
+		BOOL* pbCancel
+	);
 	virtual void OnTitleChange(LPCTSTR lpszText);
 	virtual void OnDocumentComplete(LPCTSTR lpszURL);
 
@@ -111,8 +121,11 @@ class CBrowserDoc : public CNullDoc
 	// SYNTHETIC: ROBLOX 0x0040a1a0
 	// ?GetThisClass@CBrowserDoc@@SGPAUCRuntimeClass@@XZ
 
+	// SYNTHETIC: ROBLOX 0x0040a820
+	// ?CreateObject@CBrowserDoc@@SGPAVCObject@@XZ
+
 protected:
-	CBrowserDoc() {}
+	CBrowserDoc() : m_unk0x54(NULL) {}
 
 public:
 	CBrowserView* m_unk0x54; // 0x54

@@ -28,6 +28,7 @@ extern char sPart[];
 using boost::shared_ptr;
 
 class World;
+class XmlState;
 
 // SIZE 0x2ac
 class PartInstance : public DescribedCreatable<PartInstance, PVInstance, sPart>,

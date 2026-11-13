@@ -5,11 +5,16 @@
 
 #include <GLG3D/DXCaps.h>
 
+const float g_unk0x008094f8 = 20.0f;
+const float g_unk0x008094fc = 20.0f;
+const float g_unk0x00809500 = 50.0f;
+const float g_unk0x00809504 = 50.0f;
+
 const char sRenderSettings[] = "RenderSettings";
 
 CRenderSettings::AASamples g_unk0x0091a2e8 = CRenderSettings::c_aaSamplesUnk0x1;
 G3D::Vector2int16 g_unk0x0091a2ec(800, 600);
-undefined4 g_unk0x00953ae0;
+CRenderSettings::GraphicsMode g_unk0x00953ae0;
 
 static RBX::Reflection::EnumPropDescriptor<CRenderSettings, CRenderSettings::GraphicsMode> g_unk0x00953ae4(
 	"graphicsMode", "General", &CRenderSettings::FUN_00468a60, &CRenderSettings::FUN_0044d0b0
@@ -63,13 +68,13 @@ static RBX::Reflection::EnumPropDescriptor<CRenderSettings, CRenderSettings::AAS
 	"AASamples", "Qaulity", &CRenderSettings::FUN_004482f0, &CRenderSettings::FUN_0044cda0
 );
 
-static RBX::Reflection::BoundProp<bool, 1> g_unk0x00953c68(
-	"delaySwapBuffer", "Performance", &CRenderSettings::m_unk0x11c
-);
+RBX::Reflection::BoundProp<bool, 1> g_unk0x00953c68("delaySwapBuffer", "Performance", &CRenderSettings::m_unk0x11c);
 
 static RBX::Reflection::BoundProp<std::string, 1> g_unk0x00953c84(
 	"profileName", "Qaulity", &CRenderSettings::m_unk0x120, RBX::Reflection::PropertyDescriptor::STREAMING
 );
+
+static const char* g_unk0x0091b48c = "profiled5";
 
 static G3D::Vector2int16 defaultFullscreenSize()
 {
@@ -77,30 +82,6 @@ static G3D::Vector2int16 defaultFullscreenSize()
 		return G3D::Vector2int16(1024, 768);
 	}
 	return G3D::Vector2int16(800, 600);
-}
-
-// FUNCTION: ROBLOX 0x00448290
-float CRenderSettings::FUN_00448290() const
-{
-	return m_unk0x10c;
-}
-
-// FUNCTION: ROBLOX 0x004482a0
-float CRenderSettings::FUN_004482a0() const
-{
-	return m_unk0x110;
-}
-
-// FUNCTION: ROBLOX 0x004482b0
-float CRenderSettings::FUN_004482b0() const
-{
-	return m_unk0x114;
-}
-
-// FUNCTION: ROBLOX 0x004482c0
-float CRenderSettings::FUN_004482c0() const
-{
-	return m_unk0x118;
 }
 
 // FUNCTION: ROBLOX 0x004482d0
@@ -201,12 +182,12 @@ RBX::Reflection::EnumDesc<CRenderSettings::ShadowMode>::EnumDesc()
 	addPair(CRenderSettings::c_shadowModeUnk0x2, "Off");
 }
 
-// STUB: ROBLOX 0x0044cb20
+// FUNCTION: ROBLOX 0x0044cb20
 CRenderSettings::CRenderSettings()
 	: m_unk0xf8(c_graphicsModeUnk0x1), m_unk0xfc(c_bevelModeUnk0x0), m_unk0x100(c_antialiasingModeUnk0x2),
-	  m_unk0x104(c_shadowModeUnk0x0), m_unk0x108(c_frameRateManagerModeUnk0x0), m_unk0x10c(20.0f), m_unk0x110(20.0f),
-	  m_unk0x114(50.0f), m_unk0x118(50.0f), m_unk0x11c(1), m_unk0x13c(defaultFullscreenSize()),
-	  m_unk0x140(g_unk0x0091a2ec)
+	  m_unk0x104(c_shadowModeUnk0x0), m_unk0x108(c_frameRateManagerModeUnk0x0), m_unk0x10c(g_unk0x008094f8),
+	  m_unk0x110(g_unk0x008094fc), m_unk0x114(g_unk0x00809500), m_unk0x118(g_unk0x00809504), m_unk0x11c(1),
+	  m_unk0x13c(defaultFullscreenSize()), m_unk0x140(g_unk0x0091a2ec)
 {
 	setName("Rendering");
 	RBX::Render::AggregatingSceneManager::aggregationSize = 1;
@@ -345,6 +326,20 @@ void CRenderSettings::FUN_0044d170(ShadowMode p_unk0x04)
 			RBX::ViewBase::getShadowsEnabled() = enabled;
 			raisePropertyChanged(g_unk0x00953b44);
 		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x0044d1b0
+void CRenderSettings::FUN_0044d1b0(bool p_unk0x04)
+{
+	if (p_unk0x04 || m_unk0x120 != g_unk0x0091b48c) {
+		FUN_0044cfe0(100.0f);
+		FUN_0044cf70(100.0f);
+		FUN_0044cfe0(100.0f);
+		FUN_0044ced0(100.0f);
+		FUN_0044ce30(100.0f);
+		FUN_0044ced0(100.0f);
+		g_unk0x00953c84.setValue(this, g_unk0x0091b48c);
 	}
 }
 

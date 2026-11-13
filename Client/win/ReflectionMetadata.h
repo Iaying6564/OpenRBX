@@ -2,7 +2,9 @@
 #define REFLECTIONMETADATA_H
 
 #include "decomp.h"
+#include "reflection/function.h"
 #include "reflection/property.h"
+#include "reflection/signal.h"
 #include "v8tree/Instance.h"
 
 #include <algorithm>
@@ -29,6 +31,9 @@ class Members : public Instance
 public:
 	// FUNCTION: ROBLOX 0x00427a60
 	Members() {}
+
+protected:
+	virtual bool askAddChild(const Instance* instance) const;
 };
 
 DECOMP_SIZE_ASSERT(Members, 0xf8)
@@ -42,6 +47,9 @@ public:
 
 	Class* FUN_00446130(const ClassDescriptor* descriptor, bool recurse);
 	void FUN_00447d00(const ClassDescriptor& descriptor);
+
+protected:
+	virtual bool askAddChild(const Instance* instance) const; // vtable+0x08
 };
 
 DECOMP_SIZE_ASSERT(Classes, 0xf8)
@@ -81,20 +89,17 @@ class Item : public DescribedNonCreatable<Item, Instance, sItem>
 {
 public:
 	// FUNCTION: ROBLOX 0x00429500
-	Item() : m_unk0xf8(true), m_unk0xf9(false), m_unk0xfa(false) {}
+	Item() : browsable(true), deprecated(false), preliminary(false) {}
 
-	static RBX::Reflection::BoundProp<bool, 1> g_unk0x00953a34;
-	static RBX::Reflection::BoundProp<bool, 1> g_unk0x00953a50;
-	static RBX::Reflection::BoundProp<bool, 1> g_unk0x00953a6c;
-	static RBX::Reflection::BoundProp<std::string, 1> g_unk0x00953a88;
+	static RBX::Reflection::BoundProp<bool, 1> prop_Browsable;
+	static RBX::Reflection::BoundProp<bool, 1> prop_Deprecated;
+	static RBX::Reflection::BoundProp<bool, 1> prop_Preliminary;
+	static RBX::Reflection::BoundProp<std::string, 1> prop_summary;
 
-private:
-	friend class Classes;
-
-	bool m_unk0xf8;        // 0xf8
-	bool m_unk0xf9;        // 0xf9
-	bool m_unk0xfa;        // 0xfa
-	std::string m_unk0xfc; // 0xfc
+	bool browsable;      // 0xf8
+	bool deprecated;     // 0xf9
+	bool preliminary;    // 0xfa
+	std::string summary; // 0xfc
 };
 
 DECOMP_SIZE_ASSERT(Item, 0x118)
@@ -104,13 +109,13 @@ class Class : public DescribedCreatable<Class, Item, sClass>
 {
 public:
 	// FUNCTION: ROBLOX 0x00429e20
-	Class() : m_unk0x118(-1), m_unk0x11c(0) {}
+	Class() : explorerOrder(-1), explorerImageIndex(0) {}
 
 	// FUNCTION: ROBLOX 0x00422100
 	int FUN_00422100() const
 	{
-		if (m_unk0x118) {
-			return m_unk0x118;
+		if (explorerOrder) {
+			return explorerOrder;
 		}
 		return dynamic_cast<Class*>(getParent()) && dynamic_cast<Class*>(getParent())->FUN_00422100();
 	}
@@ -118,18 +123,21 @@ public:
 	// FUNCTION: ROBLOX 0x004251c0
 	int FUN_004251c0() const
 	{
-		if (m_unk0x11c == -1) {
+		if (explorerImageIndex == -1) {
 			return dynamic_cast<Class*>(getParent()) && dynamic_cast<Class*>(getParent())->FUN_004251c0();
 		}
-		return std::max<int>(m_unk0x11c, 0);
+		return std::max<int>(explorerImageIndex, 0);
 	}
 
-	static RBX::Reflection::BoundProp<int, 1> g_unk0x00953aa4;
-	static RBX::Reflection::BoundProp<int, 1> g_unk0x00953ac0;
+	static RBX::Reflection::BoundProp<int, 1> prop_ExplorerOrder;
+	static RBX::Reflection::BoundProp<int, 1> prop_ExplorerImageIndex;
+
+protected:
+	virtual bool askAddChild(const Instance* instance) const; // vtable+0x08
 
 private:
-	int m_unk0x118; // 0x118
-	int m_unk0x11c; // 0x11c
+	int explorerOrder;      // 0x118
+	int explorerImageIndex; // 0x11c
 };
 
 DECOMP_SIZE_ASSERT(Class, 0x120)
@@ -151,16 +159,24 @@ public:
 	Reflection();
 
 	Class* FUN_00446220(const ClassDescriptor* descriptor, bool recurse);
+	Member* FUN_00446920(const PropertyDescriptor* descriptor);
+	Member* FUN_00446970(const FunctionDescriptor* descriptor);
+	Member* FUN_004469c0(const SignalDescriptor* descriptor);
 
 	void FUN_00447e50(std::string fileName);
 
 	static boost::shared_ptr<Reflection> FUN_004480c0();
+
+protected:
+	virtual bool askAddChild(const Instance* instance) const; // vtable+0x08
 
 private:
 	Classes* m_unk0xf8; // 0xf8
 };
 
 DECOMP_SIZE_ASSERT(Reflection, 0xfc)
+
+void FUN_00447680();
 
 } // namespace Metadata
 } // namespace Reflection
@@ -342,17 +358,17 @@ DECOMP_SIZE_ASSERT(Reflection, 0xfc)
 // TEMPLATE: ROBLOX 0x00447df0
 // ?setValue@?$BoundPropGetSet@VItem@Metadata@Reflection@RBX@@@?$BoundProp@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@$00@Reflection@RBX@@UBEXPAVDescribedBase@34@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
 // SYNTHETIC: ROBLOX 0x007e4860
-// `dynamic initializer for 'RBX::Reflection::Metadata::Item::g_unk0x00953a34''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Item::prop_Browsable''
 // SYNTHETIC: ROBLOX 0x007e4890
-// `dynamic initializer for 'RBX::Reflection::Metadata::Item::g_unk0x00953a50''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Item::prop_Deprecated''
 // SYNTHETIC: ROBLOX 0x007e48c0
-// `dynamic initializer for 'RBX::Reflection::Metadata::Item::g_unk0x00953a6c''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Item::prop_Preliminary''
 // SYNTHETIC: ROBLOX 0x007e48f0
-// `dynamic initializer for 'RBX::Reflection::Metadata::Item::g_unk0x00953a88''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Item::prop_summary''
 // SYNTHETIC: ROBLOX 0x007e4920
-// `dynamic initializer for 'RBX::Reflection::Metadata::Class::g_unk0x00953aa4''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Class::prop_ExplorerOrder''
 // SYNTHETIC: ROBLOX 0x007e4950
-// `dynamic initializer for 'RBX::Reflection::Metadata::Class::g_unk0x00953ac0''
+// `dynamic initializer for 'RBX::Reflection::Metadata::Class::prop_ExplorerImageIndex''
 // SYNTHETIC: ROBLOX 0x007ef7b0
 // `RBX::Reflection::Described<RBX::Reflection::Metadata::Class,&RBX::Reflection::Metadata::sClass,RBX::FactoryProduct<RBX::Reflection::Metadata::Class,RBX::Reflection::Metadata::Item,&RBX::Reflection::Metadata::sClass> >::classDescriptor'::`2'::`dynamic atexit destructor for 'foo''
 // SYNTHETIC: ROBLOX 0x007ef7c0
@@ -370,22 +386,28 @@ DECOMP_SIZE_ASSERT(Reflection, 0xfc)
 // SYNTHETIC: ROBLOX 0x007efc60
 // `RBX::Reflection::Described<RBX::Reflection::Metadata::Reflection,&RBX::Reflection::Metadata::sReflection,RBX::FactoryProduct<RBX::Reflection::Metadata::Reflection,RBX::Instance,&RBX::Reflection::Metadata::sReflection> >::classDescriptor'::`2'::`dynamic atexit destructor for 'foo''
 // SYNTHETIC: ROBLOX 0x007efb60
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::g_unk0x00953a6c''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::prop_Preliminary''
 // SYNTHETIC: ROBLOX 0x007efbc0
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::g_unk0x00953a50''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::prop_Deprecated''
 // SYNTHETIC: ROBLOX 0x007efbe0
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::g_unk0x00953a34''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::prop_Browsable''
 // SYNTHETIC: ROBLOX 0x007efc00
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Class::g_unk0x00953ac0''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Class::prop_ExplorerImageIndex''
 // SYNTHETIC: ROBLOX 0x007efc20
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Class::g_unk0x00953aa4''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Class::prop_ExplorerOrder''
 // SYNTHETIC: ROBLOX 0x007efc40
-// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::g_unk0x00953a88''
+// `dynamic atexit destructor for 'RBX::Reflection::Metadata::Item::prop_summary''
 // clang-format on
 
 // clang-format off
 // TEMPLATE: ROBLOX 0x00446720
 // RBX::Instance::findFirstChildOfType<RBX::Reflection::Metadata::Classes>
+// TEMPLATE: ROBLOX 0x004467a0
+// RBX::Instance::findFirstChildOfType<RBX::Reflection::Metadata::Properties>
+// TEMPLATE: ROBLOX 0x00446820
+// RBX::Instance::findFirstChildOfType<RBX::Reflection::Metadata::Functions>
+// TEMPLATE: ROBLOX 0x004468a0
+// RBX::Instance::findFirstChildOfType<RBX::Reflection::Metadata::Events>
 // SYNTHETIC: ROBLOX 0x007efb80
 // `RBX::FUN_004480c0::Metadata::Reflection::FUN_004480c0'::`2'::`dynamic atexit destructor for 'g_unk0x00953a24''
 // clang-format on

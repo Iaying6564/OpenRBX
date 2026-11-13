@@ -34,6 +34,30 @@ char sEvents[] = "ReflectionMetadataEvents";
 // GLOBAL: ROBLOX 0x00919d14
 char sMember[] = "ReflectionMetadataMember";
 
+// FUNCTION: ROBLOX 0x00445f70
+bool Reflection::askAddChild(const Instance* instance) const
+{
+	return dynamic_cast<const Classes*>(instance) != NULL;
+}
+
+// FUNCTION: ROBLOX 0x00445fa0
+bool Classes::askAddChild(const Instance* instance) const
+{
+	return dynamic_cast<const Class*>(instance) != NULL;
+}
+
+// FUNCTION: ROBLOX 0x00445fd0
+bool Class::askAddChild(const Instance* instance) const
+{
+	return dynamic_cast<const Members*>(instance) != NULL;
+}
+
+// FUNCTION: ROBLOX 0x00446000
+bool Members::askAddChild(const Instance* instance) const
+{
+	return dynamic_cast<const Member*>(instance) != NULL;
+}
+
 // FUNCTION: ROBLOX 0x00446130
 Class* Classes::FUN_00446130(const ClassDescriptor* descriptor, bool recurse)
 {
@@ -56,6 +80,56 @@ Class* Reflection::FUN_00446220(const ClassDescriptor* descriptor, bool recurse)
 	return NULL;
 }
 
+// FUNCTION: ROBLOX 0x00446920
+Member* Reflection::FUN_00446920(const PropertyDescriptor* descriptor)
+{
+	Class* item = m_unk0xf8 ? m_unk0xf8->FUN_00446130(&descriptor->owner, false) : NULL;
+	if (item) {
+		Properties* members = item->findFirstChildOfType<Properties>();
+		if (members) {
+			return static_cast<Member*>(members->findFirstChildByName(descriptor->name.toString()));
+		}
+	}
+	return NULL;
+}
+
+// FUNCTION: ROBLOX 0x00446970
+Member* Reflection::FUN_00446970(const FunctionDescriptor* descriptor)
+{
+	Class* item = m_unk0xf8 ? m_unk0xf8->FUN_00446130(&descriptor->owner, false) : NULL;
+	if (item) {
+		Functions* members = item->findFirstChildOfType<Functions>();
+		if (members) {
+			return static_cast<Member*>(members->findFirstChildByName(descriptor->name.toString()));
+		}
+	}
+	return NULL;
+}
+
+// FUNCTION: ROBLOX 0x004469c0
+Member* Reflection::FUN_004469c0(const SignalDescriptor* descriptor)
+{
+	Class* item = m_unk0xf8 ? m_unk0xf8->FUN_00446130(&descriptor->owner, false) : NULL;
+	if (item) {
+		Events* members = item->findFirstChildOfType<Events>();
+		if (members) {
+			return static_cast<Member*>(members->findFirstChildByName(descriptor->name.toString()));
+		}
+	}
+	return NULL;
+}
+
+// FUNCTION: ROBLOX 0x00447680
+void FUN_00447680()
+{
+	Reflection::classDescriptor();
+	Classes::classDescriptor();
+	Functions::classDescriptor();
+	Member::classDescriptor();
+	Properties::classDescriptor();
+	Events::classDescriptor();
+}
+
 // FUNCTION: ROBLOX 0x004479b0
 Reflection::Reflection() : m_unk0xf8(NULL)
 {
@@ -66,13 +140,13 @@ void Classes::FUN_00447d00(const ClassDescriptor& descriptor)
 {
 	Instance* existing = findFirstChildByName(descriptor.name.toString());
 	if (existing) {
-		static_cast<Item*>(existing)->m_unk0xf8 = false;
+		static_cast<Item*>(existing)->browsable = false;
 		return;
 	}
 
 	boost::shared_ptr<Class> metadata = Creatable<Instance>::create<Class>();
 	metadata->setName(descriptor.name.toString());
-	metadata->m_unk0xf8 = false;
+	metadata->browsable = false;
 	metadata->setParent(this);
 }
 
@@ -123,17 +197,19 @@ boost::shared_ptr<Reflection> Reflection::FUN_004480c0()
 	return g_unk0x00953a24;
 }
 
-RBX::Reflection::BoundProp<bool, 1> Item::g_unk0x00953a34("Browsable", "Reflection", &Item::m_unk0xf8);
+RBX::Reflection::BoundProp<bool, 1> Item::prop_Browsable("Browsable", "Reflection", &Item::browsable);
 
-RBX::Reflection::BoundProp<bool, 1> Item::g_unk0x00953a50("Deprecated", "Reflection", &Item::m_unk0xf9);
+RBX::Reflection::BoundProp<bool, 1> Item::prop_Deprecated("Deprecated", "Reflection", &Item::deprecated);
 
-RBX::Reflection::BoundProp<bool, 1> Item::g_unk0x00953a6c("Preliminary", "Reflection", &Item::m_unk0xfa);
+RBX::Reflection::BoundProp<bool, 1> Item::prop_Preliminary("Preliminary", "Reflection", &Item::preliminary);
 
-RBX::Reflection::BoundProp<std::string, 1> Item::g_unk0x00953a88("summary", "Reflection", &Item::m_unk0xfc);
+RBX::Reflection::BoundProp<std::string, 1> Item::prop_summary("summary", "Reflection", &Item::summary);
 
-RBX::Reflection::BoundProp<int, 1> Class::g_unk0x00953aa4("ExplorerOrder", "Reflection", &Class::m_unk0x118);
+RBX::Reflection::BoundProp<int, 1> Class::prop_ExplorerOrder("ExplorerOrder", "Reflection", &Class::explorerOrder);
 
-RBX::Reflection::BoundProp<int, 1> Class::g_unk0x00953ac0("ExplorerImageIndex", "Reflection", &Class::m_unk0x11c);
+RBX::Reflection::BoundProp<int, 1> Class::prop_ExplorerImageIndex(
+	"ExplorerImageIndex", "Reflection", &Class::explorerImageIndex
+);
 
 } // namespace Metadata
 } // namespace Reflection

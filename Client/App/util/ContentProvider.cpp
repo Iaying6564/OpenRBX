@@ -86,6 +86,17 @@ bool operator==(const ContentId& a, const ContentId& b)
 	return a.toString() == b.toString();
 }
 
+// FUNCTION: ROBLOX 0x0057d540
+ContentId ContentId::fromFile(const std::string& filePath)
+{
+	if (filePath.find("file://") == 0) {
+		return ContentId(filePath);
+	}
+
+	std::string header("file://");
+	return ContentId(header + filePath);
+}
+
 // FUNCTION: WEBSERVICE 0x1004f340
 // FUNCTION: ROBLOX 0x0057d610
 ContentId ContentId::fromAssets(const std::string& filePath)

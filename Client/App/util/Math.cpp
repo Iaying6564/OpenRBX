@@ -524,18 +524,37 @@ const Matrix3& Math::matrixTiltZ()
 	return m;
 }
 
-// STUB: ROBLOX 0x005f0b50
-const Matrix3 Math::matrixTiltQuadrant(int p_unk0x04)
+// FUNCTION: ROBLOX 0x005f0ad0
+const Matrix3& Math::matrixTiltNegativeZ()
 {
-	STUB(0x5f0b50);
-	return Matrix3::identity();
+	static const Matrix3 m(0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+
+	return m;
 }
 
-// STUB: ROBLOX 0x005f0c20
+// FUNCTION: ROBLOX 0x005f0b50
+const Matrix3 Math::matrixTiltQuadrant(int p_unk0x04)
+{
+	switch (p_unk0x04) {
+	case 0:
+		return Matrix3(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+	case 1:
+		return matrixTiltZ();
+	case 2:
+		return Matrix3(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f);
+	case 3:
+		return matrixTiltNegativeZ();
+	default:
+		return Matrix3::identity();
+	}
+}
+
+// FUNCTION: ROBLOX 0x005f0c20
 int Math::toYAxisQuadrant(const CoordinateFrame& p_unk0x04)
 {
-	STUB(0x5f0c20);
-	return 0;
+	Vector3 look = p_unk0x04.lookVector();
+
+	return radiansToQuadrant(atan2(-look.x, -look.z));
 }
 
 // FUNCTION: WEBSERVICE 0x100df8e0
@@ -595,6 +614,21 @@ unsigned char rotationToByteBase(float angle)
 unsigned char Math::rotationToByte(float angle)
 {
 	return rotationToByteBase(angle);
+}
+
+// FUNCTION: ROBLOX 0x005f0f40
+float Math::computeLaunchAngle(float v, float x, float y, float g)
+{
+	g = fabs(g);
+	float disc = v * v * v * v - g * (x * x * g + 2.0f * y * v * v);
+	if (disc <= 0.0f) {
+		return 0.78539819f;
+	}
+
+	float root = sqrt(disc);
+	float a = atan((v * v + root) / (g * x));
+	float b = atan((v * v - root) / (g * x));
+	return std::min(a, b);
 }
 
 // FUNCTION: WEBSERVICE 0x100dfb90
@@ -706,6 +740,25 @@ float Math::maxAxisLength(const Vector3& v)
 	const float answer[3] = {fabsf(v.x), fabsf(v.y), fabsf(v.z)};
 
 	return std::max(answer[0], std::max(answer[1], answer[2]));
+}
+
+// FUNCTION: ROBLOX 0x005f1330
+Vector3 Math::closestPointOnRay(const Ray& p_unk0x08, const Ray& p_unk0x0c)
+{
+	Vector3 pa = p_unk0x08.origin;
+	Vector3 pb = p_unk0x0c.origin;
+	Vector3 ua = p_unk0x08.direction;
+	Vector3 ub = p_unk0x0c.direction;
+	Vector3 p = pb - pa;
+	float uaub = ua.dot(ub);
+	float q1 = ua.dot(p);
+	float q2 = -ub.dot(p);
+	float d = 1.0f - uaub * uaub;
+	if (d > 0.00001) {
+		float alpha = (q1 + uaub * q2) / d;
+		return pa + ua * alpha;
+	}
+	return pa;
 }
 
 // FUNCTION: WEBSERVICE 0x100dfef0

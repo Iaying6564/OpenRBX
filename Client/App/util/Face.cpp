@@ -153,7 +153,7 @@ Face Face::projectOverlapOnMe(const Face& other) const
 }
 
 // FUNCTION: WEBSERVICE 0x1010b890
-// STUB: ROBLOX 0x0064aed0
+// FUNCTION: ROBLOX 0x0064aed0
 bool Face::overlapWithinPlanes(const Face& f0, const Face& f1, float tolerance)
 {
 	for (int i = 0; i < 2; ++i) {
@@ -177,8 +177,7 @@ bool Face::overlapWithinPlanes(const Face& f0, const Face& f1, float tolerance)
 		Face overlapOn1 = b->projectOverlapOnMe(*a);
 
 		for (int j = 0; j < 4; ++j) {
-			float d = overlapOn1[j].dot(normal);
-			if (fabsf(d + distance) > tolerance) {
+			if (fabs(overlapOn1[j].dot(normal) + distance) > tolerance) {
 				return false;
 			}
 		}

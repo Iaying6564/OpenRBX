@@ -9,6 +9,10 @@
 #include <boost/function.hpp>
 #include <string>
 
+namespace G3D {
+class Stopwatch;
+}
+
 namespace RBX {
 
 namespace Profiling {
@@ -107,6 +111,8 @@ template <>
 void Item::formatValue<unsigned int>(const unsigned int& value);
 template <>
 void Item::formatValue<bool>(const bool& value);
+template <>
+void Item::formatValue<G3D::Stopwatch>(const G3D::Stopwatch& value);
 
 // SIZE 0x140
 template <class T>
@@ -130,14 +136,14 @@ public:
 	// TEMPLATE: WEBSERVICE 0x10065da0
 	// TEMPLATE: ROBLOX 0x004ce200
 	// RBX::Stats::TypedStatsItem<bool>::update
+	// TEMPLATE: ROBLOX 0x004631c0
+	// RBX::Stats::TypedStatsItem<G3D::Stopwatch>::update
 	// TEMPLATE: WEBSERVICE 0x10065dd0
-	// TEMPLATE: ROBLOX 0x005727a0
 	// RBX::Stats::TypedStatsItem<int>::TypedStatsItem<int>
 	// TEMPLATE: WEBSERVICE 0x10065ec0
-	// STUB: ROBLOX 0x00463380
+	// TEMPLATE: ROBLOX 0x00463380
 	// RBX::Stats::TypedStatsItem<int>::update
 	// TEMPLATE: WEBSERVICE 0x10065ef0
-	// TEMPLATE: ROBLOX 0x005c6b20
 	// RBX::Stats::TypedStatsItem<int>::~TypedStatsItem<int>
 	// TEMPLATE: WEBSERVICE 0x1006f990
 	// TEMPLATE: ROBLOX 0x005b7d60
@@ -167,7 +173,6 @@ public:
 	virtual void update() { formatMem(func()); }
 
 	// SYNTHETIC: WEBSERVICE 0x10065f60
-	// SYNTHETIC: ROBLOX 0x005d4120
 	// RBX::Stats::TypedStatsItem<int>::`scalar deleting destructor'
 };
 
@@ -210,6 +215,10 @@ Item* Item::createChildItem(const char* name, boost::function0<T> func)
 	return item.get();
 }
 
+// TEMPLATE: ROBLOX 0x004634d0
+// RBX::Stats::Item::createBoundChildItem<G3D::Stopwatch>
+// TEMPLATE: ROBLOX 0x004635f0
+// RBX::Stats::Item::createBoundChildItem<int>
 // TEMPLATE: WEBSERVICE 0x10066a00
 // TEMPLATE: ROBLOX 0x004cef20
 // RBX::Stats::Item::createBoundChildItem<bool>

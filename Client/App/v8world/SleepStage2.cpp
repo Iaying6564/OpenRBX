@@ -12,6 +12,11 @@
 
 namespace RBX {
 
+inline static bool isSleeping(Sim::AssemblyState state)
+{
+	return state == Sim::SLEEPING_CHECKING || state == Sim::SLEEPING_DEEPLY;
+}
+
 Sim::AssemblyState SleepStage::getState(Assembly* assembly)
 {
 	return assembly->inPipeline() && assembly->inOrDownstreamOfStage(this) ? assembly->getSleepInfo()->state
@@ -296,7 +301,7 @@ void SleepStage::changeAssemblyState(Assembly* a, Sim::AssemblyState newState)
 			}
 		}
 	}
-	else if (newState == Sim::SLEEPING_CHECKING || newState == Sim::SLEEPING_DEEPLY) {
+	else if (isSleeping(newState)) {
 		a->getAssemblyPrimitive()->getBody()->setVelocity(Velocity::zero());
 
 		if (a->downstreamOfStage(this)) {

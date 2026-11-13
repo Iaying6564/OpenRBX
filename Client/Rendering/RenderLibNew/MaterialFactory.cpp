@@ -3,7 +3,13 @@
 #include "util/ContentProvider.h"
 
 #include <G3D/GImage.h>
+#include <OgreImage.h>
+#include <OgreLogManager.h>
+#include <OgreTextureManager.h>
 #include <algorithm>
+#include <sstream>
+#include <stdexcept>
+#include <stdio.h>
 
 namespace RBX {
 namespace ViewNew {
@@ -36,6 +42,28 @@ DECOMP_SIZE_ASSERT(MegaTextureProxy, 0x5c)
 
 const unsigned int MegaTextureProxy::numStrips = 32;
 
+// GLOBAL: ROBLOX 0x009586f4
+static int g_unk0x009586f4 = 0;
+
+// SIZE 0x28
+class BadConversion : public std::runtime_error
+{
+public:
+	BadConversion(const std::string& s) : std::runtime_error(s) {}
+};
+
+DECOMP_SIZE_ASSERT(BadConversion, 0x28)
+
+// FUNCTION: ROBLOX 0x0051b1b0
+std::string stringify(double x)
+{
+	std::ostringstream o;
+	if (!(o << x)) {
+		throw BadConversion("stringify(double)");
+	}
+	return o.str();
+}
+
 // STUB: ROBLOX 0x0051b2e0
 G3D::ReferenceCountedPointer<G3D::Texture> MegaTextureProxy::resolve(G3D::RenderDevice* rd)
 {
@@ -62,11 +90,32 @@ G3D::ReferenceCountedPointer<G3D::Texture> MegaTextureProxy::resolve(G3D::Render
 			}
 		}
 
-		G3D::Texture::Settings params;
-		params.wrapMode = G3D::Texture::CLAMP;
+		char name[8];
+		_snprintf(name, sizeof(name), "ta%d", g_unk0x009586f4++);
 
-		texture =
-			G3D::Texture::fromGImage("MegaTexture", strip, G3D::TextureFormat::RGB8, G3D::Texture::DIM_2D, params);
+		Ogre::Image ogreImage;
+		ogreImage.loadDynamicImage(strip.byte(), strip.width, strip.height, 1, Ogre::PF_B8G8R8, false, 1, 0);
+		while (true) {
+			try {
+				m_unk0x4c = Ogre::TextureManager::getSingleton().create(name, "general");
+				m_unk0x4c->loadImage(ogreImage);
+				break;
+			}
+			catch (...) {
+				if (ogreImage.getWidth() <= 512 && ogreImage.getHeight() <= 512) {
+					Ogre::LogManager::getSingleton().logMessage(std::string("Give up on loading texture ") + name);
+					break;
+				}
+
+				Ogre::TextureManager::getSingleton().remove(m_unk0x4c->getHandle());
+				ogreImage.resize(ogreImage.getWidth() / 2, ogreImage.getHeight() / 2);
+				Ogre::LogManager::getSingleton().logMessage(
+					std::string("Error loading texture. Reduce size to ") + stringify(strip.width) + "x" +
+					stringify(strip.height) + " and try again\n"
+				);
+			}
+		}
+
 		root = NULL;
 		loaded = true;
 	}
@@ -145,7 +194,7 @@ G3D::ReferenceCountedPointer<RenderNew::Material> MaterialFactory::getMaterial(A
 	return result;
 }
 
-// STUB: ROBLOX 0x0051c4e0
+// FUNCTION: ROBLOX 0x0051c4e0
 MaterialFactory::MaterialFactory(G3D::TextureManager* textureManager)
 {
 	surfacesTexture = new RenderNew::TextureProxy(

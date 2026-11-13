@@ -3,7 +3,11 @@
 #include "gui/GUI.h"
 #include "network/Player.h"
 #include "network/Players.h"
+#include "tool/GrabTool.h"
 #include "tool/MegaDragger.h"
+#include "tool/NullTool.h"
+#include "tool/ToolsArrow.h"
+#include "tool/ToolsSurface.h"
 #include "util/Math.h"
 #include "util/Sound.h"
 #include "v8datamodel/Backpack.h"
@@ -11,9 +15,43 @@
 #include "v8datamodel/DataModel.h"
 #include "v8datamodel/Feature.h"
 #include "v8datamodel/ModelInstance.h"
+#include "v8datamodel/PartInstance.h"
 #include "v8datamodel/Selection.h"
+#include "v8datamodel/ToolsPart.h"
 #include "v8world/SpatialHash.h"
 #include "v8world/World.h"
+#include "v8xml/SerializerV2.h"
+
+#include <algorithm>
+#include <boost/bind.hpp>
+#include <memory>
+
+template class RBX::TToolVerb<RBX::ArrowTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::ModelSetPrimaryPartTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::FillTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::DropperTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::HammerTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::LaserTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::FlatTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::GlueTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::WeldTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::StudsTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::InletTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::HingeTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::RightMotorTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::LeftMotorTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::OscillateMotorTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::ModelSetFrontTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::AnchorTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::LockTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::ResizeTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::SlingshotTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::RocketTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::NullTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::GrabTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::CloneTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::GameTool, RBX::RunStateVerb>;
+template class RBX::TToolVerb<RBX::AxisMoveTool, RBX::RunStateVerb>;
 
 namespace RBX {
 
@@ -23,6 +61,11 @@ static void FUN_00596660(DataModel* dataModel)
 	if (Network::Players::clientIsPresent(dataModel, true) && !Network::Players::serverIsPresent(dataModel, true)) {
 		throw std::runtime_error("Insufficinet permissions");
 	}
+}
+
+inline void RunStateVerb::playActionSound()
+{
+	FUN_00596660(dataModel);
 }
 
 // FUNCTION: ROBLOX 0x005966e0
@@ -119,6 +162,19 @@ bool FixedCameraCommand::isChecked() const
 	return getCamera()->getCameraType() == Camera::FIXED_CAMERA;
 }
 
+// FUNCTION: ROBLOX 0x00596c80
+void SelectAllCommand::doIt(IDataState* dataState)
+{
+	playActionSound();
+	dataModel->getWorkspace()->selectAll();
+}
+
+// FUNCTION: ROBLOX 0x00596ca0
+static void FUN_00596ca0(boost::shared_ptr<Instance> instance)
+{
+	PartInstance::setLocked(instance.get(), true);
+}
+
 // FUNCTION: ROBLOX 0x00596d20
 bool FirstPersonCommand::isEnabled() const
 {
@@ -158,6 +214,13 @@ bool StatsCommand::isChecked() const
 void EngineStatsCommand::doIt(IDataState* dataState)
 {
 	dataModel->getWorkspace()->getWorld()->getContactManager().getSpatialHash().doStats();
+}
+
+// FUNCTION: ROBLOX 0x00596fc0
+static void FUN_00596fc0(UndoState* undoState, RedoState* redoState, boost::shared_ptr<Instance> instance)
+{
+	undoState->addParentProperty(*instance);
+	redoState->addDelete(*instance);
 }
 
 // FUNCTION: ROBLOX 0x00597040
@@ -208,6 +271,16 @@ static bool FUN_00597450(ModelInstance* model)
 	return model->numChildren() > 0;
 }
 
+// FUNCTION: ROBLOX 0x00597490
+void FUN_00597490(XmlElement* container, boost::shared_ptr<Instance> instance)
+{
+	XmlElement* child = instance->write();
+
+	if (child != NULL) {
+		container->addChild(child);
+	}
+}
+
 // FUNCTION: ROBLOX 0x00597310
 RunStateVerb::~RunStateVerb()
 {
@@ -234,6 +307,44 @@ bool CameraVerb::isEnabled() const
 {
 	return true;
 }
+
+// FUNCTION: ROBLOX 0x00597890
+static void FUN_00597890(boost::shared_ptr<Instance> instance)
+{
+	if (PartInstance* part = dynamic_cast<PartInstance*>(instance.get())) {
+		Surfaces& surfaces = part->getSurfaces();
+		for (int i = 0; i < 6; i++) {
+			if (surfaces[(NormalId) i].getSurfaceType() == WELD) {
+				surfaces[(NormalId) i].setSurfaceType(STUDS);
+			}
+		}
+	}
+
+	if (instance->getChildren()) {
+		std::for_each(instance->getChildren()->begin(), instance->getChildren()->end(), boost::bind(&FUN_00597890, _1));
+	}
+}
+
+// SIZE 0x10
+class Unknown00597dd0
+{
+public:
+	// FUNCTION: ROBLOX 0x00597dd0
+	Unknown00597dd0(const Name& name, bool value)
+		: m_unk0x00(name), m_unk0x04(value), m_unk0x08(new UndoState()), m_unk0x0c(new RedoState())
+	{
+	}
+
+	// FUNCTION: ROBLOX 0x00597ec0
+	~Unknown00597dd0() {}
+
+	void operator()(boost::shared_ptr<Instance> instance);
+
+	const Name& m_unk0x00;              // 0x00
+	bool m_unk0x04;                     // 0x04
+	std::auto_ptr<UndoState> m_unk0x08; // 0x08
+	std::auto_ptr<RedoState> m_unk0x0c; // 0x0c
+};
 
 // FUNCTION: ROBLOX 0x00597f30
 EditSelectionVerb::EditSelectionVerb(std::string name, DataModel* dataModel)
@@ -267,6 +378,12 @@ DuplicateSelectionVerb::DuplicateSelectionVerb(DataModel* dataModel) : EditSelec
 {
 }
 
+// FUNCTION: ROBLOX 0x005980d0
+DeleteBase::DeleteBase(DataModel* dataModel, std::string name, bool p_unk0x24)
+	: EditSelectionVerb(name, dataModel), m_unk0x24(p_unk0x24)
+{
+}
+
 // FUNCTION: ROBLOX 0x00598150
 AttachCameraCommand::AttachCameraCommand(DataModel* dataModel) : EditSelectionVerb("AttachCamera", dataModel)
 {
@@ -292,10 +409,20 @@ MoveDownSelectionVerb::MoveDownSelectionVerb(DataModel* dataModel) : EditSelecti
 {
 }
 
-// STUB: ROBLOX 0x00599f80
+// FUNCTION: ROBLOX 0x00599f80
 bool JoinCommand::isEnabled() const
 {
-	STUB(0x599f80);
+	Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+
+	if (currentSelection->size() == 2) {
+		boost::shared_ptr<Instance> first = currentSelection->front();
+		boost::shared_ptr<Instance> second = currentSelection->back();
+
+		if (FUN_00617200(first.get(), second.get())) {
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -337,6 +464,23 @@ void ClearStarterpack::doIt(IDataState* dataState)
 	}
 }
 
+// FUNCTION: ROBLOX 0x00598570
+static void FUN_00598570(boost::shared_ptr<Instance> instance)
+{
+	if (PartInstance* part = dynamic_cast<PartInstance*>(instance.get())) {
+		Surfaces& surfaces = part->getSurfaces();
+		for (int i = 0; i < 6; i++) {
+			if (surfaces[(NormalId) i].getSurfaceType() == GLUE) {
+				surfaces[(NormalId) i].setSurfaceType(WELD);
+			}
+		}
+	}
+
+	if (instance->getChildren()) {
+		std::for_each(instance->getChildren()->begin(), instance->getChildren()->end(), boost::bind(&FUN_00598570, _1));
+	}
+}
+
 // FUNCTION: ROBLOX 0x00598960
 RotateAxisCommand::RotateAxisCommand(std::string name, DataModel* dataModel) : EditSelectionVerb(name, dataModel)
 {
@@ -351,6 +495,52 @@ ControllerCommand::ControllerCommand(std::string name, DataModel* dataModel) : E
 BoolPropertyVerb::BoolPropertyVerb(const std::string& name, DataModel* dataModel, const char* property)
 	: EditSelectionVerb(name, dataModel), propertyName(Name::declare(property, -1))
 {
+}
+
+// FUNCTION: ROBLOX 0x00598ac0
+static bool FUN_00598ac0(const Name& propertyName, boost::shared_ptr<const Instance> instance)
+{
+	Reflection::MemberDescriptorContainer<Reflection::PropertyDescriptor>::ConstIterator iter =
+		instance->findProperty(propertyName);
+	if (iter != instance->properties_end()) {
+		if (dynamic_cast<const Reflection::TypedPropertyDescriptor<bool>*>(&iter.getDescriptor())) {
+			if ((*iter).getValue<bool>()) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+// FUNCTION: ROBLOX 0x00598c10
+void Unknown00597dd0::operator()(boost::shared_ptr<Instance> instance)
+{
+	Reflection::MemberDescriptorContainer<Reflection::PropertyDescriptor>::Iterator iter =
+		instance->findProperty(m_unk0x00);
+
+	if (iter != instance->properties_end()) {
+		if (dynamic_cast<const Reflection::TypedPropertyDescriptor<bool>*>(&(*iter).getDescriptor())) {
+			if ((*iter).getValue<bool>() != m_unk0x04) {
+				m_unk0x08->addProperty(*iter);
+				(*iter).setValue<bool>(m_unk0x04);
+				m_unk0x0c->addProperty(*iter);
+			}
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00598da0
+void RotateAxisCommand::FUN_00598da0(const G3D::Matrix3& rotation, const std::vector<PVInstance*>& pvInstances)
+{
+	if (pvInstances.size() > 0) {
+		MegaDragger dragger(NULL, pvInstances, workspace.get());
+		dragger.startDragging();
+		dragger.safeRotate(rotation);
+		dragger.finishDragging();
+
+		workspace->raiseDrawChanged();
+	}
 }
 
 // FUNCTION: ROBLOX 0x00598e50
@@ -374,6 +564,33 @@ SecondaryControllerCommand::SecondaryControllerCommand(DataModel* dataModel)
 {
 }
 
+// SIZE 0x8
+class Unknown00598fd0
+{
+public:
+	Unknown00598fd0(std::vector<Instance*>& newSelection, bool& changed) : m_unk0x00(newSelection), m_unk0x04(changed)
+	{
+	}
+
+	// FUNCTION: ROBLOX 0x00598fd0
+	void operator()(const boost::shared_ptr<Instance>& instance)
+	{
+		if (instance->numChildren() > 0) {
+			for (unsigned int i = 0; i < instance->numChildren(); i++) {
+				m_unk0x00.push_back(instance->getChild(i));
+			}
+
+			instance->promoteChildren();
+			instance->setParent(NULL);
+			m_unk0x04 = true;
+		}
+	}
+
+private:
+	std::vector<Instance*>& m_unk0x00; // 0x00
+	bool& m_unk0x04;                   // 0x04
+};
+
 // FUNCTION: ROBLOX 0x0059a2a0
 EditSelectionVerb::EditSelectionVerb(VerbContainer* container, std::string name, DataModel* dataModel)
 	: Verb(container, name), workspace(shared_from(dataModel ? dataModel->find<Workspace>() : NULL)),
@@ -387,6 +604,23 @@ bool DuplicateSelectionVerb::isEnabled() const
 	return (dataModel ? dataModel->create<Selection>() : NULL)->size() > 0;
 }
 
+// FUNCTION: ROBLOX 0x0059a390
+DeleteBase::DeleteBase(VerbContainer* container, DataModel* dataModel, std::string name)
+	: EditSelectionVerb(container, name, dataModel), m_unk0x24(false)
+{
+}
+
+// SIZE 0x04
+class Unknown00598770
+{
+public:
+	Unknown00598770(Controller::ControllerType controllerType) : m_unk0x00(controllerType) {}
+
+	bool operator()(PVInstance* instance) const { return instance->getControllerType() != m_unk0x00; }
+
+	Controller::ControllerType m_unk0x00; // 0x00
+};
+
 // FUNCTION: ROBLOX 0x0059a410
 void ControllerCommand::setController(Controller::ControllerType controllerType)
 {
@@ -394,27 +628,95 @@ void ControllerCommand::setController(Controller::ControllerType controllerType)
 		dataModel ? dataModel->create<FilteredSelection<PVInstance> >() : NULL;
 
 	Controller::ControllerType newType =
-		filteredSelection->FUN_00598770(controllerType) ? controllerType : Controller::NO_CONTROLLER;
+		filteredSelection->FUN_00598690(Unknown00598770(controllerType)) ? controllerType : Controller::NO_CONTROLLER;
 
 	std::for_each(filteredSelection->begin(), filteredSelection->end(), boost::bind(&FUN_00596950, newType, _1));
 }
 
-// STUB: ROBLOX 0x0059a9f0
+// FUNCTION: ROBLOX 0x0059a9a0
+void AllCanSelectCommand::doIt(IDataState* dataState)
+{
+	playActionSound();
+	PartInstance::setLocked(dataModel->getWorkspace(), false);
+	dataState->clearStack();
+	dataState->setDirty(true);
+}
+
+// FUNCTION: ROBLOX 0x0059a9f0
 void GroupSelectionVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59a9f0);
+	FUN_00596660(dataModel);
+
+	Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+	ModelInstance* model = workspace->FUN_005984c0(currentSelection->begin(), currentSelection->end()).get();
+	currentSelection->setSelection(model);
+
+	(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PING_SOUND);
+	dataState->clearStack();
+	dataState->setDirty(true);
 }
 
-// STUB: ROBLOX 0x0059aaf0
+// FUNCTION: ROBLOX 0x0059aaf0
 void UngroupSelectionVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59aaf0);
+	FUN_00596660(dataModel);
+
+	FilteredSelection<ModelInstance>* filteredSelection =
+		dataModel ? dataModel->create<FilteredSelection<ModelInstance> >() : NULL;
+
+	std::vector<boost::shared_ptr<Instance> > models;
+	for (std::vector<ModelInstance*>::const_iterator iter = filteredSelection->begin();
+		 iter != filteredSelection->end();
+		 ++iter) {
+		ModelInstance* model = *iter;
+		models.push_back(model->shared_from_this());
+	}
+
+	std::vector<Instance*> newSelection;
+	bool changed = false;
+	std::for_each(models.begin(), models.end(), Unknown00598fd0(newSelection, changed));
+
+	if (changed) {
+		filteredSelection->setSelection(newSelection.begin(), newSelection.end());
+		(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PING_SOUND);
+	}
+
+	dataState->clearStack();
+	dataState->setDirty(true);
 }
 
-// STUB: ROBLOX 0x0059ad50
+// FUNCTION: ROBLOX 0x0059ad50
 void RotateAxisCommand::doIt(IDataState* dataState)
 {
-	STUB(0x59ad50);
+	FUN_00596660(dataModel);
+
+	FilteredSelection<PVInstance>* filteredSelection =
+		dataModel ? dataModel->create<FilteredSelection<PVInstance> >() : NULL;
+
+	UndoState* undoState = new UndoState();
+
+	for (std::vector<PVInstance*>::const_iterator iter = filteredSelection->items().begin();
+		 iter != filteredSelection->items().end();
+		 ++iter) {
+		PVInstance* pvInstance = *iter;
+	}
+
+	FUN_00598da0(getRotationAxis(), filteredSelection->items());
+
+	(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(CLICK_SOUND);
+
+	workspace->raiseDrawChanged();
+
+	RedoState* redoState = new RedoState();
+
+	for (std::vector<PVInstance*>::const_iterator iter = filteredSelection->items().begin();
+		 iter != filteredSelection->items().end();
+		 ++iter) {
+		PVInstance* pvInstance = *iter;
+	}
+
+	dataState->pushState(getName(), undoState, redoState);
+	dataState->setDirty(true);
 }
 
 // FUNCTION: ROBLOX 0x0059af30
@@ -468,6 +770,28 @@ void WatchCameraCommand::doIt(IDataState* dataState)
 	workspace->getCamera()->setCameraSubject(subject);
 	dataState->clearStack();
 	dataState->setDirty(true);
+}
+
+// FUNCTION: ROBLOX 0x0059b280
+void MoveUpSelectionVerb::doIt(IDataState* dataState)
+{
+	FUN_00596660(dataModel);
+
+	FilteredSelection<PVInstance>* filteredSelection =
+		dataModel ? dataModel->create<FilteredSelection<PVInstance> >() : NULL;
+
+	if (filteredSelection->items().size() > 0) {
+		MegaDragger dragger(NULL, filteredSelection->items(), workspace.get());
+		dragger.startDragging();
+		dragger.safeMoveNoDrop(G3D::Vector3(0.0f, moveUpHeight, 0.0f));
+		dragger.finishDragging();
+
+		(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(CLICK_SOUND);
+
+		workspace->raiseDrawChanged();
+		dataState->clearStack();
+		dataState->setDirty(true);
+	}
 }
 
 // FUNCTION: ROBLOX 0x0059b3a0
@@ -580,17 +904,23 @@ void FixedCameraCommand::doIt(IDataState* dataState)
 	dataState->setDirty(true);
 }
 
-// STUB: ROBLOX 0x0059b850
+// FUNCTION: ROBLOX 0x0059b850
 bool BoolPropertyVerb::isChecked() const
 {
-	STUB(0x59b850);
-	return false;
+	return std::find_if(
+			   selection->begin(), selection->end(), boost::bind(&FUN_00598ac0, boost::cref(propertyName), _1)
+		   ) != selection->end();
 }
 
-// STUB: ROBLOX 0x0059b900
+// FUNCTION: ROBLOX 0x0059b900
 void BoolPropertyVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59b900);
+	FUN_00596660(dataModel);
+
+	Unknown00597dd0 functor(propertyName, !isChecked());
+	std::for_each(selection->begin(), selection->end(), functor);
+	dataState->pushState(propertyName.toString(), functor.m_unk0x08.release(), functor.m_unk0x0c.release());
+	dataState->setDirty(true);
 }
 
 // FUNCTION: ROBLOX 0x0059ba50
@@ -638,6 +968,61 @@ void CameraCenterCommand::doIt(IDataState* dataState)
 	dataState->setDirty(true);
 }
 
+// FUNCTION: ROBLOX 0x0059bd90
+void CanNotSelectCommand::doIt(IDataState* dataState)
+{
+	FUN_00596660(dataModel);
+	FilteredSelection<PVInstance>* filteredSelection =
+		dataModel ? dataModel->create<FilteredSelection<PVInstance> >() : NULL;
+	std::for_each(selection->begin(), selection->end(), &FUN_00596ca0);
+	filteredSelection->clearSelection();
+	dataState->clearStack();
+	dataState->setDirty(true);
+}
+
+// FUNCTION: ROBLOX 0x0059be40
+bool RunCommand::isEnabled() const
+{
+	return runService->getRunState() != RS_RUNNING;
+}
+
+// FUNCTION: ROBLOX 0x0059be60
+void RunCommand::doIt(IDataState* dataState)
+{
+	playActionSound();
+	RunService* service = runService;
+	service->run();
+}
+
+// FUNCTION: ROBLOX 0x0059bea0
+bool StopCommand::isEnabled() const
+{
+	return runService->getRunState() == RS_RUNNING;
+}
+
+// FUNCTION: ROBLOX 0x0059bec0
+void StopCommand::doIt(IDataState* dataState)
+{
+	playActionSound();
+	RunService* service = runService;
+	service->pause();
+}
+
+// FUNCTION: ROBLOX 0x0059bef0
+bool ResetCommand::isEnabled() const
+{
+	RunState state = runService->getRunState();
+	return (state == RS_RUNNING || state == RS_PAUSED) && !Network::Players::findLocalPlayer(dataModel);
+}
+
+// FUNCTION: ROBLOX 0x0059bf30
+void ResetCommand::doIt(IDataState* dataState)
+{
+	playActionSound();
+	RunService* service = runService;
+	service->reset();
+}
+
 // FUNCTION: ROBLOX 0x0059bf60
 bool EditSelectionVerb::isEnabled() const
 {
@@ -655,10 +1040,15 @@ bool GroupSelectionVerb::isEnabled() const
 	return currentSelection->size() > 1;
 }
 
-// STUB: ROBLOX 0x0059c090
+// FUNCTION: ROBLOX 0x0059c090
 void WeldSelectionVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59c090);
+	FUN_00596660(dataModel);
+	Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+	std::for_each(selection->begin(), selection->end(), boost::bind(&FUN_00598570, _1));
+	(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PING_SOUND);
+	dataState->clearStack();
+	dataState->setDirty(true);
 }
 
 // FUNCTION: ROBLOX 0x0059c160
@@ -680,10 +1070,15 @@ bool SnapSelectionVerb::isEnabled() const
 	return (dataModel ? dataModel->create<Selection>() : NULL)->size() > 0;
 }
 
-// STUB: ROBLOX 0x0059c1d0
+// FUNCTION: ROBLOX 0x0059c1d0
 void SnapSelectionVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59c1d0);
+	FUN_00596660(dataModel);
+	Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+	std::for_each(selection->begin(), selection->end(), boost::bind(&FUN_00597890, _1));
+	(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PING_SOUND);
+	dataState->clearStack();
+	dataState->setDirty(true);
 }
 
 // FUNCTION: ROBLOX 0x0059c2a0
@@ -698,21 +1093,82 @@ bool UngroupSelectionVerb::isEnabled() const
 	return filteredSelection->FUN_00598690(&FUN_00597450) != NULL;
 }
 
-// STUB: ROBLOX 0x0059c2f0
+// FUNCTION: ROBLOX 0x0059c2f0
 void DuplicateSelectionVerb::doIt(IDataState* dataState)
 {
-	STUB(0x59c2f0);
+	FUN_00596660(dataModel);
+
+	UndoState* undoState = new UndoState();
+	RedoState* redoState = new RedoState();
+
+	std::auto_ptr<XmlElement> root(SerializerV2::newRootElement());
+	Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+	std::for_each(selection->begin(), selection->end(), boost::bind(&FUN_00597490, root.get(), _1));
+	SerializerV2::isolateHandles(root.get());
+
+	std::vector<boost::shared_ptr<Instance> > instances;
+	workspace->insertItems(root.get(), instances, INSERT_TO_3D_VIEW, ALLOW_PROMPTS);
+
+	const std::vector<boost::shared_ptr<Instance> >& items = instances;
+	selection->setSelection(items.begin(), items.end());
+
+	(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PING_SOUND);
+
+	for (std::vector<boost::shared_ptr<Instance> >::const_iterator iter = items.begin(); iter != items.end(); ++iter) {
+		if (Instance* instance = iter->get()) {
+			undoState->addDelete(*instance);
+			redoState->addParentProperty(*instance);
+		}
+	}
+
+	dataState->pushState(getName(), undoState, redoState);
+	dataState->setDirty(true);
 }
 
-// STUB: ROBLOX 0x0059c860
+// FUNCTION: ROBLOX 0x0059c5c0
+void DeleteBase::doIt(IDataState* dataState)
+{
+	FUN_00596660(dataModel);
+
+	if (selection->size() > 0) {
+		Selection* currentSelection = dataModel ? dataModel->create<Selection>() : NULL;
+
+		UndoState* undoState = new UndoState();
+		RedoState* redoState = new RedoState();
+
+		std::for_each(selection->begin(), selection->end(), boost::bind(&FUN_00596fc0, undoState, redoState, _1));
+
+		while (boost::shared_ptr<Instance> instance = selection->front()) {
+			instance->setParent(NULL);
+		}
+
+		(dataModel ? dataModel->create<Soundscape::SoundService>() : NULL)->playSound(PAGE_SOUND);
+
+		if (undoState) {
+			dataState->pushState(getName(), undoState, redoState);
+		}
+		else {
+			dataState->clearStack();
+		}
+
+		dataState->setDirty(true);
+	}
+}
+
+// FUNCTION: ROBLOX 0x0059c860
 bool AttachCameraCommand::isEnabled() const
 {
 	if (selection->size() == 0) {
 		return false;
 	}
 
-	ServiceClient<FilteredSelection<PVInstance> > filteredSelection(dataModel);
-	return filteredSelection->items().size() == 1;
+	bool result;
+	{
+		ServiceClient<FilteredSelection<PVInstance> > filteredSelection(dataModel);
+		result = filteredSelection->items().size() == 1;
+	}
+
+	return result ? true : false;
 }
 
 // FUNCTION: ROBLOX 0x0059c950
@@ -767,7 +1223,7 @@ bool ControllerCommand::isEnabled() const
 	return filteredSelection->FUN_00598690(&FUN_00596960) != NULL;
 }
 
-// STUB: ROBLOX 0x0059ca70
+// FUNCTION: ROBLOX 0x0059ca70
 void CameraZoomExtentsCommand::doIt(IDataState* dataState)
 {
 	ServiceClient<FilteredSelection<PVInstance> > filteredSelection(workspace);
@@ -790,6 +1246,7 @@ void CameraZoomExtentsCommand::doIt(IDataState* dataState)
 		dataState->setDirty(true);
 	}
 	else {
+		G3D::Vector3 center = G3D::Vector3::zero();
 		getCamera()->zoomExtents(workspace->getViewPort());
 		ServiceProvider::create<Soundscape::SoundService>(workspace)->playSound(STEP_SOUND);
 		dataState->clearStack();
@@ -823,37 +1280,6 @@ void ForceAssertionCommand::doIt(IDataState* dataState)
 bool EngineStatsCommand::isEnabled() const
 {
 	return true;
-}
-
-// FUNCTION: ROBLOX 0x0059cda0
-void XmlState::addProperty(const Reflection::Property& property)
-{
-	XmlElement* element = property.getDescriptor().write(property.getInstance(), false);
-	if (element) {
-		addState(element, *static_cast<Instance*>(property.getInstance()));
-	}
-}
-
-// FUNCTION: ROBLOX 0x0059cdf0
-void UndoState::addState(XmlElement* element, Instance& instance)
-{
-	if (element) {
-		if (!element->findAttribute(name_referent)) {
-			element->addAttribute(name_referent, InstanceHandle(&instance));
-		}
-
-		root.pushFrontChild(element);
-	}
-}
-
-// FUNCTION: ROBLOX 0x0059ce50
-void RedoState::addState(XmlElement* element, Instance& instance)
-{
-	if (!element->findAttribute(name_referent)) {
-		element->addAttribute(name_referent, InstanceHandle(&instance));
-	}
-
-	root.pushBackChild(element);
 }
 
 } // namespace RBX

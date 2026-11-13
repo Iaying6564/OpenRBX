@@ -260,6 +260,19 @@ XmlElement* Accoutrement::write()
 	return Instance::write();
 }
 
+// FUNCTION: ROBLOX 0x005bb390
+void Accoutrement::dropAllOthers(ModelInstance* model, Accoutrement* accoutrement)
+{
+	Workspace* workspace = Workspace::findWorkspace(model);
+	if (workspace) {
+		while (Accoutrement* other = model->findFirstChildOfType<Accoutrement>()) {
+			if (other != accoutrement) {
+				other->setParent(workspace);
+			}
+		}
+	}
+}
+
 // FUNCTION: WEBSERVICE 0x100dc1b0
 // FUNCTION: ROBLOX 0x005bb3d0
 void Accoutrement::onEvent_HandleTouched(boost::shared_ptr<Instance> other)
@@ -273,6 +286,12 @@ void Accoutrement::onEvent_HandleTouched(boost::shared_ptr<Instance> other)
 			}
 		}
 	}
+}
+
+// FUNCTION: ROBLOX 0x005bb4a0
+void Accoutrement::dropAll(ModelInstance* model)
+{
+	dropAllOthers(model, NULL);
 }
 
 // FUNCTION: WEBSERVICE 0x100dc3f0
@@ -369,44 +388,46 @@ void Accoutrement::setBackendAccoutrementState(int value)
 // FUNCTION: ROBLOX 0x005bc310
 void Accoutrement::setDesiredState(AccoutrementState desiredState, const ServiceProvider* serviceProvider)
 {
-	do {
-		if (desiredState > backendAccoutrementState) {
-			switch (backendAccoutrementState) {
-			case IN_CHARACTER:
-				upTo_Equipped();
-				break;
-			case IN_WORKSPACE:
-				upTo_InCharacter();
-				break;
-			case HAS_HANDLE:
-				upTo_InWorkspace();
-				break;
-			case NOTHING:
-				upTo_HasHandle();
-				break;
-			}
-
-			setBackendAccoutrementStateNoReplicate(backendAccoutrementState + 1);
+	if (desiredState > backendAccoutrementState) {
+		switch (backendAccoutrementState) {
+		case IN_CHARACTER:
+			upTo_Equipped();
+			break;
+		case IN_WORKSPACE:
+			upTo_InCharacter();
+			break;
+		case HAS_HANDLE:
+			upTo_InWorkspace();
+			break;
+		case NOTHING:
+			upTo_HasHandle();
+			break;
 		}
-		else if (desiredState < backendAccoutrementState) {
-			switch (backendAccoutrementState) {
-			case EQUIPPED:
-				downFrom_Equipped();
-				break;
-			case IN_CHARACTER:
-				downFrom_InCharacter();
-				break;
-			case IN_WORKSPACE:
-				downFrom_InWorkspace();
-				break;
-			case HAS_HANDLE:
-				downFrom_HasHandle();
-				break;
-			}
 
-			setBackendAccoutrementStateNoReplicate(backendAccoutrementState - 1);
+		setBackendAccoutrementStateNoReplicate(backendAccoutrementState + 1);
+	}
+	else if (desiredState < backendAccoutrementState) {
+		switch (backendAccoutrementState) {
+		case EQUIPPED:
+			downFrom_Equipped();
+			break;
+		case IN_CHARACTER:
+			downFrom_InCharacter();
+			break;
+		case IN_WORKSPACE:
+			downFrom_InWorkspace();
+			break;
+		case HAS_HANDLE:
+			downFrom_HasHandle();
+			break;
 		}
-	} while (desiredState != backendAccoutrementState);
+
+		setBackendAccoutrementStateNoReplicate(backendAccoutrementState - 1);
+	}
+
+	if (desiredState != backendAccoutrementState) {
+		setDesiredState(desiredState, serviceProvider);
+	}
 }
 
 // FUNCTION: WEBSERVICE 0x100dd0c0

@@ -266,7 +266,6 @@ DECOMP_SIZE_ASSERT(Rocket, 0x154)
 // SYNTHETIC: WEBSERVICE 0x1021d230
 // `dynamic initializer for 'RBX::BodyGyro::prop_maxTorque''
 // SYNTHETIC: WEBSERVICE 0x1021d260
-// STUB: ROBLOX 0x007ed1a0 FOLDED
 // `dynamic initializer for 'RBX::BodyGyro::prop_cframe''
 // SYNTHETIC: WEBSERVICE 0x1021d290
 // `dynamic initializer for 'RBX::BodyPosition::prop_kP''
@@ -275,12 +274,10 @@ DECOMP_SIZE_ASSERT(Rocket, 0x154)
 // SYNTHETIC: WEBSERVICE 0x1021d2f0
 // `dynamic initializer for 'RBX::BodyPosition::prop_maxForce''
 // SYNTHETIC: WEBSERVICE 0x1021d320
-// STUB: ROBLOX 0x007ed1a0 FOLDED
 // `dynamic initializer for 'RBX::BodyPosition::prop_position''
 // SYNTHETIC: WEBSERVICE 0x1021d350
 // `dynamic initializer for 'func_getLastForceOld''
 // SYNTHETIC: WEBSERVICE 0x1021d380
-// STUB: ROBLOX 0x007e8790
 // `dynamic initializer for 'func_getLastForce''
 // SYNTHETIC: WEBSERVICE 0x1021d3b0
 // `dynamic initializer for 'RBX::BodyVelocity::prop_kP''
@@ -295,7 +292,6 @@ DECOMP_SIZE_ASSERT(Rocket, 0x154)
 // SYNTHETIC: WEBSERVICE 0x1021d4a0
 // `dynamic initializer for 'RBX::BodyForce::prop_Force''
 // SYNTHETIC: WEBSERVICE 0x1021d4d0
-// STUB: ROBLOX 0x007ed560
 // `dynamic initializer for 'RBX::BodyThrust::prop_force''
 // SYNTHETIC: WEBSERVICE 0x1021d500
 // `dynamic initializer for 'RBX::BodyThrust::prop_location''
@@ -340,7 +336,6 @@ DECOMP_SIZE_ASSERT(Rocket, 0x154)
 // SYNTHETIC: WEBSERVICE 0x102245e0
 // `dynamic atexit destructor for 'RBX::BodyThrust::prop_location''
 // SYNTHETIC: WEBSERVICE 0x10224600
-// SYNTHETIC: ROBLOX 0x007f4a50
 // `dynamic atexit destructor for 'RBX::BodyThrust::prop_force''
 // SYNTHETIC: WEBSERVICE 0x10224620
 // `dynamic atexit destructor for 'RBX::Rocket::prop_MaxSpeed''
@@ -350,10 +345,8 @@ DECOMP_SIZE_ASSERT(Rocket, 0x154)
 // SYNTHETIC: WEBSERVICE 0x10224660
 // `dynamic atexit destructor for 'RBX::Rocket::prop_targetOffset''
 // SYNTHETIC: WEBSERVICE 0x10224680
-// SYNTHETIC: ROBLOX 0x007f48b0
 // `dynamic atexit destructor for 'RBX::BodyGyro::prop_cframe''
 // SYNTHETIC: WEBSERVICE 0x10224700
-// SYNTHETIC: ROBLOX 0x007f1ef0
 // `dynamic atexit destructor for 'func_getLastForce''
 // SYNTHETIC: WEBSERVICE 0x10224710
 // `dynamic atexit destructor for 'func_getLastForceV''

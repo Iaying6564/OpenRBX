@@ -16,6 +16,7 @@
 #include "util/scopedassign.h"
 #include "v8datamodel/Camera.h"
 #include "v8datamodel/Hopper.h"
+#include "v8datamodel/JointInstance.h"
 #include "v8datamodel/JointsService.h"
 #include "v8datamodel/Lighting.h"
 #include "v8datamodel/ModelInstance.h"
@@ -1552,7 +1553,7 @@ inline void Replicator::ChangePropertyItem::write(RakNet::BitStream& bitStream)
 }
 
 // FUNCTION: WEBSERVICE 0x101a78c0
-// STUB: ROBLOX 0x004d0840
+// FUNCTION: ROBLOX 0x004d0840
 Replicator::ReplicationData& Replicator::addReplicationData(boost::shared_ptr<Instance> instance, bool listenToChanges)
 {
 	std::pair<RepConts::iterator, bool> pair =
@@ -1614,7 +1615,7 @@ void Replicator::readProperties(RakNet::BitStream& inBitstream, Instance* instan
 }
 
 // FUNCTION: WEBSERVICE 0x101a7de0
-// STUB: ROBLOX 0x004d0d60
+// FUNCTION: ROBLOX 0x004d0d60
 void Replicator::readInstanceNew(RakNet::BitStream& inBitstream)
 {
 	int start = inBitstream.GetReadOffset();
@@ -2060,3 +2061,24 @@ Replicator::Replicator(SystemAddress remotePlayerId, RakPeerInterface* peer)
 
 template const RBX::Name& RBX::Name::doDeclare<RBX::Network::sReplicator>();
 template void RBX::Name::callDoDeclare<RBX::Network::sReplicator>();
+
+template const RBX::FactoryProduct<RBX::Snap, RBX::AutoJoint, RBX::sSnap>::Creator
+	RBX::FactoryProduct<RBX::Snap, RBX::AutoJoint, RBX::sSnap>::creator;
+
+template const RBX::FactoryProduct<RBX::Weld, RBX::AutoJoint, RBX::sWeld>::Creator
+	RBX::FactoryProduct<RBX::Weld, RBX::AutoJoint, RBX::sWeld>::creator;
+
+template const RBX::FactoryProduct<RBX::Glue, RBX::AutoJoint, RBX::sGlue>::Creator
+	RBX::FactoryProduct<RBX::Glue, RBX::AutoJoint, RBX::sGlue>::creator;
+
+template const RBX::FactoryProduct<RBX::Rotate, RBX::AutoJoint, RBX::sRotate>::Creator
+	RBX::FactoryProduct<RBX::Rotate, RBX::AutoJoint, RBX::sRotate>::creator;
+
+template const RBX::FactoryProduct<RBX::RotateP, RBX::AutoJoint, RBX::sRotateP>::Creator
+	RBX::FactoryProduct<RBX::RotateP, RBX::AutoJoint, RBX::sRotateP>::creator;
+
+template const RBX::FactoryProduct<RBX::RotateV, RBX::AutoJoint, RBX::sRotateV>::Creator
+	RBX::FactoryProduct<RBX::RotateV, RBX::AutoJoint, RBX::sRotateV>::creator;
+
+template const RBX::FactoryProduct<RBX::Motor, RBX::AutoJoint, RBX::sMotor>::Creator
+	RBX::FactoryProduct<RBX::Motor, RBX::AutoJoint, RBX::sMotor>::creator;

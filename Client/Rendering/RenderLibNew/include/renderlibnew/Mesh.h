@@ -11,18 +11,22 @@
 #include <G3D/Vector3.h>
 #include <GLG3D/RenderDevice.h>
 #include <GLG3D/VAR.h>
+#include <OgreMesh.h>
+#include <exception>
 #include <vector>
 
 class ThumbnailGenerator;
 
 namespace Ogre {
-class SubMesh;
-}
+class Unknown00671c70;
+class VisualEngine;
+} // namespace Ogre
 
 namespace RBX {
 namespace RenderNew {
 
 class Chunk;
+class RenderScene;
 
 // SIZE 0x40
 class Mesh : public G3D::ReferenceCountedObject
@@ -39,7 +43,7 @@ public:
 		G3D::RenderDevice::Primitive primitive; // 0x18
 		bool m_unk0x1c;                         // 0x1c
 		int m_unk0x20;                          // 0x20
-		Ogre::SubMesh* m_unk0x24;               // 0x24
+		Ogre::Unknown00671c70* m_unk0x24;       // 0x24
 
 		Level();
 
@@ -51,18 +55,42 @@ public:
 
 		virtual ~Level();
 
+		void makeHWSubMesh(Ogre::VisualEngine* engine, Ogre::AxisAlignedBox& box);
+		void FUN_00533160(Ogre::VisualEngine* engine, Ogre::AxisAlignedBox& box);
+
 		// SYNTHETIC: ROBLOX 0x0050e360
 		// RBX::RenderNew::Mesh::Level::`scalar deleting destructor'
 	};
 
 	typedef G3D::ReferenceCountedPointer<Level> LevelRef;
 
+	// FUNCTION: ROBLOX 0x0052c910
+	G3D::Vector3& getVertex(int index)
+	{
+		if (index < 0 || index >= visibleGeometry.vertexArray.size()) {
+			throw std::exception("RBX Mesh::getVertex() index out of range");
+		}
+		return visibleGeometry.vertexArray[index];
+	}
+
+	// FUNCTION: ROBLOX 0x0052c960
+	const G3D::Vector3& getNormal(int index)
+	{
+		if (index < 0 || index >= visibleGeometry.normalArray.size()) {
+			throw std::exception("RBX Mesh::getNormal() index out of range");
+		}
+		return visibleGeometry.normalArray[index];
+	}
+
 	static void setShadowVertex(const G3D::Vector3&);
+
+protected:
+	static G3D::MeshAlg::Geometry visibleGeometry;
 
 private:
 	friend class ::ThumbnailGenerator;
+	friend class RenderScene;
 
-	static G3D::MeshAlg::Geometry visibleGeometry;
 	static G3D::Array<G3D::Vector2> texCoordArray;
 	static G3D::Array<G3D::Vector3> tangentArray;
 	static VertexList vertexRefCounts;
@@ -92,12 +120,17 @@ protected:
 
 	int detailIndex(double detail) const { return G3D::iClamp((int) detail, 0, levels.size() - 1); }
 
-	std::vector<undefined4> m_unk0x18; // 0x18
-	std::vector<undefined4> m_unk0x28; // 0x28
-	undefined4* m_unk0x38;             // 0x38
+	std::vector<unsigned short> m_unk0x18; // 0x18
+	std::vector<G3D::Vector3> m_unk0x28;   // 0x28
+	Ogre::Unknown00671c70* m_unk0x38;      // 0x38
 
 public:
 	undefined4 m_unk0x3c; // 0x3c
+
+	static Ogre::MeshPtr g_unk0x0095877c;
+
+	static void FUN_00532380(Ogre::VisualEngine* engine);
+	void FUN_005324e0(Ogre::VisualEngine* engine);
 
 	static G3D::ReferenceCountedPointer<Mesh> aggregate(
 		const std::vector<G3D::ReferenceCountedPointer<Chunk> >& chunkArray,
@@ -125,6 +158,12 @@ public:
 	const LevelRef detailLevel(float detail) const;
 
 	static void flushVAR();
+
+	// SYNTHETIC: ROBLOX 0x007e7fc0
+	// `dynamic initializer for 'RBX::RenderNew::Mesh::visibleGeometry''
+
+	// SYNTHETIC: ROBLOX 0x007f1ad0
+	// `dynamic atexit destructor for 'RBX::RenderNew::Mesh::visibleGeometry''
 };
 
 DECOMP_SIZE_ASSERT(Mesh, 0x40)

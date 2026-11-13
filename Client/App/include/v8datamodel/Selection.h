@@ -60,7 +60,7 @@ public:
 	// FUNCTION: ROBLOX 0x00410670
 	unsigned int size() const { return selection->size(); }
 
-	// STUB: ROBLOX 0x004109b0
+	// FUNCTION: ROBLOX 0x004109b0
 	boost::shared_ptr<Instance> front() const
 	{
 		return size() > 0 ? selection->front() : boost::shared_ptr<Instance>();
@@ -209,26 +209,22 @@ public:
 	const std::vector<T*>& items() const { return filteredSelection; }
 	unsigned int size() const;
 
+	void clearSelection() { rootSelection->clearSelection(); }
+
+	template <class _InIt>
+	void setSelection(_InIt _First, _InIt _Last)
+	{
+		rootSelection->setSelection(_First, _Last);
+	}
+
 	typename std::vector<T*>::const_iterator begin() const { return filteredSelection.begin(); }
 	typename std::vector<T*>::const_iterator end() const { return filteredSelection.end(); }
 
-	// FUNCTION: ROBLOX 0x00598690
-	// RBX::FilteredSelection<RBX::ModelInstance>::FUN_00598690
-	T* FUN_00598690(bool (*predicate)(T*)) const
+	template <class _Pr>
+	T* FUN_00598690(_Pr predicate) const
 	{
 		typename std::vector<T*>::const_iterator it =
 			std::find_if(filteredSelection.begin(), filteredSelection.end(), predicate);
-
-		return it != filteredSelection.end() ? *it : NULL;
-	}
-
-	// STUB: ROBLOX 0x00598770
-	// RBX::FilteredSelection<RBX::PVInstance>::FUN_00598770
-	T* FUN_00598770(Controller::ControllerType controllerType) const
-	{
-		typename std::vector<T*>::const_iterator it = std::find_if(
-			filteredSelection.begin(), filteredSelection.end(), boost::bind(&T::getControllerType, _1) != controllerType
-		);
 
 		return it != filteredSelection.end() ? *it : NULL;
 	}
@@ -274,17 +270,17 @@ protected:
 	// TEMPLATE: WEBSERVICE 0x100a1850
 	// TEMPLATE: ROBLOX 0x005e9e40
 	// RBX::FilteredSelection<RBX::PartInstance>::FilteredSelection<RBX::PartInstance>
-	// STUB: ROBLOX 0x005979b0
+	// TEMPLATE: ROBLOX 0x005979b0
 	// RBX::FilteredSelection<RBX::PVInstance>::FilteredSelection<RBX::PVInstance>
-	// STUB: ROBLOX 0x00597b20
+	// TEMPLATE: ROBLOX 0x00597b20
 	// RBX::FilteredSelection<RBX::ModelInstance>::FilteredSelection<RBX::ModelInstance>
 	// TEMPLATE: ROBLOX 0x00599080
 	// RBX::FilteredSelection<RBX::PVInstance>::onSelectionChanged
 	// TEMPLATE: ROBLOX 0x00599140
 	// RBX::FilteredSelection<RBX::ModelInstance>::onSelectionChanged
-	// STUB: ROBLOX 0x0059a6c0
+	// TEMPLATE: ROBLOX 0x0059a6c0
 	// RBX::FilteredSelection<RBX::PVInstance>::onAncestorChanged
-	// STUB: ROBLOX 0x0059a830
+	// TEMPLATE: ROBLOX 0x0059a830
 	// RBX::FilteredSelection<RBX::ModelInstance>::onAncestorChanged
 	// TEMPLATE: WEBSERVICE 0x100a1bd0
 	// TEMPLATE: ROBLOX 0x005ea1a0
@@ -296,7 +292,7 @@ protected:
 	// TEMPLATE: ROBLOX 0x005eb920
 	// RBX::FilteredSelection<RBX::PartInstance>::onSelectionChanged
 	// TEMPLATE: WEBSERVICE 0x100a4a80
-	// STUB: ROBLOX 0x005ed120
+	// TEMPLATE: ROBLOX 0x005ed120
 	// RBX::FilteredSelection<RBX::PartInstance>::onAncestorChanged
 	// TEMPLATE: WEBSERVICE 0x100bf860
 	// TEMPLATE: ROBLOX 0x006212e0
@@ -311,7 +307,7 @@ protected:
 	// TEMPLATE: ROBLOX 0x00621c00
 	// RBX::FilteredSelection<RBX::Instance>::onSelectionChanged
 	// TEMPLATE: WEBSERVICE 0x100c0630
-	// STUB: ROBLOX 0x00622050
+	// TEMPLATE: ROBLOX 0x00622050
 	// RBX::FilteredSelection<RBX::Instance>::onAncestorChanged
 	// clang-format on
 
@@ -321,6 +317,8 @@ private:
 };
 
 // clang-format off
+// TEMPLATE: ROBLOX 0x004205f0
+// RBX::Selection::setSelection<std::_Vector_iterator<RBX::Instance *,std::allocator<RBX::Instance *> > >
 // TEMPLATE: WEBSERVICE 0x1005e8c0
 // TEMPLATE: ROBLOX 0x005688f0
 // RBX::Selection::setSelection<std::_Vector_const_iterator<boost::shared_ptr<RBX::Instance>,std::allocator<boost::shared_ptr<RBX::Instance> > > >

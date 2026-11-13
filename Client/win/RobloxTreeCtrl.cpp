@@ -2,9 +2,12 @@
 
 #include "MarshaledListener.h"
 #include "ReflectionMetadata.h"
+#include "Roblox.h"
 #include "RobloxTreeCtrlNode.h"
 #include "SelectionTreeCtrl.h"
+#include "script/Script.h"
 #include "util/scopedassign.h"
+#include "v8datamodel/Workspace.h"
 
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -23,6 +26,9 @@ public:
 
 DECOMP_SIZE_ASSERT(RootNode, 0x50)
 
+IMPLEMENT_DYNAMIC(CRobloxTreeCtrl, CXTTreeCtrl)
+IMPLEMENT_DYNAMIC(CSelectionTreeCtrl, CRobloxTreeCtrl)
+
 // FUNCTION: ROBLOX 0x004221a0
 void CRobloxTreeCtrlNode::FUN_004221a0()
 {
@@ -38,6 +44,136 @@ void CRobloxTreeCtrlNode::FUN_004221a0()
 	}
 }
 
+// FUNCTION: ROBLOX 0x004221f0
+void CRobloxTreeCtrl::FUN_004221f0(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTREEVIEW* treeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+	reinterpret_cast<CRobloxTreeCtrlNode*>(treeView->itemNew.lParam)->VTable0x10(treeView->action);
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00422210
+void CRobloxTreeCtrl::FUN_00422210(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTVDISPINFO* dispInfo = reinterpret_cast<NMTVDISPINFO*>(pNMHDR);
+	reinterpret_cast<CRobloxTreeCtrlNode*>(dispInfo->item.lParam)->VTable0x14(dispInfo);
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00422230
+void CSelectionTreeCtrl::FUN_00422230(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	*pResult = m_unk0xcc != 0;
+}
+
+// VTABLE: ROBLOX 0x008024f0
+// SIZE 0x2c
+class CEnabledCmdUI : public CCmdUI
+{
+public:
+	CEnabledCmdUI() : m_unk0x28(FALSE) {}
+
+	// FUNCTION: ROBLOX 0x00422250
+	virtual void Enable(BOOL bOn = TRUE)
+	{
+		m_unk0x28 = bOn;
+		m_bEnableChanged = TRUE;
+	}
+
+	virtual void SetCheck(int nCheck = 1) {}
+	virtual void SetRadio(BOOL bOn = TRUE) {}
+	virtual void SetText(LPCTSTR lpszText) {}
+
+	BOOL m_unk0x28; // 0x28
+};
+
+DECOMP_SIZE_ASSERT(CEnabledCmdUI, 0x2c)
+
+// FUNCTION: ROBLOX 0x00422270
+void CSelectionTreeCtrl::FUN_00422270(CPoint point)
+{
+	CMenu* popup = m_unk0xc4.GetSubMenu(0);
+	if (popup) {
+		for (UINT i = 0; i < popup->GetMenuItemCount(); i++) {
+			CEnabledCmdUI state;
+			state.m_nID = popup->GetMenuItemID(i);
+			if (state.m_nID == 0) {
+				continue;
+			}
+			if (state.m_nID == (UINT) -1) {
+				popup->GetSubMenu(i);
+				continue;
+			}
+
+			AfxGetMainWnd()->OnCmdMsg(state.m_nID, CN_UPDATE_COMMAND_UI, &state, NULL);
+			popup->EnableMenuItem(i, MF_BYPOSITION | (state.m_unk0x28 ? MF_ENABLED : MF_DISABLED));
+		}
+
+		if (point.x == -1 && point.y == -1) {
+			CRect rect;
+			GetClientRect(&rect);
+			point = rect.CenterPoint();
+			ClientToScreen(&point);
+			CXTPCommandBars::TrackPopupMenu(
+				popup, TPM_CENTERALIGN | TPM_VCENTERALIGN, point.x, point.y, GetParentFrame()
+			);
+		}
+		else {
+			CXTPCommandBars::TrackPopupMenu(popup, 0, point.x, point.y, GetParentFrame());
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00422400
+void CSelectionTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	FUN_00422270(point);
+}
+
+// FUNCTION: ROBLOX 0x00422420
+BOOL CSelectionTreeCtrl::OnButtonDown(BOOL bLeft, UINT nFlags, CPoint point)
+{
+	return CXTTreeBase::OnButtonDown(bLeft, nFlags, point);
+}
+
+// FUNCTION: ROBLOX 0x00422440
+void CSelectionTreeCtrl::DoPreSelection(HTREEITEM hItem, BOOL bLeft, UINT nFlags)
+{
+	CXTTreeBase::DoPreSelection(hItem, bLeft, nFlags);
+}
+
+// FUNCTION: ROBLOX 0x00422450
+void CSelectionTreeCtrl::DoAction(HTREEITEM hItem, BOOL bLeft, UINT nFlags, CPoint point)
+{
+	CXTTreeBase::DoAction(hItem, bLeft, nFlags, point);
+}
+
+// FUNCTION: ROBLOX 0x00422480
+void CSelectionTreeCtrl::DoBanding(UINT nFlags, CPoint point)
+{
+	CXTTreeBase::DoBanding(nFlags, point);
+}
+
+// FUNCTION: ROBLOX 0x004224a0
+void CSelectionTreeCtrl::UpdateSelectionForRect(LPCRECT pRect, UINT nFlags, CTypedPtrList<CPtrList, HTREEITEM>& list)
+{
+	CXTTreeBase::UpdateSelectionForRect(pRect, nFlags, list);
+}
+
+// FUNCTION: ROBLOX 0x004224b0
+BOOL CSelectionTreeCtrl::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+	if (CRobloxTreeCtrl::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo)) {
+		return TRUE;
+	}
+
+	if (!g_unk0x00952d8c) {
+		return FALSE;
+	}
+
+	return g_unk0x00952d8c->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+}
+
 // FUNCTION: ROBLOX 0x00422ae0
 void CRobloxTreeCtrl::VTable0x15c()
 {
@@ -51,6 +187,74 @@ void CRobloxTreeCtrl::VTable0x15c()
 	}
 }
 
+// FUNCTION: ROBLOX 0x00422b80
+void CRobloxTreeCtrl::FUN_00422b80(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	RBX::ScopedAssign<undefined> deleting(m_unk0xa4, true);
+	delete reinterpret_cast<CRobloxTreeCtrlNode*>(reinterpret_cast<NMTREEVIEW*>(pNMHDR)->itemOld.lParam);
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00422cc0
+void CRobloxTreeCtrl::OnDestroy()
+{
+	CXTTreeCtrl::OnDestroy();
+
+	RBX::ScopedAssign<undefined> clearing(m_unk0xa4, true);
+	DeleteAllItems();
+	if (m_unk0x94) {
+		delete m_unk0x94;
+		m_unk0x94 = NULL;
+	}
+}
+
+// FUNCTION: ROBLOX 0x00422d60
+BOOL CRobloxTreeCtrl::PreCreateWindow(CREATESTRUCT& cs)
+{
+	cs.style &= ~TVS_DISABLEDRAGDROP;
+	cs.style |= TVS_HASBUTTONS | TVS_LINESATROOT | TVS_EDITLABELS | TVS_SHOWSELALWAYS;
+	return CXTTreeCtrl::PreCreateWindow(cs);
+}
+
+// FUNCTION: ROBLOX 0x00422da0
+void CSelectionTreeCtrl::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	CXTTreeCtrl::OnRButtonDown(nFlags, point);
+	ClientToScreen(&point);
+	FUN_00422270(point);
+}
+
+// FUNCTION: ROBLOX 0x00422de0
+void CRobloxTreeCtrl::FUN_00422de0(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	GetEditControl()->LimitText(32);
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00422e20
+void CRobloxTreeCtrl::OnPaint()
+{
+	COLORREF face = XTPColorManager()->GetColor(COLOR_3DFACE);
+	COLORREF highlight = XTPColorManager()->GetColor(COLOR_HIGHLIGHT);
+	XTPColorManager()->SetColor(
+		COLOR_3DFACE,
+		RGB((GetRValue(face) + GetRValue(highlight)) / 2,
+			(GetGValue(face) + GetGValue(highlight)) / 2,
+			(GetBValue(face) + GetBValue(highlight)) / 2)
+	);
+	CXTTreeCtrl::OnPaint();
+	XTPColorManager()->SetColor(COLOR_3DFACE, face);
+}
+
+// FUNCTION: ROBLOX 0x00422ec0
+void CRobloxTreeCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (nChar == VK_F2) {
+		EditLabel(GetSelectedItem());
+	}
+	CXTTreeCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
 // FUNCTION: ROBLOX 0x004230c0
 int FUN_004230c0(RBX::Instance* instance)
 {
@@ -58,6 +262,213 @@ int FUN_004230c0(RBX::Instance* instance)
 		RBX::Reflection::Metadata::Reflection::FUN_004480c0();
 	RBX::Reflection::Metadata::Class* metadata = reflection->FUN_00446220(&instance->getDescriptor(), true);
 	return metadata ? metadata->FUN_00422100() : 0;
+}
+
+// FUNCTION: ROBLOX 0x00423170
+void CSelectionTreeCtrl::FUN_00423170(TVITEM* item, bool select)
+{
+	if (item->hItem && item->lParam) {
+		boost::shared_ptr<RBX::Instance> instance = reinterpret_cast<CRobloxTreeCtrlNode*>(item->lParam)->m_unk0x0c;
+		if (instance) {
+			RBX::DataModel::Lock lock(VTable0x14c());
+			RBX::Selection* selection = VTable0x148();
+			RBX::ScopedAssign<undefined> updating(m_unk0xce, true);
+			if (select) {
+				selection->addToSelection(instance.get());
+			}
+			else {
+				selection->removeFromSelection(instance.get());
+			}
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x004232d0
+void CSelectionTreeCtrl::FUN_004232d0(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	*pResult = 0;
+	if (!m_unk0xcd && !m_unk0xa4 && m_unk0xe8) {
+		NMTREEVIEW* treeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+		if (treeView->itemNew.hItem) {
+			FUN_00423170(&treeView->itemNew, true);
+		}
+		if (treeView->itemOld.hItem && treeView->action) {
+			FUN_00423170(&treeView->itemOld, false);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00423330
+int CRobloxTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CXTTreeCtrl::OnCreate(lpCreateStruct) == -1) {
+		return -1;
+	}
+
+	{
+		BOOL alpha = FALSE;
+		HBITMAP handle = CXTPImageManagerIcon::LoadBitmapFromResource(MAKEINTRESOURCE(0x85), &alpha);
+		CBitmap bitmap;
+		bitmap.Attach(handle);
+
+		if (alpha) {
+			if (!m_unk0xa8.Create(16, 16, ILC_COLOR32, 0, 0)) {
+				return -1;
+			}
+			if (m_unk0xa8.Add(&bitmap, &bitmap) == -1) {
+				return -1;
+			}
+		}
+		else {
+			if (!m_unk0xa8.Create(16, 16, ILC_COLORDDB | ILC_MASK, 0, 0)) {
+				return -1;
+			}
+			if (m_unk0xa8.Add(&bitmap, RGB(255, 0, 255)) == -1) {
+				return -1;
+			}
+		}
+
+		SetImageList(&m_unk0xa8, TVSIL_NORMAL);
+	}
+
+	EnableMultiSelect(TRUE);
+	VTable0x15c();
+	return 0;
+}
+
+// FUNCTION: ROBLOX 0x004234f0
+void CRobloxTreeCtrl::FUN_004234f0(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTVDISPINFO* dispInfo = reinterpret_cast<NMTVDISPINFO*>(pNMHDR);
+	if (dispInfo->item.pszText) {
+		CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(dispInfo->item.lParam);
+		RBX::DataModel::Lock lock(VTable0x14c());
+		node->m_unk0x0c->setName(dispInfo->item.pszText);
+		*pResult = 1;
+	}
+	else {
+		*pResult = 0;
+	}
+}
+
+// STUB: ROBLOX 0x00423630
+void CSelectionTreeCtrl::FUN_00423630(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTREEVIEW* treeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+	m_unk0xf0.reset(CreateDragImage(treeView->itemNew.hItem));
+	if (m_unk0xf0.get()) {
+		CRect rect;
+		GetItemRect(treeView->itemNew.hItem, &rect, TRUE);
+		int indent = GetIndent();
+		CPoint point = treeView->ptDrag;
+		m_unk0xf0->BeginDrag(0, CPoint(point.x - rect.left + indent, point.y - rect.top));
+		ClientToScreen(&point);
+		CImageList::DragEnter(NULL, point);
+		SetCapture();
+	}
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00423730
+int CSelectionTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CRobloxTreeCtrl::OnCreate(lpCreateStruct) == -1) {
+		return -1;
+	}
+
+	FUN_004204e0();
+	SetTimer(0, 200, NULL);
+	return 0;
+}
+
+// FUNCTION: ROBLOX 0x00423770
+void CSelectionTreeCtrl::SelectAllIgnore(BOOL bSelect, HTREEITEM hIgnore)
+{
+	if (!bSelect) {
+		CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(GetItemData(hIgnore));
+		boost::shared_ptr<RBX::Instance> instance;
+		if (node) {
+			instance = node->m_unk0x0c;
+		}
+
+		{
+			RBX::DataModel::Lock lock(VTable0x14c());
+			RBX::Selection* selection = VTable0x148();
+			RBX::ScopedAssign<undefined> updating(m_unk0xce, true);
+			selection->setSelection(instance.get());
+		}
+
+		{
+			RBX::ScopedAssign<undefined> selecting(m_unk0xcd, true);
+			CXTTreeBase::SelectAllIgnore(FALSE, hIgnore);
+		}
+	}
+	else {
+		CXTTreeBase::SelectAllIgnore(bSelect, hIgnore);
+	}
+}
+
+// FUNCTION: ROBLOX 0x004239a0
+void CRobloxTreeCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	Default();
+
+	if (nFlags & (MK_SHIFT | MK_CONTROL)) {
+		return;
+	}
+
+	HTREEITEM item = HitTest(point, &nFlags);
+	if (item && (nFlags & TVHT_ONITEM)) {
+		CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(GetItemData(item));
+		if (node) {
+			boost::shared_ptr<RBX::Script> script = boost::shared_dynamic_cast<RBX::Script>(node->m_unk0x0c);
+			if (script) {
+				RBX::DataModel::Lock lock(VTable0x14c());
+				static_cast<CRobloxApp*>(AfxGetApp())->FUN_0044ef90(script);
+			}
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00423cc0
+HTREEITEM CSelectionTreeCtrl::FUN_00423cc0(HTREEITEM item)
+{
+	if (item) {
+		CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(GetItemData(item));
+		if (node) {
+			boost::shared_ptr<RBX::Instance> instance = node->m_unk0x0c;
+			if (instance && instance->FUN_00422f10(VTable0x148()->begin(), VTable0x148()->end())) {
+				return item;
+			}
+		}
+	}
+	return NULL;
+}
+
+// FUNCTION: ROBLOX 0x00423dc0
+void CSelectionTreeCtrl::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (m_unk0xf0.get()) {
+		CPoint screen = point;
+		ClientToScreen(&screen);
+		CImageList::DragMove(screen);
+
+		UINT flags;
+		HTREEITEM target = HitTest(point, &flags);
+		if (target) {
+			if (flags & TVHT_ONITEM) {
+				target = FUN_00423cc0(target);
+			}
+			else {
+				target = NULL;
+			}
+		}
+
+		CImageList::DragShowNolock(FALSE);
+		SelectDropTarget(target);
+		CImageList::DragShowNolock(TRUE);
+	}
+	CXTTreeCtrl::OnMouseMove(nFlags, point);
 }
 
 // FUNCTION: ROBLOX 0x004248f0
@@ -541,6 +952,40 @@ void CSelectionTreeCtrl::FUN_004285a0(boost::shared_ptr<RBX::DataModel> dataMode
 	}
 }
 
+// FUNCTION: ROBLOX 0x00428720
+void CRobloxTreeCtrl::FUN_00428720(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTREEVIEW* treeView = reinterpret_cast<NMTREEVIEW*>(pNMHDR);
+	CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(treeView->itemNew.lParam);
+	if (treeView->action & TVE_EXPAND) {
+		if (!node->m_unk0x2d) {
+			node->FUN_00426960();
+			node->FUN_00426b00();
+		}
+	}
+	*pResult = 0;
+}
+
+// FUNCTION: ROBLOX 0x00428770
+static void FUN_00428770(RBX::Instance* parent, boost::shared_ptr<RBX::Instance> child)
+{
+	if (child->getParent() == parent) {
+		return;
+	}
+
+	RBX::Workspace* workspace = RBX::Workspace::findWorkspace(parent);
+	if (workspace) {
+		bool descendent = child->isDescendentOf(workspace);
+		if (!descendent) {
+			std::vector<boost::shared_ptr<RBX::Instance> > instances;
+			instances.push_back(child);
+			workspace->insertInstances(instances, workspace, RBX::INSERT_TO_TREE, RBX::SUPPRESS_PROMPTS);
+		}
+	}
+
+	child->setParent(parent);
+}
+
 // FUNCTION: ROBLOX 0x00428b40
 CSelectionTreeCtrl::~CSelectionTreeCtrl()
 {
@@ -566,3 +1011,62 @@ void RootNode::VTable0x14(NMTVDISPINFO* dispInfo)
 
 template class RBX::MarshaledListener<RBX::Instance, RBX::DescendentAdded, RBX::Instance, RBX::DescendentAdded>;
 template class RBX::MarshaledListener<RBX::Instance, RBX::DescendentRemoving, RBX::Instance, RBX::DescendentRemoving>;
+
+// FUNCTION: ROBLOX 0x00429040
+void CSelectionTreeCtrl::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	Default();
+
+	if (m_unk0xf0.get()) {
+		CImageList::DragLeave(this);
+		CImageList::EndDrag();
+		ReleaseCapture();
+		m_unk0xf0.reset();
+
+		HTREEITEM target = GetDropHilightItem();
+		if (target) {
+			CRobloxTreeCtrlNode* node = reinterpret_cast<CRobloxTreeCtrlNode*>(GetItemData(target));
+			if (node) {
+				boost::shared_ptr<RBX::Instance> instance = node->m_unk0x0c;
+				RBX::DataModel::Lock lock(m_unk0xe8);
+				if (instance) {
+					std::for_each(
+						VTable0x148()->begin(), VTable0x148()->end(), boost::bind(&FUN_00428770, instance.get(), _1)
+					);
+				}
+				m_unk0xe8->clearStack();
+				m_unk0xe8->setDirty(true);
+			}
+		}
+
+		SelectDropTarget(NULL);
+	}
+}
+
+// clang-format off
+BEGIN_MESSAGE_MAP(CRobloxTreeCtrl, CXTTreeCtrl)
+	ON_NOTIFY_REFLECT(TVN_GETDISPINFO, FUN_00422210)
+	ON_NOTIFY_REFLECT(TVN_ITEMEXPANDING, FUN_00428720)
+	ON_NOTIFY_REFLECT(TVN_ITEMEXPANDED, FUN_004221f0)
+	ON_NOTIFY_REFLECT(TVN_DELETEITEM, FUN_00422b80)
+	ON_NOTIFY_REFLECT(TVN_BEGINLABELEDIT, FUN_00422de0)
+	ON_NOTIFY_REFLECT(TVN_ENDLABELEDIT, FUN_004234f0)
+	ON_WM_LBUTTONDBLCLK()
+	ON_WM_PAINT()
+	ON_WM_KEYDOWN()
+	ON_WM_DESTROY()
+	ON_WM_CREATE()
+END_MESSAGE_MAP()
+
+BEGIN_MESSAGE_MAP(CSelectionTreeCtrl, CRobloxTreeCtrl)
+	ON_WM_CONTEXTMENU()
+	ON_NOTIFY_REFLECT(TVN_SELCHANGED, FUN_004232d0)
+	ON_NOTIFY_REFLECT(TVN_SELCHANGING, FUN_00422230)
+	ON_WM_RBUTTONDOWN()
+	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, FUN_00423630)
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONUP()
+	ON_WM_CREATE()
+	ON_WM_TIMER()
+END_MESSAGE_MAP()
+// clang-format on

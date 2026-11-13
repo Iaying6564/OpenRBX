@@ -558,7 +558,7 @@ public:
 	// TEMPLATE: WEBSERVICE 0x1007e1a0
 	// RBX::Reflection::PropDescriptor<RBX::Soundscape::SoundChannel,bool>::getset<bool (__thiscall RBX::Soundscape::SoundChannel::*)(void)const ,void (__thiscall RBX::Soundscape::SoundChannel::*)(bool)>
 	// TEMPLATE: WEBSERVICE 0x10081cd0
-	// STUB: ROBLOX 0x005c5820
+	// TEMPLATE: ROBLOX 0x005c5820
 	// RBX::Reflection::BoundProp<float,1>::BoundProp<float,1><RBX::Soundscape::SoundService>
 	// TEMPLATE: WEBSERVICE 0x10082260
 	// TEMPLATE: ROBLOX 0x005c5cd0
@@ -667,7 +667,7 @@ public:
 	// TEMPLATE: WEBSERVICE 0x100f35f0
 	// RBX::Reflection::BoundProp<G3D::Vector3,1>::BoundProp<G3D::Vector3,1><RBX::Value<G3D::Vector3,&RBX::sVector3Value> >
 	// TEMPLATE: WEBSERVICE 0x100f36d0
-	// STUB: ROBLOX 0x006323b0
+	// TEMPLATE: ROBLOX 0x006323b0
 	// RBX::Reflection::BoundProp<G3D::CoordinateFrame,1>::BoundProp<G3D::CoordinateFrame,1><RBX::Value<G3D::CoordinateFrame,&RBX::sCFrameValue> >
 	// TEMPLATE: WEBSERVICE 0x100f37b0
 	// TEMPLATE: ROBLOX 0x00632490
@@ -866,6 +866,7 @@ public:
 	// TEMPLATE: ROBLOX 0x00625ad0
 	// RBX::Reflection::BoundProp<float,1>::BoundProp<float,1><RBX::Explosion>
 	// TEMPLATE: WEBSERVICE 0x100e2a90
+	// TEMPLATE: ROBLOX 0x00625ba0
 	// RBX::Reflection::BoundProp<G3D::Vector3,1>::BoundProp<G3D::Vector3,1><RBX::Explosion>
 	// TEMPLATE: WEBSERVICE 0x100e4a40
 	// RBX::Reflection::PropDescriptor<RBX::VelocityMotor,float>::getset<float (__thiscall RBX::VelocityMotor::*)(void)const ,void (__thiscall RBX::VelocityMotor::*)(float)>
@@ -908,7 +909,7 @@ public:
 	// TEMPLATE: ROBLOX 0x004c1e10
 	// RBX::Reflection::BoundProp<bool,1>::BoundProp<bool,1><RBX::NetworkSettings>
 	// TEMPLATE: WEBSERVICE 0x1019b6a0
-	// STUB: ROBLOX 0x0062b330
+	// TEMPLATE: ROBLOX 0x004c1ef0
 	// RBX::Reflection::BoundProp<int,1>::BoundProp<int,1><RBX::NetworkSettings>
 	// TEMPLATE: WEBSERVICE 0x1019b780
 	// RBX::Reflection::BoundProp<float,1>::BoundProp<float,1><RBX::NetworkSettings>

@@ -82,6 +82,12 @@ const G3D::GCamera& Workspace::getGCamera() const
 	return getCamera()->getGCamera();
 }
 
+// FUNCTION: ROBLOX 0x005b4730
+void Workspace::onWrapMouse(const G3D::Vector2& wrapMouseDelta)
+{
+	getCamera()->onWrapMouse(wrapMouseDelta);
+}
+
 // FUNCTION: WEBSERVICE 0x1006a100
 // FUNCTION: ROBLOX 0x005b4750
 void Workspace::zoomToExtents()
@@ -133,6 +139,18 @@ World* Workspace::getMyWorldFast(const Instance* context)
 	return getMyWorkspaceFast(context)->getWorld();
 }
 
+// FUNCTION: ROBLOX 0x005b4a30
+void Workspace::insertItems(
+	XmlElement* root, std::vector<boost::shared_ptr<Instance> >& items, InsertMode insertMode, PromptMode promptMode
+)
+{
+	SerializerV2().loadInstances(root, items);
+
+	if (items.size() > 0) {
+		insertInstances(items, this, insertMode, promptMode);
+	}
+}
+
 // FUNCTION: WEBSERVICE 0x1006a830
 // FUNCTION: ROBLOX 0x005b4a70
 void Workspace::setNullMouseCommand()
@@ -180,6 +198,21 @@ IScriptOwner* Workspace::scriptShouldRun(Script* script)
 void Workspace::setThrottleEnabled(bool value)
 {
 	world->setCanThrottle(value);
+}
+
+// FUNCTION: ROBLOX 0x005b4fe0
+Instance* Workspace::findTopInstance(Instance* instance)
+{
+	Instance* service = instance->getParent();
+	Instance* root = service->getParent();
+	while (root->getParent()) {
+		service = root;
+		root = root->getParent();
+	}
+	while (instance->getParent() != service) {
+		instance = instance->getParent();
+	}
+	return instance;
 }
 
 // FUNCTION: WEBSERVICE 0x1006b2e0
@@ -609,7 +642,7 @@ static void append(const boost::shared_ptr<Instance>& item, std::vector<boost::s
 }
 
 // FUNCTION: WEBSERVICE 0x1006f040
-// STUB: ROBLOX 0x005b73c0
+// FUNCTION: ROBLOX 0x005b73c0
 void Workspace::start()
 {
 	isSimulating = true;
@@ -635,6 +668,15 @@ void Workspace::start()
 	}
 }
 
+// FUNCTION: ROBLOX 0x005b75d0
+void Workspace::setCursor(Adorn* adorn)
+{
+	UserInputBase* userInput = ServiceProvider::create<ControllerService>(this)->getHardwareDevice();
+	if (userInput) {
+		userInput->setCursorId(adorn, getCurrentMouseCommand()->getCursorId());
+	}
+}
+
 // FUNCTION: WEBSERVICE 0x1006f380
 // FUNCTION: ROBLOX 0x005b7650
 boost::shared_ptr<const std::vector<boost::shared_ptr<Instance> > > Workspace::insertContent(ContentId contentId)
@@ -648,6 +690,19 @@ boost::shared_ptr<const std::vector<boost::shared_ptr<Instance> > > Workspace::i
 
 	std::for_each(items.begin(), items.end(), boost::bind(&append, _1, values.get()));
 	return values;
+}
+
+// FUNCTION: ROBLOX 0x005b79b0
+void Workspace::selectAll()
+{
+	ServiceClient<Selection> selection(this);
+	selection->clearSelection();
+	for (unsigned int i = 0; i < numChildren(); ++i) {
+		Instance* child = getChild(i);
+		if (!PartInstance::getLocked(child)) {
+			selection->addToSelection(child);
+		}
+	}
 }
 
 // FUNCTION: WEBSERVICE 0x1006f6e0

@@ -56,7 +56,19 @@ function(add_cxx_warning WARNING)
   cmake_pop_check_state()
 
   if (${varname})
-    add_compile_options(${compiler_option})
+    set(OPENRBX_WARNING_OPTIONS ${OPENRBX_WARNING_OPTIONS} ${compiler_option} PARENT_SCOPE)
+  endif()
+endfunction()
+
+function(openrbx_compile_defaults NAME)
+  if (OPENRBX_WARNING_OPTIONS)
+    target_compile_options(${NAME} PRIVATE ${OPENRBX_WARNING_OPTIONS})
+  endif()
+  if (MSVC)
+    target_compile_options(${NAME} PRIVATE /W3)
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
+      target_compile_definitions(${NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+    endif()
   endif()
 endfunction()
 
@@ -91,10 +103,6 @@ add_subdirectory(3rdparty)
 set(OPENRBX_BOOST_LIBS boost_signals boost_thread boost_date_time)
 set(OPENRBX_G3D_LIBS   graphics3d glg3d)
 set(OPENRBX_MESA_LIBS  opengl32 glu32 osmesa32)
-
-if (MSVC)
-  add_compile_options(/W3)
-endif()
 
 set(OPENRBX_APP_SOURCES
   Client/App/security/SecurityContext.cpp
@@ -239,12 +247,14 @@ set(OPENRBX_APP_SOURCES
   Client/App/tool/PartDragTool.cpp
   Client/App/tool/RunDragger.cpp
   Client/App/tool/ToolsArrow.cpp
+  Client/App/tool/ToolsSurface.cpp
   Client/App/util/RunStateOwner.cpp
   Client/App/util/Sound.cpp
   Client/App/util/SoundWorld.cpp
   Client/App/v8datamodel/Backpack.cpp
   Client/App/v8datamodel/Camera.cpp
   Client/App/v8datamodel/CharacterAppearance.cpp
+  Client/App/v8datamodel/Commands.cpp
   Client/App/v8datamodel/DataModel.cpp
   Client/App/v8datamodel/DebrisService.cpp
   Client/App/v8datamodel/Explosion.cpp
@@ -275,6 +285,7 @@ set(OPENRBX_APP_SOURCES
   Client/App/v8datamodel/UserController.cpp
   Client/App/v8datamodel/Value.cpp
   Client/App/v8datamodel/Visit.cpp
+  Client/App/v8datamodel/Unknown005d2700.cpp
   Client/App/v8datamodel/factoryregistration.cpp
   Client/App/v8tree/Service.cpp
 )
@@ -347,6 +358,8 @@ set(OPENRBX_RBXVIEWNEW_SOURCES
 set(OPENRBX_RENDERLIBNEW_SOURCES
   Client/Rendering/RenderLibNew/AggregatingSceneManager.cpp
   Client/Rendering/RenderLibNew/Chunk.cpp
+  Client/Rendering/RenderLibNew/Clusterer.cpp
+  Client/Rendering/RenderLibNew/EffectSettings.cpp
   Client/Rendering/RenderLibNew/Material.cpp
   Client/Rendering/RenderLibNew/Mesh.cpp
   Client/Rendering/RenderLibNew/RenderScene.cpp
@@ -366,6 +379,21 @@ set(OPENRBX_RENDERLIB_SOURCES
   Client/Rendering/RenderLib/RenderSurface.cpp
   Client/Rendering/RenderLib/TextureProxy.cpp
 )
+set(OPENRBX_APPDRAW_RBXGFX_SOURCES
+  Client/Rendering/AppDraw/AdornRbxGfx.cpp
+)
+set(OPENRBX_APPDRAW_CLIENT_SOURCES
+  Client/Rendering/AppDraw/RbxEntity.cpp
+  Client/Rendering/AppDraw/RbxFont.cpp
+  Client/Rendering/AppDraw/RbxSceneManager.cpp
+  Client/Rendering/AppDraw/RbxSceneNode.cpp
+  Client/Rendering/AppDraw/RbxSky.cpp
+  Client/Rendering/AppDraw/RbxSubEntity.cpp
+  Client/Rendering/AppDraw/TwoDManager.cpp
+  Client/Rendering/AppDraw/Unknown0067eb00.cpp
+  Client/Rendering/AppDraw/VisualEngine.cpp
+)
+
 set(OPENRBX_APPDRAW_SOURCES
   Client/Rendering/AppDraw/AdornG3D.cpp
   Client/Rendering/AppDraw/Draw.cpp
@@ -419,6 +447,7 @@ function(add_engine_library NAME)
     return()
   endif()
   add_library(${NAME} OBJECT ${ARGS_SOURCES})
+  openrbx_compile_defaults(${NAME})
   target_compile_definitions(${NAME} PRIVATE ${OPENRBX_COMMON_DEFINITIONS} ${ARGS_DEFINITIONS})
   target_include_directories(${NAME} PRIVATE ${OPENRBX_ENGINE_INCLUDE_DIRS} ${OPENRBX_3RDPARTY_INCLUDE_DIRS})
   if (MSVC_FOR_DECOMP AND ARGS_OPTIONS)
@@ -489,14 +518,6 @@ if (TARGET app)
   target_link_libraries(app PRIVATE fmodex)
 endif()
 
-add_library(app_client OBJECT Client/App/v8datamodel/Commands.cpp)
-target_compile_definitions(app_client PRIVATE ${OPENRBX_COMMON_DEFINITIONS} _CRT_SECURE_NO_WARNINGS _RELEASE BOOST_IOSTREAMS_NO_LIB)
-target_include_directories(app_client PRIVATE ${OPENRBX_ENGINE_INCLUDE_DIRS} ${OPENRBX_3RDPARTY_INCLUDE_DIRS})
-if (MSVC_FOR_DECOMP)
-  target_compile_options(app_client PRIVATE /O2 /Ob2 /Oi /Oy /GF /Gy /GS- /fp:fast)
-elseif (MSVC)
-  target_compile_options(app_client PRIVATE /EHsc)
-endif()
 
 add_engine_library(network
   OPTIONS /O2
@@ -520,6 +541,18 @@ add_engine_library(appdraw
   SOURCES ${OPENRBX_APPDRAW_SOURCES}
 )
 
+add_engine_library(appdraw_rbxgfx
+  DEFINITIONS _RELEASE
+  OPTIONS /O2 /GS-
+  SOURCES ${OPENRBX_APPDRAW_RBXGFX_SOURCES}
+)
+
+add_engine_library(appdraw_client
+  DEFINITIONS _RELEASE
+  OPTIONS /O2
+  SOURCES ${OPENRBX_APPDRAW_CLIENT_SOURCES}
+)
+
 add_engine_library(renderlib
   OPTIONS /O2 /Wp64
   SOURCES ${OPENRBX_RENDERLIB_SOURCES}
@@ -541,10 +574,15 @@ add_engine_library(renderlibnew
   SOURCES ${OPENRBX_RENDERLIBNEW_SOURCES}
 )
 
-list(REMOVE_ITEM OPENRBX_ENGINE_LIBRARIES rbxviewnew renderlibnew)
-foreach(lib rbxviewnew renderlibnew)
+list(REMOVE_ITEM OPENRBX_ENGINE_LIBRARIES rbxviewnew renderlibnew appdraw_rbxgfx appdraw_client)
+foreach(lib rbxviewnew renderlibnew appdraw_rbxgfx appdraw_client)
   if (TARGET ${lib})
     target_include_directories(${lib} PRIVATE ${OPENRBX_RENDERLIBNEW_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/Client/Rendering/OgreSDK/include")
+  endif()
+endforeach()
+foreach(lib appdraw_rbxgfx appdraw_client)
+  if (TARGET ${lib})
+    target_include_directories(${lib} PRIVATE "${OPENRBX_3RDPARTY}/Microsoft DirectX SDK (November 2007)/Include")
   endif()
 endforeach()
 
@@ -561,6 +599,7 @@ if (MSVC_FOR_DECOMP)
   endforeach()
 
   add_library(toolkitpro STATIC ${OPENRBX_TOOLKITPRO_SOURCES})
+  openrbx_compile_defaults(toolkitpro)
   target_compile_definitions(toolkitpro PRIVATE WIN32 _LIB NDEBUG _MBCS _AFXDLL ZLIB_WINAPI)
   target_include_directories(toolkitpro PRIVATE
     "${OPENRBX_TOOLKITPRO_WORKSPACE}"
@@ -597,6 +636,7 @@ add_library(webservice SHARED
   ${OPENRBX_WEBSERVICE_SOURCES}
   util/decomp.cpp
 )
+openrbx_compile_defaults(webservice)
 target_compile_definitions(webservice PRIVATE ${OPENRBX_COMMON_DEFINITIONS} _USRDLL _CRT_SECURE_NO_WARNINGS
   _ATL_NO_COM_SUPPORT)
 reccmp_add_target(webservice ID WEBSERVICE)
@@ -671,23 +711,40 @@ if (MSVC_FOR_DECOMP)
   add_executable(roblox WIN32
     Client/win/AboutRobloxDialog.cpp
     Client/win/App.cpp
+    Client/win/Unknown00409ef0.cpp
     Client/win/BrowserView.cpp
+    Client/win/ChatPrompt.cpp
     Client/win/ChildFrm.cpp
+    Client/win/ClipboardVerbs.cpp
+    Client/win/DHTMLWindow.cpp
     Client/win/DxUserInput.cpp
+    Client/win/UserInputUtil.cpp
     Client/win/ErrorUploader.cpp
+    Client/win/InsertObjectDialog.cpp
+    Client/win/InstanceExplorer.cpp
     Client/win/LogManager.cpp
+    Client/win/LuaHtmlView.cpp
+    Client/win/LDraw2RobloxColorMap.cpp
+    Client/win/LDraw2RobloxMapRoot.cpp
+    Client/win/LDraw2RobloxPartMap.cpp
+    Client/win/LDrawCommand.cpp
+    Client/win/LDrawParser.cpp
+    Client/win/LuaFunction.cpp
+    Client/win/LuaWriter.cpp
     Client/win/MainFrm.cpp
     Client/win/MarshalWindow.cpp
     Client/win/MultiPlayerPane.cpp
     Client/win/NullDoc.cpp
     Client/win/ObjectBrowser.cpp
     Client/win/PropGrid.cpp
+    Client/win/RBXImage.cpp
     Client/win/RenderSettings.cpp
     Client/win/Roblox.cpp
     Client/win/RobloxDoc.cpp
     Client/win/RobloxReportView.cpp
     Client/win/RobloxView.cpp
     Client/win/RobloxWnd.cpp
+    Client/win/SaveToRobloxDialog.cpp
     Client/win/ScintillaCtrl.cpp
     Client/win/ScintillaDocView.cpp
     Client/win/ScriptDoc.cpp
@@ -700,11 +757,13 @@ if (MSVC_FOR_DECOMP)
     Client/win/ActiveDocView.cpp
     Client/win/ReflectionMetadata.cpp
     Client/win/RobloxTreeCtrl.cpp
+    Client/win/Content.cpp
     Client/win/Roblox.rc
     "${OPENRBX_ROBLOX_MIDL_DIR}/Roblox_h.h"
     "${OPENRBX_ROBLOX_MIDL_DIR}/Roblox_i.c"
     util/decomp.cpp
   )
+  openrbx_compile_defaults(roblox)
   target_compile_definitions(roblox PRIVATE ${OPENRBX_COMMON_DEFINITIONS} _CRT_SECURE_NO_WARNINGS _AFXDLL _XTP_STATICLINK)
   target_precompile_headers(roblox PRIVATE "${PROJECT_SOURCE_DIR}/Client/win/StdAfx.h")
   set_source_files_properties("${OPENRBX_ROBLOX_MIDL_DIR}/Roblox_i.c" PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
@@ -724,7 +783,7 @@ if (MSVC_FOR_DECOMP)
   )
 
   set(OPENRBX_CLIENT_ENGINE_LIBRARIES)
-  foreach(lib rbxview renderlib rbxviewnew renderlibnew network app app_client appdraw appdraw_head lua)
+  foreach(lib rbxview renderlib rbxviewnew renderlibnew network appdraw_head app appdraw_rbxgfx appdraw appdraw_client lua)
     if (TARGET ${lib})
       list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${lib})
     endif()
@@ -764,15 +823,10 @@ if (MSVC_FOR_DECOMP)
   endforeach()
 
   set_property(TARGET roblox PROPERTY OUTPUT_NAME "Roblox")
-endif()
 
-if (MSVC)
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  endif()
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
-    add_compile_options(-Zc:__cplusplus)
-  endif()
+  set_property(TARGET roblox appdraw_client PROPERTY RULE_LAUNCH_COMPILE
+    "\"${CMAKE_COMMAND}\" -DSOURCE=<SOURCE> -DLANGUAGE=<LANGUAGE> -P \"${PROJECT_SOURCE_DIR}/cmake/compile_relative.cmake\" --"
+  )
 endif()
 
 if (OPENRBX_DECOMP_ASSERT)

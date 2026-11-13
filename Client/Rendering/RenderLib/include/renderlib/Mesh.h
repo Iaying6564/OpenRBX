@@ -13,6 +13,7 @@
 #include <GLG3D/VAR.h>
 #include <vector>
 
+class CRobloxWnd;
 class ThumbnailGenerator;
 
 namespace RBX {
@@ -64,6 +65,7 @@ public:
 	static void setShadowVertex(const G3D::Vector3&);
 
 private:
+	friend class ::CRobloxWnd;
 	friend class ::ThumbnailGenerator;
 
 	static G3D::MeshAlg::Geometry visibleGeometry;
@@ -152,7 +154,6 @@ public:
 	// SYNTHETIC: ROBLOX 0x0049b080
 	// RBX::Render::Mesh::ShadowSurface::ShadowSurface
 	// SYNTHETIC: WEBSERVICE 0x1021eb80
-	// STUB: ROBLOX 0x007e7fc0
 	// `dynamic initializer for 'RBX::Render::Mesh::visibleGeometry''
 	// SYNTHETIC: WEBSERVICE 0x1021ebc0
 	// `dynamic initializer for 'RBX::Render::Mesh::texCoordArray''
@@ -190,7 +191,7 @@ public:
 	// SYNTHETIC: WEBSERVICE 0x10225870
 	// `dynamic atexit destructor for 'RBX::Render::Mesh::tangentVAR''
 	// SYNTHETIC: WEBSERVICE 0x102258b0
-	// STUB: ROBLOX 0x0048b590
+	// SYNTHETIC: ROBLOX 0x007f06e0
 	// `dynamic atexit destructor for 'RBX::Render::Mesh::vertexVAR''
 	// clang-format on
 	static void flushVAR();

@@ -57,16 +57,14 @@ ICameraOwner* Camera::getCameraOwner()
 	return NULL;
 }
 
-// STUB: ROBLOX 0x005d5fd0
+// FUNCTION: ROBLOX 0x005d5fd0
 bool Camera::canZoom(int p_unk0x04) const
 {
-	float distance = goalToFocusDistance();
-
 	if (p_unk0x04 > 0) {
-		return distanceMin() < distance;
+		return goalToFocusDistance() > distanceMin();
 	}
 
-	return distanceMax() > distance;
+	return goalToFocusDistance() < distanceMax();
 }
 
 // FUNCTION: WEBSERVICE 0x100c2670
@@ -274,12 +272,14 @@ void Camera::panRadians(float angle)
 	}
 }
 
-// STUB: ROBLOX 0x005d68e0
+// FUNCTION: ROBLOX 0x005d68e0
 bool Camera::tiltUnits(int p_unk0x04)
 {
 	float elevation = Math::elevationAngle(cameraGoal.lookVector());
 
-	return tiltRadians((G3D::iRound(elevation * 57.2957764f * 0.1f) + p_unk0x04) * 0.174532935f - elevation);
+	float degrees = elevation * 57.2957764f;
+
+	return tiltRadians((G3D::iRound(degrees * 0.1f) + p_unk0x04) * 0.174532935f - elevation);
 }
 
 // FUNCTION: ROBLOX 0x005d6980
@@ -367,6 +367,13 @@ void Camera::updateGoal()
 	}
 
 	cameraGoal.lookAt(cameraFocus.translation);
+}
+
+// FUNCTION: ROBLOX 0x005d6e40
+void Camera::onWrapMouse(const G3D::Vector2& wrapMouseDelta)
+{
+	tiltRadians(wrapMouseDelta.y * -0.0052359882f);
+	panRadians(wrapMouseDelta.x * -0.0069813174f);
 }
 
 // FUNCTION: WEBSERVICE 0x100c31e0

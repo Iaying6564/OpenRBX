@@ -66,6 +66,7 @@ private:
 	virtual void updateLighting();                                                   // vtable+0x24
 	virtual void invalidateLighting(bool updateSkybox);                              // vtable+0x28
 
+	void FUN_0050c5c0(void* rd);
 	void FUN_0050d3d0(void* rd);
 
 	// SYNTHETIC: ROBLOX 0x0050dca0
@@ -73,6 +74,11 @@ private:
 };
 
 DECOMP_SIZE_ASSERT(View, 0x58)
+
+extern bool g_unk0x0092a24c;
+
+void FUN_0050b2a0(bool value);
+bool FUN_0050b2b0();
 
 } // namespace ViewNew
 } // namespace RBX

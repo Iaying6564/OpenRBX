@@ -28,6 +28,18 @@ void Dragger::movePrimitives(const G3D::Array<Primitive*>& primitives, const G3D
 	}
 }
 
+// FUNCTION: ROBLOX 0x0061db20
+Extents Dragger::computeExtents(const std::vector<Primitive*>& primitives)
+{
+	Extents answer = Extents::negativeInfiniteExtents();
+
+	for (unsigned int i = 0; i < primitives.size(); i++) {
+		answer.unionWith(primitives[i]->getExtentsWorld());
+	}
+
+	return answer;
+}
+
 // FUNCTION: WEBSERVICE 0x10105760
 // FUNCTION: ROBLOX 0x0061dc20
 Extents Dragger::computeExtents(const G3D::Array<Primitive*>& primitives)
@@ -48,6 +60,19 @@ bool Dragger::intersectingWorldOrOthers(const G3D::Array<Primitive*>& primitives
 	Extents group = computeExtents(primitives);
 
 	return group.min().y < -0.01f || contactManager.intersectingOthers(primitives, 0.01f);
+}
+
+// FUNCTION: ROBLOX 0x0061dd30
+void Dragger::movePrimitivesGoal(
+	const G3D::Array<Primitive*>& primitives, const G3D::Vector3& p_unk0x08, G3D::Vector3& movedSoFar
+)
+{
+	G3D::Vector3 delta = toGrid(p_unk0x08 - movedSoFar);
+
+	if (delta != G3D::Vector3::zero()) {
+		movePrimitives(primitives, delta);
+		movedSoFar = p_unk0x08;
+	}
 }
 
 // FUNCTION: WEBSERVICE 0x10105870
@@ -119,6 +144,56 @@ void Dragger::searchDownGross(
 	else {
 		searchUpFine(primitives, movedSoFar, contactManager);
 	}
+}
+
+// FUNCTION: ROBLOX 0x0061e0c0
+void Dragger::safePlaceAlongLine(
+	const G3D::Array<Primitive*>& primitives,
+	const G3D::Vector3& p_unk0x08,
+	const G3D::Vector3& p_unk0x0c,
+	G3D::Vector3& movedSoFar,
+	ContactManager& contactManager
+)
+{
+	movePrimitivesGoal(primitives, p_unk0x0c, movedSoFar);
+
+	if (intersectingWorldOrOthers(primitives, contactManager)) {
+		G3D::Vector3 middle = toGrid((p_unk0x08 + p_unk0x0c) * 0.51f);
+
+		movePrimitivesGoal(primitives, middle, movedSoFar);
+
+		bool intersecting = intersectingWorldOrOthers(primitives, contactManager);
+
+		if (middle == p_unk0x0c) {
+			if (intersecting) {
+				movePrimitivesGoal(primitives, p_unk0x08, movedSoFar);
+			}
+		}
+		else if (intersecting) {
+			safePlaceAlongLine(primitives, p_unk0x08, middle, movedSoFar, contactManager);
+		}
+		else {
+			safePlaceAlongLine(primitives, middle, p_unk0x0c, movedSoFar, contactManager);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x0061e200
+G3D::Vector3 Dragger::safeMoveAlongLine(
+	const G3D::Array<Primitive*>& primitives, const G3D::Vector3& tryMove, ContactManager& contactManager
+)
+{
+	if (primitives.size() == 0) {
+		return G3D::Vector3::zero();
+	}
+
+	G3D::Vector3 movedSoFar = G3D::Vector3::zero();
+
+	if (tryMove != G3D::Vector3::zero()) {
+		safePlaceAlongLine(primitives, G3D::Vector3::zero(), tryMove, movedSoFar, contactManager);
+	}
+
+	return movedSoFar;
 }
 
 // FUNCTION: WEBSERVICE 0x10105b10

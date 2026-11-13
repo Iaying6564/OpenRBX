@@ -39,7 +39,7 @@ class DataModel : public DescribedNonCreatable<DataModel, ServiceProvider, sData
 				  public Evaluator,
 				  public Listener<RunService, RunTransition>
 {
-	GuiResponse processAccelerators(const GuiEvent&);
+	GuiResponse processAccelerators(const GuiEvent& event);
 	void processEvent(const UIEvent&);
 
 private:
@@ -100,7 +100,7 @@ public:
 	void buildGui(Adorn*);
 	void processGui(const UIEvent&);
 	GuiRoot* getGuiRoot() const { return guiRoot.get(); }
-	GuiRoot* getGuiHooks() const;
+	GuiRoot* getGuiHooks() const { return guiHooks.get(); }
 	void clearContents();
 	// FUNCTION: ROBLOX 0x00468c90
 	boost::shared_ptr<boost::recursive_mutex> getMutex() const { return mutex; }

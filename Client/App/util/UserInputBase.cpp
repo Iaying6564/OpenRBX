@@ -1,6 +1,10 @@
 #include "util/UserInputBase.h"
 
+#include "appdraw/Textures.h"
+#include "rbxgraphics/Adorn.h"
 #include "rbxgraphics/TextureProxyBase.h"
+#include "util/ContentProvider.h"
+#include "util/TextureId.h"
 
 namespace RBX {
 
@@ -19,8 +23,14 @@ void UserInputBase::getNavKeys(NavKeys& navKeys) const
 	navKeys.space = keyDown(SDLK_SPACE);
 }
 
-// STUB: ROBLOX 0x005d8ce0
-UserInputBase::UserInputBase()
+// FUNCTION: ROBLOX 0x005d8c00
+void UserInputBase::init(Adorn* adorn)
+{
+	setCursorId(adorn, ContentId::fromAssets("Textures\\ArrowCursor.png"));
+}
+
+// FUNCTION: ROBLOX 0x005d8ce0
+UserInputBase::UserInputBase() : currentCursor(NULL)
 {
 }
 
@@ -30,10 +40,31 @@ G3D::ReferenceCountedPointer<TextureProxyBase> UserInputBase::getGameCursor(Ador
 	return currentCursor;
 }
 
-// STUB: ROBLOX 0x005d8d70
+// FUNCTION: ROBLOX 0x005d8d70
 void UserInputBase::setCursorId(Adorn* adorn, const TextureId& cursorId)
 {
-	STUB(0x5d8d70);
+	if (currentCursorId != cursorId) {
+		currentCursorId = cursorId;
+		currentCursor = Textures::getTextureProxy(adorn, cursorId);
+
+		if (currentCursor.isNull()) {
+			currentCursor = Textures::getTextureProxy(adorn, ContentId::fromAssets("Textures\\ArrowCursor.png"));
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x005d8ee0
+void UserInputBase::renderGameCursor(Adorn* adorn)
+{
+	G3D::ReferenceCountedPointer<TextureProxyBase> cursor = getGameCursor(adorn);
+	if (cursor.notNull()) {
+		G3D::Rect2D rect = adorn->getTextureSize(cursor);
+		rect = (rect - rect.center()) + getCursorPosition();
+
+		adorn->setTexture(0, cursor);
+		adorn->rect2d(rect, G3D::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+		adorn->setTexture(0, NULL);
+	}
 }
 
 } // namespace RBX

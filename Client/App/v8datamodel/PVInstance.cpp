@@ -212,6 +212,16 @@ Controller* PVInstance::getTopPVController() const
 	return NullController::getStaticNullController();
 }
 
+// FUNCTION: ROBLOX 0x005f7810
+PVInstance* PVInstance::getTopLevelPVParent()
+{
+	if (isTopLevelPVInstance()) {
+		return this;
+	}
+
+	return static_cast<PVInstance*>(getParent())->getTopLevelPVParent();
+}
+
 // FUNCTION: WEBSERVICE 0x100997e0
 // FUNCTION: ROBLOX 0x005f79c0
 void PVInstance::clearLegacyOffset()

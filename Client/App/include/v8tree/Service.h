@@ -106,12 +106,13 @@ DECOMP_SIZE_ASSERT(ServiceRemoving, 0x8)
 // TEMPLATE: ROBLOX 0x00458420
 // RBX::ServiceProvider::create<RBX::RunService>
 // TEMPLATE: WEBSERVICE 0x10065ba0
-// STUB: ROBLOX 0x0045cb90
+// TEMPLATE: ROBLOX 0x0045cb90
 // RBX::ServiceProvider::create<RBX::Stats::StatsService>
 // TEMPLATE: WEBSERVICE 0x100666a0
 // TEMPLATE: ROBLOX 0x00572f20
 // RBX::ServiceProvider::create<RBX::Stats::StatsService>
 // TEMPLATE: WEBSERVICE 0x1006a590
+// TEMPLATE: ROBLOX 0x0045f920
 // RBX::ServiceProvider::doGetClassIndex<RBX::ControllerService>
 // TEMPLATE: WEBSERVICE 0x1006a5f0
 // RBX::ServiceProvider::doGetClassIndex<RBX::StarterPackService>
@@ -127,13 +128,13 @@ DECOMP_SIZE_ASSERT(ServiceRemoving, 0x8)
 // TEMPLATE: ROBLOX 0x004aaae0
 // RBX::ServiceProvider::find<RBX::StarterPackService>
 // FUNCTION: WEBSERVICE 0x1006e4c0
-// STUB: ROBLOX 0x00461fc0
+// FUNCTION: ROBLOX 0x00461fc0
 // RBX::ServiceProvider::find<RBX::ControllerService>
 // TEMPLATE: WEBSERVICE 0x1006e670
 // TEMPLATE: ROBLOX 0x004cbe00
 // RBX::ServiceProvider::create<RBX::StarterPackService>
 // TEMPLATE: WEBSERVICE 0x1006e760
-// STUB: ROBLOX 0x00462180
+// TEMPLATE: ROBLOX 0x00462180
 // RBX::ServiceProvider::create<RBX::ControllerService>
 // TEMPLATE: WEBSERVICE 0x1006ea80
 // TEMPLATE: ROBLOX 0x005b6ea0
@@ -141,7 +142,7 @@ DECOMP_SIZE_ASSERT(ServiceRemoving, 0x8)
 // TEMPLATE: WEBSERVICE 0x1006eb20
 // TEMPLATE: ROBLOX 0x005b6ef0
 // RBX::ServiceProvider::create<RBX::ControllerService>
-// STUB: ROBLOX 0x00599cb0
+// TEMPLATE: ROBLOX 0x00599cb0
 // RBX::ServiceProvider::create<RBX::FilteredSelection<RBX::PVInstance> >
 // TEMPLATE: ROBLOX 0x00599da0
 // RBX::ServiceProvider::create<RBX::FilteredSelection<RBX::ModelInstance> >
@@ -492,8 +493,10 @@ public:
 	ServiceClient(Instance* context) : context(context) {}
 
 	// clang-format off
+	// TEMPLATE: ROBLOX 0x0059a480
+	// RBX::ServiceClient<RBX::RunService>::createService
 	// TEMPLATE: WEBSERVICE 0x1006f250
-	// STUB: ROBLOX 0x0059a540
+	// TEMPLATE: ROBLOX 0x0059a540
 	// RBX::ServiceClient<RBX::Selection>::createService
 	// TEMPLATE: WEBSERVICE 0x100a49c0
 	// TEMPLATE: ROBLOX 0x005ed060

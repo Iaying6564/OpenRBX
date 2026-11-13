@@ -50,6 +50,31 @@ void RunService::onAncestorChanged(const AncestorChanged& event)
 	}
 }
 
+// FUNCTION: ROBLOX 0x00569480
+void RunService::setRunState(RunState state)
+{
+	if (state == RS_RUNNING) {
+		if (!isEditState() && !isPauseState()) {
+			return;
+		}
+	}
+	else if (state == RS_PAUSED) {
+		if (!isRunState()) {
+			return;
+		}
+	}
+
+	if (runState == state) {
+		return;
+	}
+
+	RunTransition transition(runState, state);
+
+	runState = state;
+	Notifier<RunService, RunState>::raise(state);
+	Notifier<RunService, RunTransition>::raise(transition);
+}
+
 // FUNCTION: WEBSERVICE 0x10054cb0
 // FUNCTION: ROBLOX 0x005694e0
 void RunService::runProc(boost::shared_ptr<DataModel> dataModel)
@@ -189,7 +214,7 @@ RunService::RunService()
 }
 
 // FUNCTION: WEBSERVICE 0x100573e0
-// STUB: ROBLOX 0x0056b4e0
+// FUNCTION: ROBLOX 0x0056b4e0
 void RunService::start()
 {
 	boost::shared_ptr<DataModel> dataModel = shared_from(dynamic_cast<DataModel*>(getParent()));

@@ -1,6 +1,7 @@
 #include "BrickMesh.h"
 
 #include "QuadVolume.h"
+#include "ViewBase.h"
 #include "util/Math.h"
 #include "v8datamodel/BrickColor.h"
 
@@ -10,6 +11,9 @@
 
 namespace RBX {
 namespace ViewNew {
+
+// GLOBAL: ROBLOX 0x0092a908
+bool g_unk0x0092a908 = true;
 
 static int orderedCompare(const G3D::Vector3& a, const G3D::Vector3& b)
 {
@@ -77,6 +81,11 @@ const float BrickMesh::normalPerturbation = 0.05f;
 
 const float BrickMesh::bevel = 0.0f;
 
+static bool g_unk0x00958541;
+
+// GLOBAL: ROBLOX 0x00958544
+float BrickMesh::g_unk0x00958544 = 0.0f;
+
 static G3D::Vector2 flatTex(1.0f / 64.0f, 8.0f / 9.0f);
 
 template <int N>
@@ -85,7 +94,8 @@ void meshFace(
 	float inset,
 	RenderSurfaceTypes surfaceTypes,
 	float colorIndex,
-	RBX::RenderNew::Mesh::LevelRef& level
+	RBX::RenderNew::Mesh::LevelRef& level,
+	unsigned int* corners
 )
 {
 	RenderSurfaceType surfaceType = surfaceTypes.getSurfaceType((RBX::NormalId) N);
@@ -120,13 +130,24 @@ void meshFace(
 
 	textureOffset.x += colorIndex / 32.0;
 
-	G3D::Vector2 perturbationMin;
-	perturbationMin.x = G3D::uniformRandom(-BrickMesh::normalPerturbation, BrickMesh::normalPerturbation);
-	perturbationMin.y = G3D::uniformRandom(-BrickMesh::normalPerturbation, BrickMesh::normalPerturbation);
+	static G3D::Vector2 lastPerturbationMin;
+	static G3D::Vector2 lastPerturbationMax;
 
+	G3D::Vector2 perturbationMin;
 	G3D::Vector2 perturbationMax;
-	perturbationMax.x = G3D::uniformRandom() > 0.5f ? perturbationMin.x : -perturbationMin.x;
-	perturbationMax.y = G3D::uniformRandom() > 0.5f ? perturbationMin.y : -perturbationMin.y;
+	if (!g_unk0x00958541) {
+		perturbationMin.x = G3D::uniformRandom(-BrickMesh::normalPerturbation, BrickMesh::normalPerturbation);
+		perturbationMin.y = G3D::uniformRandom(-BrickMesh::normalPerturbation, BrickMesh::normalPerturbation);
+		perturbationMax.x = G3D::uniformRandom() > 0.5f ? perturbationMin.x : -perturbationMin.x;
+		perturbationMax.y = G3D::uniformRandom() > 0.5f ? perturbationMin.y : -perturbationMin.y;
+
+		lastPerturbationMin = perturbationMin;
+		lastPerturbationMax = perturbationMax;
+	}
+	else {
+		perturbationMin = lastPerturbationMin;
+		perturbationMax = lastPerturbationMax;
+	}
 
 	if (surfaceType == FLAT) {
 		G3D::Vector3 nxy(perturbationMin.x, perturbationMin.y, 1.0f);
@@ -160,20 +181,30 @@ void meshFace(
 		);
 
 		level->indexArray.append(i0, i1, i2, i3);
+
+		corners[0] = i0;
+		corners[1] = i1;
+		corners[2] = i2;
+		corners[3] = i3;
 	}
 	else {
-
 		G3D::Vector2 minCorner;
 		minCorner.x = -faceCorner.x;
 
 		G3D::Vector2 normalDelta = (perturbationMax - perturbationMin) * 0.5 / faceCorner.xy();
+		int countX = 0;
 
 		G3D::Vector2 minNormal;
 		minNormal.x = perturbationMin.x;
 
+		static std::vector<unsigned int> indices;
+		indices.clear();
+
+		int countY;
 		while (minCorner.x < faceCorner.x) {
 			G3D::Vector2 maxCorner;
 			maxCorner.x = std::min(minCorner.x + studsPerTile.x, faceCorner.x);
+			countY = 0;
 
 			G3D::Vector2 maxNormal;
 			maxNormal.x = minNormal.x + normalDelta.x;
@@ -218,34 +249,27 @@ void meshFace(
 					true
 				);
 
+				indices.push_back(i0);
+				indices.push_back(i1);
+				indices.push_back(i2);
+				indices.push_back(i3);
+
 				level->indexArray.append(i0, i1, i2, i3);
+				countY++;
 
 				minCorner.y = maxCorner.y;
 				minNormal.y = maxNormal.y;
 			}
 
+			countX++;
 			minCorner.x = maxCorner.x;
 			minNormal.x = maxNormal.x;
 		}
-	}
-}
 
-BrickMesh::BrickMesh(const G3D::Vector3& size, RenderSurfaceTypes surfaceTypes, BrickColor color)
-{
-	{
-		RenderNew::Mesh::LevelRef level = new RenderNew::Mesh::Level(G3D::RenderDevice::QUADS);
-		levels.append(level);
-
-		G3D::Vector3 halfSize(size.x * 0.5 - widthInset, size.y * 0.5, size.z * 0.5 - widthInset);
-
-		const float colorIndex = color.getClosestPaletteIndex();
-
-		meshFace<0>(halfSize, bevel, surfaceTypes, colorIndex, level);
-		meshFace<1>(halfSize, bevel, surfaceTypes, colorIndex, level);
-		meshFace<2>(halfSize, bevel, surfaceTypes, colorIndex, level);
-		meshFace<3>(halfSize, bevel, surfaceTypes, colorIndex, level);
-		meshFace<4>(halfSize, bevel, surfaceTypes, colorIndex, level);
-		meshFace<5>(halfSize, bevel, surfaceTypes, colorIndex, level);
+		corners[0] = indices[0];
+		corners[1] = indices[(countX - 1) * countY * 4 + 1];
+		corners[2] = indices[countY * countX * 4 - 2];
+		corners[3] = indices[countY * 4 - 1];
 	}
 }
 
@@ -253,6 +277,193 @@ BrickMesh::BrickMesh(const G3D::Vector3& size, RenderSurfaceTypes surfaceTypes, 
 void BrickMesh::flushCache()
 {
 	cache.clear();
+}
+
+// FUNCTION: ROBLOX 0x0050f030
+static void appendTriangles(std::vector<unsigned short>& indices, int v0, int v1, int v2, int v3)
+{
+	indices.push_back(v0);
+	indices.push_back(v1);
+	indices.push_back(v2);
+	indices.push_back(v0);
+	indices.push_back(v2);
+	indices.push_back(v3);
+}
+
+// FUNCTION: ROBLOX 0x00514070
+void BrickMesh::FUN_00514070(const G3D::Vector3& size, RenderSurfaceTypes surfaceTypes, BrickColor color)
+{
+	RenderNew::Mesh::LevelRef level = new RenderNew::Mesh::Level(G3D::RenderDevice::QUADS);
+	levels.append(level);
+
+	G3D::Vector3 halfSize(size.x * 0.5 - widthInset, size.y * 0.5, size.z * 0.5 - widthInset);
+
+	const float colorIndex = color.getClosestPaletteIndex();
+
+	unsigned int corners[24];
+	meshFace<0>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[0]);
+	meshFace<1>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[4]);
+	meshFace<2>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[8]);
+	meshFace<3>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[12]);
+	meshFace<4>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[16]);
+	meshFace<5>(halfSize, g_unk0x00958544, surfaceTypes, colorIndex, level, &corners[20]);
+
+	if (g_unk0x00958544 > 0.0f) {
+		G3D::Vector2 tex = flatTex;
+		tex.x += colorIndex / 32.0;
+
+		unsigned int vertices[24];
+		for (int i = 0; i < 24; i++) {
+			vertices[i] = allocVertex(
+				visibleGeometry.vertexArray[corners[i]], visibleGeometry.normalArray[corners[i]], tex, true
+			);
+		}
+
+		level->indexArray.append(vertices[3], vertices[2], vertices[4], vertices[7]);
+		level->indexArray.append(vertices[11], vertices[10], vertices[7], vertices[6]);
+		level->indexArray.append(vertices[6], vertices[5], vertices[15], vertices[14]);
+		level->indexArray.append(vertices[5], vertices[4], vertices[23], vertices[22]);
+		level->indexArray.append(vertices[10], vertices[9], vertices[0], vertices[3]);
+		level->indexArray.append(vertices[2], vertices[1], vertices[20], vertices[23]);
+		level->indexArray.append(vertices[12], vertices[15], vertices[22], vertices[21]);
+		level->indexArray.append(vertices[14], vertices[13], vertices[8], vertices[11]);
+		level->indexArray.append(vertices[17], vertices[16], vertices[21], vertices[20]);
+		level->indexArray.append(vertices[13], vertices[12], vertices[16], vertices[19]);
+		level->indexArray.append(vertices[9], vertices[8], vertices[19], vertices[18]);
+		level->indexArray.append(vertices[1], vertices[0], vertices[18], vertices[17]);
+		level->indexArray.append(vertices[7], vertices[10], vertices[3], vertices[3]);
+		level->indexArray.append(vertices[4], vertices[2], vertices[23], vertices[23]);
+		level->indexArray.append(vertices[5], vertices[22], vertices[15], vertices[15]);
+		level->indexArray.append(vertices[11], vertices[6], vertices[14], vertices[14]);
+		level->indexArray.append(vertices[16], vertices[12], vertices[21], vertices[21]);
+		level->indexArray.append(vertices[13], vertices[19], vertices[8], vertices[8]);
+		level->indexArray.append(vertices[0], vertices[9], vertices[18], vertices[18]);
+		level->indexArray.append(vertices[17], vertices[20], vertices[1], vertices[1]);
+
+		allocVertex(vertices[3], 1);
+		allocVertex(vertices[2], 1);
+		allocVertex(vertices[4], 1);
+		allocVertex(vertices[7], 1);
+		allocVertex(vertices[11], 1);
+		allocVertex(vertices[10], 1);
+		allocVertex(vertices[7], 1);
+		allocVertex(vertices[6], 1);
+		allocVertex(vertices[6], 1);
+		allocVertex(vertices[5], 1);
+		allocVertex(vertices[15], 1);
+		allocVertex(vertices[14], 1);
+		allocVertex(vertices[5], 1);
+		allocVertex(vertices[4], 1);
+		allocVertex(vertices[23], 1);
+		allocVertex(vertices[22], 1);
+		allocVertex(vertices[10], 1);
+		allocVertex(vertices[9], 1);
+		allocVertex(vertices[0], 1);
+		allocVertex(vertices[3], 1);
+		allocVertex(vertices[2], 1);
+		allocVertex(vertices[1], 1);
+		allocVertex(vertices[20], 1);
+		allocVertex(vertices[23], 1);
+		allocVertex(vertices[12], 1);
+		allocVertex(vertices[15], 1);
+		allocVertex(vertices[22], 1);
+		allocVertex(vertices[21], 1);
+		allocVertex(vertices[14], 1);
+		allocVertex(vertices[13], 1);
+		allocVertex(vertices[8], 1);
+		allocVertex(vertices[11], 1);
+		allocVertex(vertices[17], 1);
+		allocVertex(vertices[16], 1);
+		allocVertex(vertices[21], 1);
+		allocVertex(vertices[20], 1);
+		allocVertex(vertices[13], 1);
+		allocVertex(vertices[12], 1);
+		allocVertex(vertices[16], 1);
+		allocVertex(vertices[19], 1);
+		allocVertex(vertices[9], 1);
+		allocVertex(vertices[8], 1);
+		allocVertex(vertices[19], 1);
+		allocVertex(vertices[18], 1);
+		allocVertex(vertices[1], 1);
+		allocVertex(vertices[0], 1);
+		allocVertex(vertices[18], 1);
+		allocVertex(vertices[17], 1);
+		allocVertex(vertices[7], 1);
+		allocVertex(vertices[10], 1);
+		allocVertex(vertices[3], 1);
+		allocVertex(vertices[3], 1);
+		allocVertex(vertices[4], 1);
+		allocVertex(vertices[2], 1);
+		allocVertex(vertices[23], 1);
+		allocVertex(vertices[23], 1);
+		allocVertex(vertices[5], 1);
+		allocVertex(vertices[22], 1);
+		allocVertex(vertices[15], 1);
+		allocVertex(vertices[15], 1);
+		allocVertex(vertices[11], 1);
+		allocVertex(vertices[6], 1);
+		allocVertex(vertices[14], 1);
+		allocVertex(vertices[14], 1);
+		allocVertex(vertices[16], 1);
+		allocVertex(vertices[12], 1);
+		allocVertex(vertices[21], 1);
+		allocVertex(vertices[21], 1);
+		allocVertex(vertices[13], 1);
+		allocVertex(vertices[19], 1);
+		allocVertex(vertices[8], 1);
+		allocVertex(vertices[8], 1);
+		allocVertex(vertices[0], 1);
+		allocVertex(vertices[9], 1);
+		allocVertex(vertices[18], 1);
+		allocVertex(vertices[18], 1);
+		allocVertex(vertices[17], 1);
+		allocVertex(vertices[20], 1);
+		allocVertex(vertices[1], 1);
+		allocVertex(vertices[1], 1);
+
+		for (int i = 0; i < 24; i++) {
+			allocVertex(vertices[i], -1);
+		}
+	}
+}
+
+// FUNCTION: ROBLOX 0x00514960
+void BrickMesh::FUN_00514960(
+	const G3D::Vector3& halfSize, std::vector<G3D::Vector3>& vertices, std::vector<unsigned short>& indices
+)
+{
+	vertices.reserve(8);
+	indices.reserve(36);
+
+	vertices.push_back(G3D::Vector3(-halfSize.x, -halfSize.y, -halfSize.z));
+	vertices.push_back(G3D::Vector3(-halfSize.x, -halfSize.y, halfSize.z));
+	vertices.push_back(G3D::Vector3(-halfSize.x, halfSize.y, -halfSize.z));
+	vertices.push_back(G3D::Vector3(-halfSize.x, halfSize.y, halfSize.z));
+	vertices.push_back(G3D::Vector3(halfSize.x, -halfSize.y, -halfSize.z));
+	vertices.push_back(G3D::Vector3(halfSize.x, -halfSize.y, halfSize.z));
+	vertices.push_back(G3D::Vector3(halfSize.x, halfSize.y, -halfSize.z));
+	vertices.push_back(G3D::Vector3(halfSize.x, halfSize.y, halfSize.z));
+
+	appendTriangles(indices, 7, 5, 4, 6);
+	appendTriangles(indices, 2, 0, 1, 3);
+	appendTriangles(indices, 7, 6, 2, 3);
+	appendTriangles(indices, 1, 0, 4, 5);
+	appendTriangles(indices, 3, 1, 5, 7);
+	appendTriangles(indices, 6, 4, 0, 2);
+}
+
+// FUNCTION: ROBLOX 0x00514b10
+BrickMesh::BrickMesh(const G3D::Vector3& size, RenderSurfaceTypes surfaceTypes, BrickColor color)
+{
+	m_unk0x3c = 1;
+	FUN_00514070(size, surfaceTypes, color);
+
+	if (ViewBase::getShadowsEnabled()) {
+		G3D::Vector3 halfSize =
+			G3D::Vector3(size.x * 0.5, size.y * 0.5, size.z * 0.5) -
+			G3D::Vector3(widthInset + g_unk0x00958544, g_unk0x00958544, widthInset + g_unk0x00958544);
+		FUN_00514960(halfSize, m_unk0x28, m_unk0x18);
+	}
 }
 
 // STUB: ROBLOX 0x00514c00
@@ -271,10 +482,25 @@ G3D::ReferenceCountedPointer<RenderNew::Mesh> BrickMesh::create(
 		index = std::min(3, G3D::iRandom(0, 8));
 	}
 
-	G3D::ReferenceCountedPointer<RenderNew::Mesh> result = variations.meshes[index];
+	G3D::ReferenceCountedPointer<RenderNew::Mesh>& slot = variations.meshes[index];
+	G3D::ReferenceCountedPointer<RenderNew::Mesh> result = slot;
 	if (result.isNull()) {
-		result = new BrickMesh(size, surfaceTypes, color);
-		variations.meshes[index] = result;
+		g_unk0x00958541 = false;
+		if (g_unk0x0092a908) {
+			g_unk0x00958544 = 0.065f;
+			result = new BrickMesh(size, surfaceTypes, color);
+
+			g_unk0x00958544 = 0.0f;
+			g_unk0x00958541 = true;
+			dynamic_cast<BrickMesh*>(result.pointer())->FUN_00514070(size, surfaceTypes, color);
+			g_unk0x00958541 = false;
+		}
+		else {
+			g_unk0x00958544 = 0.0f;
+			result = new BrickMesh(size, surfaceTypes, color);
+		}
+
+		slot = result;
 		variations.count++;
 	}
 

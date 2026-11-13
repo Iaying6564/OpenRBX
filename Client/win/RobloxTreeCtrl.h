@@ -18,6 +18,14 @@ class CRobloxTreeCtrlNode;
 // SIZE 0xbc
 class CRobloxTreeCtrl : public CXTTreeCtrl
 {
+	DECLARE_DYNAMIC(CRobloxTreeCtrl)
+
+	// SYNTHETIC: ROBLOX 0x00422170
+	// ?_GetBaseClass@CRobloxTreeCtrl@@KGPAUCRuntimeClass@@XZ
+
+	// SYNTHETIC: ROBLOX 0x00422180
+	// ?GetThisClass@CRobloxTreeCtrl@@SGPAUCRuntimeClass@@XZ
+
 public:
 	CRobloxTreeCtrl();
 
@@ -37,6 +45,25 @@ public:
 	CRobloxTreeCtrlNode* FUN_00426e00(const boost::shared_ptr<RBX::Instance>& instance);
 
 protected:
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+
+	afx_msg void FUN_004221f0(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void FUN_00422210(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void FUN_00422b80(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDestroy();
+	afx_msg void FUN_00422de0(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnPaint();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void FUN_004234f0(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void FUN_00428720(NMHDR* pNMHDR, LRESULT* pResult);
+
+	DECLARE_MESSAGE_MAP()
+
+	// SYNTHETIC: ROBLOX 0x00429030
+	// ?GetMessageMap@CRobloxTreeCtrl@@MBEPBUAFX_MSGMAP@@XZ
+
 	friend class CRobloxTreeCtrlNode;
 
 	CRobloxTreeCtrlNode* m_unk0x94;                           // 0x94
