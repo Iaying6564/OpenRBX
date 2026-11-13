@@ -324,7 +324,7 @@ void RenderScene::markStencilShadows(G3D::RenderDevice* rd, const G3D::GCamera& 
 	rd->popState();
 }
 
-// STUB: WEBSERVICE 0x101f1960
+// FUNCTION: WEBSERVICE 0x101f1960
 // STUB: ROBLOX 0x0049f7d0
 void RenderScene::allocateProxies(G3D::RenderDevice* rd, const G3D::GCamera& camera)
 {
@@ -359,9 +359,7 @@ void RenderScene::allocateProxies(G3D::RenderDevice* rd, const G3D::GCamera& cam
 				shadowCachingChunkArray.append(chunkArray[p]);
 			}
 			else {
-				shadowProxyArray.resize(shadowProxyArray.size() + 1, false);
-
-				RenderSurface& shadowProxy = shadowProxyArray.last();
+				RenderSurface& shadowProxy = shadowProxyArray.next();
 				shadowProxy.material = NULL;
 				shadowProxy.cframe = cframe;
 				shadowProxy.mesh = chunk->getMesh()->dropShadowMesh().getPointer();
