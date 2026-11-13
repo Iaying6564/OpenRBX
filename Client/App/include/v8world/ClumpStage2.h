@@ -109,6 +109,10 @@ public:
 
 	virtual ~ClumpStage() {} // vtable+0x00
 
+	// FUNCTION: WEBSERVICE 0x10108040 FOLDED
+	// FUNCTION: ROBLOX 0x006a0740 FOLDED
+	virtual StageType getStageType() { return CLUMP_STAGE; } // vtable+0x04
+
 	void onPrimitiveCanSleepChanged(Primitive* p);
 
 	void onPrimitiveAddedAnchor(Primitive* p);
@@ -120,8 +124,6 @@ public:
 	// SYNTHETIC: WEBSERVICE 0x1011b710
 	// SYNTHETIC: ROBLOX 0x00645100
 	// RBX::ClumpStage::`scalar deleting destructor'
-
-	virtual StageType getStageType(); // vtable+0x04
 
 	// FUNCTION: WEBSERVICE 0x101187e0 FOLDED
 	// FUNCTION: ROBLOX 0x00645130 FOLDED

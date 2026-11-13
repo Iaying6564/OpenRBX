@@ -27,7 +27,8 @@ public:
 	unsigned int hashCode() const;
 
 private:
-	virtual JointType getJointType() const; // vtable+0x14
+	virtual JointType getJointType() const;         // vtable+0x14
+	virtual bool isBroken() const { return false; } // vtable+0x1c
 
 	virtual bool isAligned(); // vtable+0x24
 

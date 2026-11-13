@@ -45,9 +45,10 @@ bool JointStage::edgeHasPrimitivesDownstream(Edge* e)
 {
 	Primitive* prim0 = e->getPrimitive(0);
 	Primitive* prim1 = e->getPrimitive(1);
+	const IPipelined* pipeline1 = prim1;
 
-	return prim0 != NULL && prim1 != NULL && prim0->inPipeline() && prim1->inPipeline() &&
-		   prim0->downstreamOfStage(this) && prim1->downstreamOfStage(this);
+	return prim0 != NULL && prim1 != NULL && prim0->inPipeline() && pipeline1->inPipeline() &&
+		   prim0->downstreamOfStage(this) && pipeline1->downstreamOfStage(this);
 }
 
 // FUNCTION: WEBSERVICE 0x10118350
@@ -144,7 +145,7 @@ JointStage::JointStage(IStage* upstream, World* world) : IWorldStage(upstream, n
 {
 }
 
-// STUB: WEBSERVICE 0x101188f0
+// FUNCTION: WEBSERVICE 0x101188f0
 // STUB: ROBLOX 0x00642770
 void JointStage::onPrimitiveAdded(Primitive* p)
 {
