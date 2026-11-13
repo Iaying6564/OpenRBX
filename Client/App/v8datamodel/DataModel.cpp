@@ -3,6 +3,7 @@
 #include "compat.h"
 #include "gui/GUI.h"
 #include "gui/GuiEvent.h"
+#include "humanoid/Humanoid.h"
 #include "network/Players.h"
 #include "rbxgraphics/Adorn.h"
 #include "reflection/reflection.h"
