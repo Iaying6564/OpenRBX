@@ -12,6 +12,7 @@
 #include "util/RunStateOwner.h"
 #include "util/UIEvent.h"
 #include "v8datamodel/RootInstance.h"
+#include "v8datamodel/Selection.h"
 #include "v8tree/Service.h"
 #include "v8tree/Verb.h"
 #include "v8world/IMoving.h"

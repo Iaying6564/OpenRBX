@@ -338,7 +338,8 @@ BrickColor BrickColor::closest(G3D::Color4 color)
 	float closestDistance = 10000.0f;
 	Number result = lego_194;
 
-	std::map<Number, G3D::Color4>::const_iterator iter = BrickMap::singleton().map2.begin();
+	const std::map<Number, G3D::Color4>& colors = BrickMap::singleton().map2;
+	std::map<Number, G3D::Color4>::const_iterator iter = colors.begin();
 	std::map<Number, G3D::Color4>::const_iterator end = BrickMap::singleton().map2.end();
 
 	while (iter != end) {

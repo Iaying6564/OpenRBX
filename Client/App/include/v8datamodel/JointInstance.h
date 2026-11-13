@@ -89,26 +89,24 @@ public:
 DECOMP_SIZE_ASSERT(AutoJoint, 0x11c)
 
 // SIZE 0x11c
-class Motor : public DescribedCreatable<Motor, AutoJoint, sMotor>
+class Snap : public DescribedCreatable<Snap, AutoJoint, sSnap>
 {
-private:
-	MotorJoint* getMotorJoint() { return static_cast<MotorJoint*>(joint); }
-	void renderJointCylinder(Adorn*, int);
-	const MotorJoint* getMotorJoint() const { return static_cast<const MotorJoint*>(joint); }
-
 public:
-	Motor();
-	Motor(Joint* joint);
-
-	float getMaxVelocity() const;
-	void setMaxVelocity(float value);
-	float getDesiredAngle() const;
-	void setDesiredAngle(float value);
-	float getCurrentAngle() const;
-	void setCurrentAngle(float value);
+	Snap();
+	Snap(Joint* joint);
 };
 
-DECOMP_SIZE_ASSERT(Motor, 0x11c)
+DECOMP_SIZE_ASSERT(Snap, 0x11c)
+
+// SIZE 0x11c
+class Weld : public DescribedCreatable<Weld, AutoJoint, sWeld>
+{
+public:
+	Weld();
+	Weld(Joint* joint);
+};
+
+DECOMP_SIZE_ASSERT(Weld, 0x11c)
 
 // SIZE 0x11c
 class Glue : public DescribedCreatable<Glue, AutoJoint, sGlue>
@@ -151,24 +149,26 @@ public:
 DECOMP_SIZE_ASSERT(RotateV, 0x11c)
 
 // SIZE 0x11c
-class Snap : public DescribedCreatable<Snap, AutoJoint, sSnap>
+class Motor : public DescribedCreatable<Motor, AutoJoint, sMotor>
 {
+private:
+	MotorJoint* getMotorJoint() { return static_cast<MotorJoint*>(joint); }
+	void renderJointCylinder(Adorn*, int);
+	const MotorJoint* getMotorJoint() const { return static_cast<const MotorJoint*>(joint); }
+
 public:
-	Snap();
-	Snap(Joint* joint);
+	Motor();
+	Motor(Joint* joint);
+
+	float getMaxVelocity() const;
+	void setMaxVelocity(float value);
+	float getDesiredAngle() const;
+	void setDesiredAngle(float value);
+	float getCurrentAngle() const;
+	void setCurrentAngle(float value);
 };
 
-DECOMP_SIZE_ASSERT(Snap, 0x11c)
-
-// SIZE 0x11c
-class Weld : public DescribedCreatable<Weld, AutoJoint, sWeld>
-{
-public:
-	Weld();
-	Weld(Joint* joint);
-};
-
-DECOMP_SIZE_ASSERT(Weld, 0x11c)
+DECOMP_SIZE_ASSERT(Motor, 0x11c)
 
 // clang-format off
 // TEMPLATE: WEBSERVICE 0x100d8a40
