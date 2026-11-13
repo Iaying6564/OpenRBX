@@ -62,8 +62,8 @@ public:
 	const AssemblySet& getAwakeAssemblies() const { return awake; }
 
 private:
-	static float sleepTolerance() { return 0.02f; }
-	static int stepsToSleep() { return 6; }
+	float sleepTolerance() { return 0.02f; }
+	int stepsToSleep() { return 6; }
 
 	bool isMoving(Assembly* assembly);
 	bool canThrottle(Assembly* assembly);
@@ -84,7 +84,7 @@ private:
 	Sim::AssemblyState getState(Assembly* assembly);
 	// __forceinline: the original's callers carry its switch expanded, and the
 	// inlined copy of stateToSet is what emits the jump table over the state.
-	__forceinline AssemblySet* stateToSet(Sim::AssemblyState state);
+	__forceinline AssemblySet& stateToSet(Sim::AssemblyState state);
 
 	int getSleepCount(Assembly* assembly);
 	void incrementSleepCount(Assembly* assembly);
@@ -95,6 +95,7 @@ private:
 	// the optimizer, which inlines all of them. The two callers the original expands
 	// spell it out at their own call sites instead.
 	__declspec(noinline) void changeAssemblyState(Assembly* assembly, Sim::AssemblyState state);
+	void changeAssemblyStateInline(Assembly* assembly, Sim::AssemblyState state);
 	void changeAssemblyState(const std::vector<Assembly*>& assemblies, Sim::AssemblyState state);
 	void changeContactState(Contact* contact, Sim::EdgeState state);
 	void changeContactState(const std::vector<Contact*>& contacts, Sim::EdgeState state);

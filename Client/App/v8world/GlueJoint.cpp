@@ -92,7 +92,16 @@ GlueJoint* GlueJoint::canBuildJoint(Primitive* p0, Primitive* p1, NormalId nId0,
 	return NULL;
 }
 
-// STUB: WEBSERVICE 0x10120810
+inline G3D::Vector3 gluePointWorld(const G3D::CoordinateFrame& f, const G3D::Vector3& v)
+{
+	return G3D::Vector3(
+		f.rotation[0][0] * v[0] + f.rotation[0][1] * v[1] + f.rotation[0][2] * v[2] + f.translation[0],
+		f.rotation[1][0] * v[0] + f.rotation[1][1] * v[1] + f.rotation[1][2] * v[2] + f.translation[1],
+		f.rotation[2][0] * v[0] + f.rotation[2][1] * v[1] + f.rotation[2][2] * v[2] + f.translation[2]
+	);
+}
+
+// FUNCTION: WEBSERVICE 0x10120810
 // STUB: ROBLOX 0x00648a50
 void GlueJoint::putInKernel(Kernel* _kernel)
 {
@@ -104,8 +113,8 @@ void GlueJoint::putInKernel(Kernel* _kernel)
 	NormalId nId0 = Matrix3ToNormalId(jointCoord0.rotation);
 
 	for (int i = 0; i < 4; i++) {
-		Vector3 p0World = body0->getCoordinateFrame().pointToWorldSpace(overlapInP0[i]);
-		Vector3 p1World = body1->getCoordinateFrame().pointToWorldSpace(overlapInP1[i]);
+		G3D::Vector3 p0World = gluePointWorld(body0->getPV().position, overlapInP0[i]);
+		G3D::Vector3 p1World = body1->getPV().position.pointToWorldSpace(overlapInP1[i]);
 
 		Point* point0 = getKernel()->newPoint(body0, p0World);
 		Point* point1 = getKernel()->newPoint(body1, p1World);
