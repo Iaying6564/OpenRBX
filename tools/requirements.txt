@@ -1,1 +1,1 @@
-reccmp @ git+https://github.com/Asphaltian/reccmp@msvc800
+reccmp @ git+https://github.com/Asphaltian/reccmp@37a49c8e8b024b0f275bd1ae0f36a73b5de37797
