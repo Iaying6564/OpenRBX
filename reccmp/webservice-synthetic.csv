@@ -15,7 +15,7 @@ address,type,symbol
 0x10006340,synthetic,??1FunctionDescriptor@Reflection@RBX@@UAE@XZ
 0x100063b0,synthetic,??1SignatureDescriptor@Reflection@RBX@@QAE@XZ
 0x100063d0,synthetic,??1?$BoundFuncDesc@VThumbnailGenerator@@$$A6A?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@0HH@Z$03@Reflection@RBX@@UAE@XZ
-0x10006990,stub,??_GOSContext@@UAEPAXI@Z
+0x10006990,synthetic,??_GOSContext@@UAEPAXI@Z
 0x10007050,synthetic,??1GuiDrawImage@RBX@@QAE@XZ
 0x100078c0,synthetic,??1?$vector@PAV?$MemberDescriptorContainer@VFunctionDescriptor@Reflection@RBX@@@Reflection@RBX@@V?$allocator@PAV?$MemberDescriptorContainer@VFunctionDescriptor@Reflection@RBX@@@Reflection@RBX@@@std@@@std@@QAE@XZ
 0x100078f0,synthetic,??3?$Creatable@VInstance@RBX@@@RBX@@CAXPAX@Z
@@ -43,7 +43,7 @@ address,type,symbol
 0x1000c850,synthetic,??_EThumbnailGenerator@@WBE@AEPAXI@Z
 0x1000c860,synthetic,??_E?$DescribedCreatable@VThumbnailGenerator@@VInstance@RBX@@$1?sThumbnailGenerator@@3QBDB@RBX@@WJM@AEPAXI@Z
 0x1000cfd0,synthetic,??1Job@CWebService@Roblox@@QAE@XZ
-0x1000d340,stub,??_GStandardOutLog@@UAEPAXI@Z
+0x1000d340,synthetic,??_GStandardOutLog@@UAEPAXI@Z
 0x1000d370,synthetic,??1StandardOutMessage@RBX@@QAE@XZ
 0x1000db70,synthetic,_GetAtlHandlerByName@12
 0x1000dc00,synthetic,_InitializeAtlHandlers@8
@@ -1701,6 +1701,7 @@ address,type,symbol
 0x10189880,synthetic,??$buildFace@$0A@VCylinderTransform@@@LevelBuilder@View@RBX@@IAEXVCylinderTransform@@VVector2int16@G3D@@W4Purpose@012@@Z
 0x10189ba0,synthetic,??$buildFace@$04VCylinderTransform@@@LevelBuilder@View@RBX@@IAEXVCylinderTransform@@VVector2int16@G3D@@W4Purpose@012@@Z
 0x10189ed0,synthetic,??$buildFace@$01VCylinderTransform@@@LevelBuilder@View@RBX@@IAEXVCylinderTransform@@VVector2int16@G3D@@W4Purpose@012@@Z
+0x1018a8d0,synthetic,??_GBrickMesh@View@RBX@@UAEPAXI@Z
 0x1018c4c0,synthetic,??_E?$FactoryProduct@VPlayer@Network@RBX@@VInstance@3@$1?sPlayer@23@3PADA@RBX@@OGM@AEPAXI@Z
 0x1018c4d0,synthetic,??_G?$DescribedCreatable@VPlayer@Network@RBX@@VInstance@3@$1?sPlayer@23@3PADA@RBX@@UAEPAXI@Z
 0x1018c4f0,synthetic,??_E?$DescribedCreatable@VPlayer@Network@RBX@@VInstance@3@$1?sPlayer@23@3PADA@RBX@@WBA@AEPAXI@Z
@@ -1918,5 +1919,5 @@ address,type,symbol
 0x10224330,synthetic,??__Fs@?1??singleton@?$EnumDesc@W4TopBottom@Feature@RBX@@@Reflection@RBX@@SAABV123@XZ@YAXXZ
 0x10224340,synthetic,??__Fs@?1??singleton@?$EnumDesc@W4NormalId@RBX@@@Reflection@RBX@@SAABV123@XZ@YAXXZ
 0x102256e0,synthetic,??__Fs@?1??singleton@?$EnumDesc@W4MeshType@SpecialShape@RBX@@@Reflection@RBX@@SAABV123@XZ@YAXXZ
-0x10220fd0,stub,??__Fshared@?6??shared@OSContext@@CAPAUosmesa_context@@_N@Z@YAXXZ
-0x10220fe0,stub,??__Fshared@?4??shared@OSContext@@CAPAUosmesa_context@@_N@Z@YAXXZ
+0x10220fd0,synthetic,??__Fshared@?6??shared@OSContext@@CAPAUosmesa_context@@_N@Z@YAXXZ
+0x10220fe0,synthetic,??__Fshared@?4??shared@OSContext@@CAPAUosmesa_context@@_N@Z@YAXXZ
