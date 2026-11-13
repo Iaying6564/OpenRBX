@@ -53,12 +53,20 @@ jobs:
         repository: Asphaltian/MSVC800-SP1
         path: msvc800sp1
 
+    - name: 'Checkout MSVC 8.0 RTM for zlib'
+      uses: actions/checkout@v6
+      with:
+        repository: archaic-msvc/msvc800
+        ref: 00ddaf58d09788f0b12e475dae5fb5674dd32578
+        path: msvc800rtm
+
     - name: Key the vendored builds
       id: vendored
       shell: bash
       run: |
         {
           echo "g3d=$(git rev-parse HEAD:Client/Rendering/g3d)"
+          echo "rtm=$(git -C msvc800rtm rev-parse HEAD)"
           echo "mesa=$(git rev-parse HEAD:Client/Rendering/Mesa-6.5)"
           echo "boost=$(git rev-parse HEAD:Client/boost_1_34_1)"
         } >>"$GITHUB_OUTPUT"
@@ -71,7 +79,7 @@ jobs:
           build/3rdparty/CMakeFiles/glg3d.dir
           build/3rdparty/graphics3d.lib
           build/3rdparty/glg3d.lib
-        key: g3d-${{ steps.vendored.outputs.g3d }}-${{ hashFiles('3rdparty/CMakeLists.txt') }}
+        key: g3d-${{ steps.vendored.outputs.g3d }}-${{ steps.vendored.outputs.rtm }}-${{ hashFiles('3rdparty/CMakeLists.txt', 'cmake/msvc-rtm-launcher.cmake') }}
 
     - name: Restore Mesa
       uses: actions/cache@v5
@@ -100,14 +108,14 @@ jobs:
     - name: Backdate the inputs that never change
       shell: pwsh
       run: |
-        Get-ChildItem 3rdparty, Client/boost_1_34_1, Client/App/lua-5.1.1, Client/Network/raknet30, Client/fmod, Client/Rendering/g3d, Client/Rendering/SDL-1.2.6, Client/Rendering/Mesa-6.5, Client/Rendering/OgreSDK, msvc800sp1 -Recurse -File |
+        Get-ChildItem 3rdparty, Client/boost_1_34_1, Client/App/lua-5.1.1, Client/Network/raknet30, Client/fmod, Client/Rendering/g3d, Client/Rendering/SDL-1.2.6, Client/Rendering/Mesa-6.5, Client/Rendering/OgreSDK, msvc800sp1, msvc800rtm -Recurse -File |
           ForEach-Object { $_.LastWriteTime = '2000-01-01' }
 
     - name: Build
       shell: cmd
       run: |
         call .\msvc800sp1\Common7\Tools\vsvars32.bat
-        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles" "-DOPENRBX_MSVC_RTM_COMPILER=%CD%\msvc800rtm\VC\bin\cl.exe"
         cmake --build build
 
     - name: Upload Artifact

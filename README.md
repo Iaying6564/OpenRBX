@@ -20,19 +20,26 @@ The client, `Roblox.exe`, is currently being worked on. Both binaries were built
 
 You will need:
 
-* Visual C++ 8.0 SP1. [MSVC800-SP1](https://github.com/Asphaltian/MSVC800-SP1) is a portable copy that doesn't need installing. This is the compiler the original was built with, and no other version produces the same code.
+* Visual C++ 8.0 SP1. [MSVC800-SP1](https://github.com/Asphaltian/MSVC800-SP1) is a portable copy that doesn't need installing. Use it for the engine and remaining sources.
+* Visual C++ 8.0 RTM for zlib. Use [archaic-msvc/msvc800](https://github.com/archaic-msvc/msvc800) at revision `00ddaf58d09788f0b12e475dae5fb5674dd32578` (`cl.exe` 14.00.50727.42). CMake selects this compiler only for zlib; keep the SP1 environment, headers, libraries and linker active.
 * [CMake](https://cmake.org/), either standalone or the one that comes with the "Desktop development with C++" workload in a recent Visual Studio.
 
 Open a command prompt and run `Common7\Tools\vsvars32.bat` from the toolchain folder. Don't use `VC\bin\vcvars32.bat`, it looks for a registered Visual Studio 2005 install and won't work with the portable copy.
 
-Then configure and build:
+Fetch the pinned RTM compiler, then configure and build:
 
 ```
+git clone https://github.com/archaic-msvc/msvc800.git msvc800rtm
+git -C msvc800rtm checkout 00ddaf58d09788f0b12e475dae5fb5674dd32578
 cmake -B build -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 cmake --build build
 ```
 
 This gives you `build\WebService.dll` and `build\Roblox.exe`. Stick with `RelWithDebInfo`, comparing your build against the original needs the debug symbols it produces.
+
+CMake finds RTM in `msvc800rtm/VC/bin`, `msvc800-rtm/VC/bin`, or the build directory's `msvc800-rtm/VC/bin`. For another local cache location, pass `-DOPENRBX_MSVC_RTM_COMPILER=C:/path/to/msvc800/VC/bin/cl.exe`. The SP1 and RTM compilers share one program database, so this build must run serially; upstream CI builds it with NMake, which is serial by default. Current MSVC builds keep their regular compiler for every source.
+
+The original zlib library carried no debug records. We keep `/Zi` for the rebuilt objects because it preserves private helper names for comparison and produces identical machine code with this compiler.
 
 ## Comparing With the Original
 
