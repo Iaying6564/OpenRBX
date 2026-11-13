@@ -1200,8 +1200,8 @@ void PartInstance::onCameraNear(float distance)
 	}
 }
 
-// STUB: WEBSERVICE 0x1009ff60
-// STUB: ROBLOX 0x005b2ce0
+// FUNCTION: WEBSERVICE 0x1009ff60
+// FUNCTION: ROBLOX 0x005b2ce0
 void PartInstance::render3dAdorn(Adorn* adorn)
 {
 	if (partType == Part::CYLINDER_PART || SurfacesNeedAdorn) {
@@ -1261,7 +1261,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	if (showAnchoredParts && primitive->getAnchorObject()) {
 		DrawAdorn::partSurface(
 			getPart(),
-			Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), primitive->getCoordinateFrame().rotation),
+			Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), getCoordinateFrame().rotation),
 			adorn,
 			G3D::Color4(Color3::gray(), alpha())
 		);
