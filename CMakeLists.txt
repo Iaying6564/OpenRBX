@@ -110,7 +110,6 @@ set(OPENRBX_APP_SOURCES
   Client/App/gui/GuiDraw.cpp
   Client/App/gui/MenuItem.cpp
   Client/App/gui/ProfanityFilter.cpp
-  Client/App/gui/ScoreHud.cpp
   Client/App/gui/Widget.cpp
   Client/App/humanoid/Humanoid.cpp
   Client/App/reflection/reflection_function.cpp
@@ -274,6 +273,7 @@ set(OPENRBX_APP_SOURCES
   Client/App/v8datamodel/ToolsPart.cpp
   Client/App/v8datamodel/UserController.cpp
   Client/App/v8datamodel/Value.cpp
+  Client/App/gui/ScoreHud.cpp
   Client/App/v8datamodel/Visit.cpp
   Client/App/v8datamodel/factoryregistration.cpp
   Client/App/v8tree/Service.cpp
@@ -327,7 +327,6 @@ set(OPENRBX_RBXVIEW_SOURCES
   Client/RbxView/TorsoMesh.cpp
   Client/RbxView/View.cpp
   Client/RbxView/WedgeMesh.cpp
-  Client/RbxView/Part.cpp
 )
 set(OPENRBX_RBXVIEWNEW_SOURCES
   Client/Rendering/RenderLibNew/BevelMesh.cpp
@@ -359,7 +358,6 @@ set(OPENRBX_RENDERLIB_SOURCES
   Client/Rendering/RenderLib/DepthBlur.cpp
   Client/Rendering/RenderLib/EffectSettings.cpp
   Client/Rendering/RenderLib/Material.cpp
-  Client/Rendering/RenderLib/Mesh.cpp
   Client/Rendering/RenderLib/Profiler.cpp
   Client/Rendering/RenderLib/RenderScene.cpp
   Client/Rendering/RenderLib/RenderStats.cpp
@@ -498,6 +496,13 @@ elseif (MSVC)
   target_compile_options(app_client PRIVATE /EHsc)
 endif()
 
+# The original signal connection COMDAT comes from Part, before Replicator.
+add_engine_library(rbxview_part
+  DEFINITIONS _RELEASE
+  OPTIONS /O2 /Ob2 /Oi /Oy /GF /GS-
+  SOURCES Client/RbxView/Part.cpp
+)
+
 add_engine_library(network
   OPTIONS /O2
   SOURCES ${OPENRBX_NETWORK_SOURCES} ${OPENRBX_RAKNET_SOURCES}
@@ -507,6 +512,12 @@ if (TARGET network AND OPENRBX_RAKNET_SOURCES)
   set_source_files_properties(${OPENRBX_RAKNET_SOURCES}
     PROPERTIES COMPILE_DEFINITIONS "_CRT_SECURE_NO_WARNINGS")
 endif()
+
+# Keep Mesh's original RenderLib COMDATs ahead of the copies in BrickMesh.
+add_engine_library(renderlib_mesh
+  OPTIONS /O2 /Wp64
+  SOURCES Client/Rendering/RenderLib/Mesh.cpp
+)
 
 add_engine_library(rbxview
   DEFINITIONS _RELEASE
@@ -593,12 +604,39 @@ set(OPENRBX_WEBSERVICE_SOURCES
   Client/win/VersionInfo.cpp
 )
 
+set(OPENRBX_WEBSERVICE_BUILD_SOURCES ${OPENRBX_WEBSERVICE_SOURCES})
+if (MSVC_FOR_DECOMP)
+  set(OPENRBX_WEBSERVICE_PCH_FILE "${CMAKE_CURRENT_BINARY_DIR}/WebService.pch")
+  set(OPENRBX_WEBSERVICE_BUILD_SOURCES)
+  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/webservice_pch")
+  # Use target-local sources so the shared Client/win files keep their Roblox
+  # compile options and dependencies. Include them at their real source paths.
+  foreach(webservice_source IN LISTS OPENRBX_WEBSERVICE_SOURCES)
+    get_filename_component(webservice_source_name "${webservice_source}" NAME)
+    set(webservice_wrapper "${CMAKE_CURRENT_BINARY_DIR}/webservice_pch/${webservice_source_name}")
+    file(CONFIGURE OUTPUT "${webservice_wrapper}" CONTENT
+      "#include \"StdAfx.h\"\n#include \"${PROJECT_SOURCE_DIR}/${webservice_source}\"\n" @ONLY)
+    list(APPEND OPENRBX_WEBSERVICE_BUILD_SOURCES "${webservice_wrapper}")
+  endforeach()
+  set_source_files_properties(${OPENRBX_WEBSERVICE_BUILD_SOURCES} PROPERTIES
+    COMPILE_DEFINITIONS OPENRBX_WEBSERVICE_PCH
+    COMPILE_OPTIONS "/O2;/GL;/YuStdAfx.h;/Fp${OPENRBX_WEBSERVICE_PCH_FILE}"
+    OBJECT_DEPENDS "${OPENRBX_WEBSERVICE_PCH_FILE}")
+  set_source_files_properties(WebService/StdAfx.cpp PROPERTIES
+    COMPILE_DEFINITIONS OPENRBX_WEBSERVICE_PCH
+    COMPILE_OPTIONS "/O2;/GL;/YcStdAfx.h;/Fp${OPENRBX_WEBSERVICE_PCH_FILE}"
+    OBJECT_OUTPUTS "${OPENRBX_WEBSERVICE_PCH_FILE}")
+  # Keep the producer after its consumers in the link, before the native ABI
+  # helper. Earlier placement selects different CRT implementations.
+  list(APPEND OPENRBX_WEBSERVICE_BUILD_SOURCES WebService/StdAfx.cpp)
+endif()
+
 add_library(webservice SHARED
-  ${OPENRBX_WEBSERVICE_SOURCES}
+  ${OPENRBX_WEBSERVICE_BUILD_SOURCES}
   util/decomp.cpp
 )
 target_compile_definitions(webservice PRIVATE ${OPENRBX_COMMON_DEFINITIONS} _USRDLL _CRT_SECURE_NO_WARNINGS
-  _ATL_NO_COM_SUPPORT)
+  _ATL_NO_COM_SUPPORT ATL_CRITICAL_ISAPI_ERROR_LOGONLY)
 reccmp_add_target(webservice ID WEBSERVICE)
 
 target_include_directories(webservice PRIVATE
@@ -724,7 +762,7 @@ if (MSVC_FOR_DECOMP)
   )
 
   set(OPENRBX_CLIENT_ENGINE_LIBRARIES)
-  foreach(lib rbxview renderlib rbxviewnew renderlibnew network app app_client appdraw appdraw_head lua)
+  foreach(lib rbxview rbxview_part renderlib renderlib_mesh rbxviewnew renderlibnew network app app_client appdraw appdraw_head lua)
     if (TARGET ${lib})
       list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${lib})
     endif()
@@ -783,19 +821,16 @@ endif()
 
 if (MSVC_FOR_DECOMP)
   if (OPENRBX_WEBSERVICE_SOURCES)
-    set_source_files_properties(
-      ${OPENRBX_WEBSERVICE_SOURCES}
-      PROPERTIES COMPILE_OPTIONS "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,webservice>:/O2;/GL>"
-    )
     target_link_options(webservice PRIVATE "/LTCG")
   endif()
 
-  option(OPENRBX_KEEP_UNREFERENCED "Keep unreferenced functions so reccmp can compare them" ON)
+  # Discard unused code to reproduce WebService's observed function and data layout.
+  target_link_options(webservice PRIVATE "/OPT:REF,ICF")
+
+  option(OPENRBX_KEEP_UNREFERENCED "Keep unreferenced Roblox functions so reccmp can compare them" ON)
   if (OPENRBX_KEEP_UNREFERENCED)
-    target_link_options(webservice PRIVATE "/OPT:NOREF,ICF")
     target_link_options(roblox PRIVATE "/OPT:NOREF,ICF")
   else()
-    target_link_options(webservice PRIVATE "/OPT:REF,ICF")
     target_link_options(roblox PRIVATE "/OPT:REF,ICF")
   endif()
 
