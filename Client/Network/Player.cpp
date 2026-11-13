@@ -9,6 +9,7 @@
 #include "v8datamodel/Backpack.h"
 #include "v8datamodel/Camera.h"
 #include "v8datamodel/CharacterAppearance.h"
+#include "v8datamodel/GameSettings.h"
 #include "v8datamodel/Hopper.h"
 #include "v8datamodel/ModelInstance.h"
 #include "v8datamodel/SpawnLocation.h"

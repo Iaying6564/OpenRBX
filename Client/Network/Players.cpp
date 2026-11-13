@@ -7,9 +7,12 @@
 #include "reflection/property.h"
 #include "util/Http.h"
 #include "util/StandardOut.h"
+#include "v8datamodel/Backpack.h"
 #include "v8datamodel/GameSettings.h"
 #include "v8datamodel/ModelInstance.h"
+#include "v8datamodel/PartInstance.h"
 #include "v8datamodel/Teams.h"
+#include "v8datamodel/Workspace.h"
 #include "v8xml/XmlElement.h"
 #include "v8xml/XmlSerializer.h"
 
