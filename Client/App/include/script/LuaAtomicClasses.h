@@ -53,7 +53,9 @@ public:
 		lua_pop(L, 1);
 	}
 
-	static void pushVector3(lua_State* L, G3D::Vector3 value);
+	// FUNCTION: WEBSERVICE 0x1005f8c0
+	// FUNCTION: ROBLOX 0x0056cad0
+	static void pushVector3(lua_State* L, G3D::Vector3 color) { pushNewObject(L, color); }
 
 private:
 	static int newVector3(lua_State* L);

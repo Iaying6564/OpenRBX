@@ -80,6 +80,12 @@ public:
 		}
 	};
 
+private:
+	static void* operator new(size_t size) { return malloc(size); }
+
+	static void operator delete(void* p) { free(p); }
+
+public:
 	// clang-format off
 	// TEMPLATE: WEBSERVICE 0x100093c0
 	// RBX::Creatable<RBX::Instance>::create<ThumbnailGenerator>
@@ -104,7 +110,7 @@ public:
 	// FUNCTION: WEBSERVICE 0x100097b0
 	// STUB: ROBLOX 0x00407040
 	// RBX::Creatable<RBX::Instance>::create<RBX::LocalScript>
-	// STUB: WEBSERVICE 0x10019d00
+	// FUNCTION: WEBSERVICE 0x10019d00
 	// STUB: ROBLOX 0x004417f0
 	// RBX::Creatable<RBX::Instance>::create<RBX::Soundscape::SoundChannel>
 	// TEMPLATE: WEBSERVICE 0x10045340
@@ -477,10 +483,6 @@ public:
 protected:
 	Creatable() {}
 	virtual ~Creatable() {}
-
-	static void* operator new(size_t size) { return malloc(size); }
-
-	static void operator delete(void* p) { free(p); }
 };
 
 // SIZE 0x4
@@ -578,7 +580,7 @@ public:
 	// TEMPLATE: WEBSERVICE 0x1000fdf0
 	// TEMPLATE: ROBLOX 0x004415f0
 	// RBX::FactoryProduct<RBX::Soundscape::SoundService,RBX::Instance,&RBX::Soundscape::sSoundService>::Creator::create
-	// STUB: WEBSERVICE 0x1000feb0
+	// FUNCTION: WEBSERVICE 0x1000feb0
 	// STUB: ROBLOX 0x00441880
 	// RBX::FactoryProduct<RBX::Soundscape::SoundChannel,RBX::Instance,&RBX::Soundscape::sSoundChannel>::Creator::create
 	// TEMPLATE: WEBSERVICE 0x10008b90
@@ -1072,7 +1074,7 @@ public:
 	// FUNCTION: WEBSERVICE 0x100da8e0
 	// FUNCTION: ROBLOX 0x005e76b0
 	// RBX::FactoryProduct<RBX::Teams,RBX::Instance,&RBX::sTeams>::`scalar deleting destructor'
-	// TEMPLATE: WEBSERVICE 0x100dabc0
+
 	// TEMPLATE: ROBLOX 0x005e79b0
 	// RBX::FactoryProduct<RBX::Teams,RBX::Instance,&RBX::sTeams>::className
 	// FUNCTION: WEBSERVICE 0x100db590
@@ -1449,11 +1451,9 @@ public:
 	// TEMPLATE: ROBLOX 0x004c1d20
 	// RBX::FactoryProduct<RBX::NetworkSettings,RBX::GlobalSettings::Item,&RBX::sNetworkSettings>::FactoryProduct<RBX::NetworkSettings,RBX::GlobalSettings::Item,&RBX::sNetworkSettings>
 	// clang-format on
-	const Creator& getCreator() const { return creator; }
 
-	static const Name& className() { return Name::declare<sName>(); }
-
-	virtual const Name& getClassName() const { return className(); }
+private:
+	static const Creator creator;
 
 protected:
 	FactoryProduct() {}
@@ -1465,8 +1465,12 @@ protected:
 
 	virtual ~FactoryProduct() {} // vtable+0x00
 
-private:
-	static const Creator creator;
+public:
+	const ICreator& getCreator() { return creator; }
+
+	static const Name& className() { return creator.getClassName(); }
+
+	virtual const Name& getClassName() const { return className(); }
 };
 
 template <class T, class Base, const char* sName>

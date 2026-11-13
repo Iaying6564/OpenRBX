@@ -55,9 +55,13 @@ float Extents::areaXZ() const
 // FUNCTION: ROBLOX 0x005f8890
 Vector3 Extents::getCorner(int i) const
 {
-	const Vector3* corners = &low;
-
-	return Vector3(corners[i / 4].x, corners[i / 2 % 2].y, corners[i % 2].z);
+	int x_id = i / 4;
+	int y_id = (i / 2) % 2;
+	int z_id = i % 2;
+	float x = (&low)[x_id].x;
+	float y = (&low)[y_id].y;
+	float z = (&low)[z_id].z;
+	return Vector3(x, y, z);
 }
 
 // FUNCTION: WEBSERVICE 0x100a5ab0

@@ -125,13 +125,6 @@ void Lua::CoordinateFrameBridge::pushCoordinateFrame(lua_State* L, G3D::Coordina
 	pushNewObject(L, CF);
 }
 
-// FUNCTION: WEBSERVICE 0x1005f8c0
-// FUNCTION: ROBLOX 0x0056cad0
-void Lua::Vector3Bridge::pushVector3(lua_State* L, G3D::Vector3 color)
-{
-	pushNewObject(L, color);
-}
-
 // FUNCTION: WEBSERVICE 0x1005f910
 // FUNCTION: ROBLOX 0x0056cb20
 void Lua::Color3Bridge::pushColor3(lua_State* L, G3D::Color3 color)
@@ -723,7 +716,8 @@ void ScriptContext::startScript(boost::shared_ptr<Script> script)
 	lua_setfield(thread, LUA_GLOBALSINDEX, "script");
 
 	std::string name = std::string("=") + getFullName(script.get());
-	if (luaL_loadbuffer(thread, code->c_str(), code->size(), name.c_str())) {
+	int luaFailedLoad = luaL_loadbuffer(thread, code->c_str(), code->size(), name.c_str());
+	if (luaFailedLoad) {
 		StandardOut::singleton()->print(MESSAGE_ERROR, lua_tostring(thread, -1));
 		lua_pop(thread, 1);
 	}

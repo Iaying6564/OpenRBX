@@ -40,7 +40,10 @@ public:
 	static boost::shared_ptr<StandardOut> singleton();
 	static void print_exception(const boost::function0<void>& job, MessageType type, bool rethrow);
 
-	void print(MessageType type, const std::exception& error);
+	// FUNCTION: WEBSERVICE 0x100010d0
+	// FUNCTION: ROBLOX 0x00413eb0
+	void print(MessageType type, const std::exception& exp) { print(type, exp.what()); }
+
 	void print(MessageType type, const char* format, ...);
 
 	// clang-format off
