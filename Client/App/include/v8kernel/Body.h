@@ -8,6 +8,7 @@
 #include "util/Velocity.h"
 #include "v8kernel/Cofm.h"
 #include "v8kernel/KernelIndex.h"
+#include "v8kernel/Link.h"
 #include "v8kernel/SimBody.h"
 
 #include <G3D/CoordinateFrame.h>
@@ -18,7 +19,6 @@ namespace RBX {
 
 class Kernel;
 class KernelData;
-class Link;
 
 using G3D::CoordinateFrame;
 using G3D::Matrix3;
@@ -32,7 +32,18 @@ public:
 	~Body();
 
 private:
-	void updatePV() const;
+	// FUNCTION: WEBSERVICE 0x1009ad20
+	// FUNCTION: ROBLOX 0x005ad760
+	void updatePV() const
+	{
+		if (parent != NULL && stateIndex != root->getStateIndex()) {
+			const PV& parentPv = parent->getPV();
+
+			pv = parentPv.pvAtLocalCoord(link != NULL ? link->getChildInParent() : meInParent);
+
+			stateIndex = root->getStateIndex();
+		}
+	}
 
 public:
 	Body* getParent() const { return parent; }
