@@ -94,9 +94,9 @@ void Running::onComputeForce(const float dt)
 	float accelZ = (desiredVelocityInWorldZ - currentVelocity.linear.z) * kAltitudeD;
 
 	G3D::Vector3 desiredAccel(accelX, accelY, accelZ);
-	G3D::Vector3 deltaAccel = (desiredAccel - currentAccel)
-								  .clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z),
-										 maxMoveAccelerationGrid);
+	G3D::Vector3 deltaAccel =
+		(desiredAccel - currentAccel)
+			.clamp(G3D::Vector3(-maxMoveAccelerationGrid.x, 0.0f, -maxMoveAccelerationGrid.z), maxMoveAccelerationGrid);
 
 	G3D::Vector3 deltaForce = deltaAccel * mass;
 
