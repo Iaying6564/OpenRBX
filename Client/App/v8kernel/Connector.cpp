@@ -115,8 +115,10 @@ void RotateConnector::computeForce(float dt, bool throttling)
 
 	Vector3 torque = normal * torqueMag;
 
-	ref0->getBody()->accumulateTorque(-torque);
-	ref1->getBody()->accumulateTorque(torque);
+	const Vector3& negativeTorque = -torque;
+	ref0->getBody()->accumulateTorque(negativeTorque);
+	const Vector3& positiveTorque = torque;
+	ref1->getBody()->accumulateTorque(positiveTorque);
 }
 
 // FUNCTION: WEBSERVICE 0x1011e1f0
