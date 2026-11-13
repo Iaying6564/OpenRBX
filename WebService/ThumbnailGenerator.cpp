@@ -123,8 +123,8 @@ public:
 		}
 	}
 
-	// STUB: WEBSERVICE 0x10006740
-	virtual ~OSContext() { OSMesaDestroyContext(ctx); }
+	// FUNCTION: WEBSERVICE 0x10006740
+	~OSContext() { OSMesaDestroyContext(ctx); }
 
 	// FUNCTION: WEBSERVICE 0x100067d0
 	virtual void reallyMakeCurrent() const
@@ -185,19 +185,19 @@ public:
 	virtual void notifyResize(int w, int h) { throw std::runtime_error("OSContext unimplemented method"); }
 
 	// FUNCTION: WEBSERVICE 0x10006930 FOLDED
-	virtual void setRelativeMousePosition(double x, double y)
-	{
-		throw std::runtime_error("OSContext unimplemented method");
-	}
-
-	// FUNCTION: WEBSERVICE 0x10006930 FOLDED
 	virtual void setRelativeMousePosition(const G3D::Vector2& p)
 	{
 		throw std::runtime_error("OSContext unimplemented method");
 	}
 
 	// FUNCTION: WEBSERVICE 0x10006930 FOLDED
-	virtual void getRelativeMouseState(G3D::Vector2& position, G3D::uint8& mouseButtons) const
+	virtual void setRelativeMousePosition(double x, double y)
+	{
+		throw std::runtime_error("OSContext unimplemented method");
+	}
+
+	// FUNCTION: WEBSERVICE 0x10006930 FOLDED
+	virtual void getRelativeMouseState(double& x, double& y, G3D::uint8& mouseButtons) const
 	{
 		throw std::runtime_error("OSContext unimplemented method");
 	}
@@ -209,7 +209,7 @@ public:
 	}
 
 	// FUNCTION: WEBSERVICE 0x10006930 FOLDED
-	virtual void getRelativeMouseState(double& x, double& y, G3D::uint8& mouseButtons) const
+	virtual void getRelativeMouseState(G3D::Vector2& position, G3D::uint8& mouseButtons) const
 	{
 		throw std::runtime_error("OSContext unimplemented method");
 	}
@@ -245,7 +245,7 @@ static void waitForContent()
 	}
 }
 
-// STUB: WEBSERVICE 0x10006af0
+// FUNCTION: WEBSERVICE 0x10006af0
 std::string ThumbnailGenerator::clickTexture(std::string textureId, std::string fileType, int cx, int cy)
 {
 	try {
@@ -271,10 +271,9 @@ std::string ThumbnailGenerator::clickTexture(std::string textureId, std::string 
 
 		context.makeCurrent();
 
-		RBX::Render::Mesh::makeVAR();
+		RBX::Render::Mesh::flushVAR();
 
 		{
-			RBX::Render::Mesh::varDirty = true;
 			G3D::RenderDevice renderDevice;
 			renderDevice.init(&context);
 			renderDevice.pushState();
@@ -319,7 +318,7 @@ std::string ThumbnailGenerator::clickTexture(std::string textureId, std::string 
 	}
 }
 
-// STUB: WEBSERVICE 0x10007170
+// FUNCTION: WEBSERVICE 0x10007170
 std::string ThumbnailGenerator::click(std::string fileType, int cx, int cy, bool hideSky)
 {
 	try {
@@ -379,7 +378,8 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 			lighting->setClearColor(G3D::Color4(1, 1, 1, 1));
 		}
 
-		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
+		RBX::Workspace* workspace = RBX::ServiceProvider::find<RBX::Workspace>(this);
+		workspace->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
 	}
 
 	OSContext context(cx, cy, alphaChannel);
@@ -388,57 +388,61 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 
 	context.makeCurrent();
 
-	RBX::Render::Mesh::makeVAR();
+	RBX::Render::Mesh::flushVAR();
 
-	RBX::Render::Mesh::varDirty = true;
-	G3D::RenderDevice renderDevice;
-	renderDevice.init(&context);
+	{
+		G3D::RenderDevice renderDevice;
+		renderDevice.init(&context);
 
-	boost::scoped_ptr<RBX::View::View> rbxView(
-		new RBX::View::View(RBX::shared_from(static_cast<RBX::DataModel*>(getParent())))
-	);
-
-	rbxView->updateSettings(100, 100, false, 10);
-
-	glMatrixMode(GL_MODELVIEW);
-	rbxView->render(&renderDevice);
-	glMatrixMode(GL_MODELVIEW);
-
-	if (alphaChannel) {
-		G3D::GImage::flipRGBAVertical(
-			context.image.byte(), context.image.byte(), context.image.width, context.image.height
+		boost::scoped_ptr<RBX::View::View> rbxView(
+			new RBX::View::View(RBX::shared_from(static_cast<RBX::DataModel*>(getParent())))
 		);
-	}
-	else {
-		G3D::GImage::flipRGBVertical(
-			context.image.byte(), context.image.byte(), context.image.width, context.image.height
-		);
-	}
 
-	double s = renderDevice.getLightSaturation();
-	if (s != 1.0) {
-		G3D::uint8 L[256];
-		for (int i = 255; i >= 0; --i) {
-			L[i] = G3D::iMin(G3D::iRound(i * s), 255);
+		rbxView->updateSettings(100, 100, false, 10);
+
+		glMatrixMode(GL_MODELVIEW);
+		rbxView->render(&renderDevice);
+		glMatrixMode(GL_MODELVIEW);
+
+		if (alphaChannel) {
+			G3D::GImage::flipRGBAVertical(
+				context.image.byte(), context.image.byte(), context.image.width, context.image.height
+			);
+		}
+		else {
+			G3D::GImage::flipRGBVertical(
+				context.image.byte(), context.image.byte(), context.image.width, context.image.height
+			);
 		}
 
-		int N = context.image.width * context.image.height * context.image.channels;
-		int stride = alphaChannel ? 4 : 3;
-		for (int i = 0; i < N; i += stride) {
-			for (int c = 0; c < 3; ++c) {
-				context.image.byte()[i + c] = L[context.image.byte()[i + c]];
+		double s = renderDevice.getLightSaturation();
+		if (s != 1.0) {
+			G3D::uint8 L[256];
+			for (int i = 255; i >= 0; --i) {
+				L[i] = std::min(G3D::iRound(i * s), 255);
+			}
+
+			int N = context.image.width * context.image.height * context.image.channels;
+			G3D::uint8* image = context.image.byte();
+			int stride = 3 + alphaChannel;
+			for (int i = 0; i < N; i += stride) {
+				G3D::uint8* pixel = image + i;
+				pixel[0] = L[pixel[0]];
+				pixel[1] = L[pixel[1]];
+				pixel[2] = L[pixel[2]];
 			}
 		}
-	}
 
-	if (binaryOutput) {
-		context.image.encode(format, *binaryOutput);
-	}
-	else if (hideSky) {
-		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
-	}
+		if (binaryOutput) {
+			context.image.encode(format, *binaryOutput);
+		}
+		else if (hideSky) {
+			RBX::Workspace* workspace = RBX::ServiceProvider::find<RBX::Workspace>(this);
+			workspace->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
+		}
 
-	renderDevice.cleanup();
+		renderDevice.cleanup();
+	}
 }
 
 template void RBX::Name::callDoDeclare<sThumbnailGenerator>();
