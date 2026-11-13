@@ -416,7 +416,7 @@ void TextXmlWriterWithEmbeddedContent::serializeNode(const XmlElement* xmlNode, 
 			}
 			else if (contentId.isAsset() || contentId.isHttp()) {
 				stream << "<url>";
-				TextXmlWriter::encodedWrite(stream, contentId.c_str());
+				writeText(contentId.c_str(), true);
 				stream << "</url>";
 			}
 			else if (embeddedContent.find(contentId) == embeddedContent.end()) {
@@ -452,7 +452,7 @@ void TextXmlWriterWithEmbeddedContent::serializeNode(const XmlElement* xmlNode, 
 				embeddedContent.insert(contentId);
 
 				stream << "<hash>";
-				stream << xmlNode->toString(this);
+				writeText(xmlNode->toString(this), false);
 				stream << "</hash>";
 			}
 		}

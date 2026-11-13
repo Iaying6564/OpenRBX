@@ -54,14 +54,6 @@ DECOMP_SIZE_ASSERT(SoundId, 0x20)
 // SIZE 0x30
 class Sound : private boost::noncopyable
 {
-public:
-	Sound(FMOD::System* system, SoundId id, bool is3D);
-	~Sound();
-
-	FMOD::Sound* get();
-	void detatch();
-	void release();
-
 private:
 	FMOD::Sound* fmod_sound; // 0x00
 	FMOD::System* system;    // 0x04
@@ -70,6 +62,18 @@ public:
 	int refCount;     // 0x08
 	const SoundId id; // 0x0c
 	const bool is3D;  // 0x2c
+
+	// FUNCTION: WEBSERVICE 0x1007d420
+	// FUNCTION: ROBLOX 0x005c1280
+	Sound(FMOD::System* system, SoundId id, bool is3D)
+		: fmod_sound(NULL), system(system), refCount(0), id(id), is3D(is3D)
+	{
+	}
+	~Sound();
+
+	FMOD::Sound* get();
+	void detatch();
+	void release();
 };
 
 DECOMP_SIZE_ASSERT(Sound, 0x30)
@@ -195,10 +199,24 @@ DECOMP_SIZE_ASSERT(SoundService, 0x150)
 class SoundChannel : public DescribedCreatable<SoundChannel, Instance, sSoundChannel>,
 					 public Listener<RunService, Heartbeat>
 {
+private:
+	boost::shared_ptr<Sound> sound; // 0xfc
+	FMOD::Channel* fmod_channel;    // 0x104
+	SoundId soundId;                // 0x108
+	float volume;                   // 0x128
+	bool playOnRemove;              // 0x12c
+	bool is3D : 1;                  // 0x12d
+	bool looped : 1;                // 0x12d
+	bool soundDisabled : 1;         // 0x12d
+	int playCount;                  // 0x130
+	PartInstance* part;             // 0x134
+
 public:
 	SoundChannel();
 
 	virtual ~SoundChannel();
+
+	static Reflection::BoundProp<bool, 1> sound_desc_playOnRemove;
 
 	// clang-format off
 	// SYNTHETIC: WEBSERVICE 0x1007e580
@@ -215,7 +233,8 @@ public:
 	bool getLooped() const;
 	void setLooped(bool value);
 
-	int getPlayCount() const;
+	// FUNCTION: WEBSERVICE 0x1007c9b0
+	int getPlayCount() const { return playCount; }
 	void setPlayCount(int value);
 
 	void play();
@@ -224,8 +243,6 @@ public:
 
 	bool isPlaying() const;
 	bool isPaused() const;
-
-	static Reflection::BoundProp<bool, 1> sound_desc_playOnRemove;
 
 protected:
 	virtual bool askSetParent(const Instance* parent) const;
@@ -240,24 +257,12 @@ private:
 	void updateListenState();
 	void updateLooped();
 	void update3D(FMOD::Channel* channel);
-	void playSound(Instance* context);
 	void playSound();
+	void playSound(Instance* context);
 	void releaseChannel();
 
 public:
 	void onChannelEnd();
-
-private:
-	boost::shared_ptr<Sound> sound; // 0xfc
-	FMOD::Channel* fmod_channel;    // 0x104
-	SoundId soundId;                // 0x108
-	float volume;                   // 0x128
-	bool playOnRemove;              // 0x12c
-	bool is3D : 1;                  // 0x12d
-	bool looped : 1;                // 0x12d
-	bool soundDisabled : 1;         // 0x12d
-	int playCount;                  // 0x130
-	PartInstance* part;             // 0x134
 };
 
 DECOMP_SIZE_ASSERT(SoundChannel, 0x138)

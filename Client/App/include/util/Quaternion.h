@@ -50,6 +50,10 @@ public:
 	const G3D::Vector3& imag() const { return *reinterpret_cast<const G3D::Vector3*>(this); }
 	G3D::Vector3& imag();
 
+	float& operator[](int index) const;
+	operator float*();
+	operator const float*() const;
+
 	Quaternion operator*(float value) const { return Quaternion(value * x, value * y, value * z, value * w); }
 
 	Quaternion& operator+=(const Quaternion& other)

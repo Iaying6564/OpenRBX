@@ -31,9 +31,9 @@ public:
 	Face(const Face& other) : c0(other.c0), c1(other.c1), c2(other.c2), c3(other.c3) {}
 
 private:
-	// STUB: WEBSERVICE 0x1010b320
+	// FUNCTION: WEBSERVICE 0x1010b320
 	// STUB: ROBLOX 0x0064a960
-	Vector3 getAxis(int i) const { return i == 0 ? (c1 - c0).direction() : (c3 - c0).direction(); }
+	Vector3 getAxis(int i) const { return i == 0 ? getU().unit() : getV().unit(); }
 
 	void minMax(const Vector3& point, const Vector3& normal, float& min, float& max) const;
 
