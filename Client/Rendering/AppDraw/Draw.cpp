@@ -42,7 +42,7 @@ const G3D::Color3& Draw::selectColor()
 	return c;
 }
 
-// STUB: WEBSERVICE 0x101ec7c0
+// FUNCTION: WEBSERVICE 0x101ec7c0
 // STUB: ROBLOX 0x00670340
 void Draw::constraint(const Part& part, Adorn* adorn, int face, const G3D::Color3& controllerColor)
 {
@@ -63,10 +63,14 @@ void Draw::constraint(const Part& part, Adorn* adorn, int face, const G3D::Color
 
 	adorn->setObjectToWorldMatrix(newObject);
 
-	adorn->cylinderAlongX(0.2f, 1.0f, G3D::Color4(G3D::Color3::yellow(), 1.0f), G3D::Color4::clear());
+	float axis = 1.0f;
+	float radius = 0.2f;
+	adorn->cylinderAlongX(radius, axis, G3D::Color4(G3D::Color3::yellow(), 1.0f), G3D::Color4::clear());
 
 	if (surfaceType == ROTATE_V || surfaceType == ROTATE_P) {
-		adorn->cylinderAlongX(0.4f, 0.25f, G3D::Color4(controllerColor, 1.0f), G3D::Color4::clear());
+		float axis = 0.25f;
+		float radius = 0.4f;
+		adorn->cylinderAlongX(radius, axis, G3D::Color4(controllerColor, 1.0f), G3D::Color4::clear());
 	}
 }
 

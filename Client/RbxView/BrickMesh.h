@@ -51,7 +51,6 @@ public:
 	);
 	static void flushCache();
 
-	// SYNTHETIC: WEBSERVICE 0x1018a8d0
 	// SYNTHETIC: ROBLOX 0x00484900
 	// RBX::View::BrickMesh::`scalar deleting destructor'
 };
