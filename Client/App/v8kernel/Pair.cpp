@@ -159,40 +159,34 @@ void GeoPair::computeEdgeEdgePlane(PairParams& _params)
 // FUNCTION: ROBLOX 0x00655bd0
 void GeoPair::computeEdgeEdge(PairParams& _params)
 {
-	const CoordinateFrame& coord0 = body0->getCoordinateFrame();
-	const CoordinateFrame& coord1 = body1->getCoordinateFrame();
+	const CoordinateFrame& ca = body0->getCoordinateFrame();
+	const CoordinateFrame& cb = body1->getCoordinateFrame();
 
-	Vector3 pa = coord0.pointToWorldSpace(*offset0);
-	Vector3 pb = coord1.pointToWorldSpace(*offset1);
+	Vector3 pa = ca.pointToWorldSpace(*offset0);
+	Vector3 pb = cb.pointToWorldSpace(*offset1);
 
-	Vector3 e0 = Math::getWorldNormal(pairData.normalID0, coord0);
-	Vector3 ub = Math::getWorldNormal(pairData.normalID1, coord1);
+	Vector3 ua = Math::getWorldNormal(pairData.normalID0, ca);
+	Vector3 ub = Math::getWorldNormal(pairData.normalID1, cb);
 
 	Vector3 p = pb - pa;
-
-	float dot = ub.dot(e0);
-	float q1 = p.dot(e0);
+	float uaub = ua.dot(ub);
+	float q1 = ua.dot(p);
 	float q2 = -ub.dot(p);
-
-	float denom = 1.0f - dot * dot;
-
-	if (denom > 1e-06f) {
-		float recip = 1.0f / denom;
-
-		float s0 = (q2 * dot + q1) * recip;
-		float s1 = (q1 * dot + q2) * recip;
-
-		Vector3 c0 = pa + e0 * s0;
-		Vector3 c1 = pb + ub * s1;
-
-		_params.position = (c1 + c0) * 0.5f;
-		_params.normal = c0 - c1;
+	float d = 1 - uaub * uaub;
+	if (d > 1e-6f) {
+		d = 1.0f / d;
+		float alpha = (q1 + uaub * q2) * d;
+		float beta = (uaub * q1 + q2) * d;
+		pa = pa + alpha * ua;
+		pb = pb + beta * ub;
+		_params.position = 0.5 * (pa + pb);
+		_params.normal = pa - pb;
 		_params.length = -_params.normal.unitize();
 	}
 	else {
 		_params.position = pa;
-		_params.normal = e0;
-		_params.length = 0.0f;
+		_params.normal = ua;
+		_params.length = 0.0; // hopefully will blow out;
 	}
 }
 

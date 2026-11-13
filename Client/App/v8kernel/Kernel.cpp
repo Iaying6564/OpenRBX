@@ -178,7 +178,7 @@ Point* Kernel::newPoint(Body* _body, const Vector3& worldPos)
 	for (int i = 0; i < kernelData->points.size(); ++i) {
 		Point* other = kernelData->points[i];
 
-		if (Point::sameBodyAndOffset(point, other)) {
+		if (Point::sameBodyAndOffset(*point, *other)) {
 			kernelData->points[i]->numOwners++;
 			delete point;
 

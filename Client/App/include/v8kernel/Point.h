@@ -45,9 +45,9 @@ protected:
 	// RBX::Point::`scalar deleting destructor'
 
 public:
-	static bool sameBodyAndOffset(const Point* p0, const Point* p1)
+	static bool sameBodyAndOffset(const Point& p0, const Point& p1)
 	{
-		return p0->body == p1->body && p0->localPos == p1->localPos;
+		return p0.body == p1.body && p0.localPos == p1.localPos;
 	}
 
 	void step();
