@@ -23,12 +23,6 @@ set(OPENRBX_GRAPHICS3D_SOURCES
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Log.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/debugAssert.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bmp.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_tga.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_png.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_jpeg.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_ppm.cpp"
-  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bayer.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/System.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/BinaryOutput.cpp"
   "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Matrix4.cpp"
@@ -200,11 +194,10 @@ file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" ${OPENRBX_ZLIB_SOURCES})
 # exactly 1.0000, no regressions, +0.3558 accuracy-units. Probe diffs for all
 # twelve candidates are in build/probe/Vendored/.
 #
-# The four files whose __LINE__ also differs are a separate cause and this
-# directive does not fix it: RenderDevice.cpp is uniformly -2, System.cpp +2 and
-# Table.h +1, so the original's copies are a commit or two from ours, while
-# GImage.cpp is a genuinely larger file (the original reaches line 2932 where
-# ours has 1000) and is not closable without substituting upstream source.
+# Source coordinates also depend on the original revisions. Table.h and the
+# monolithic GImage.cpp have been recovered from upstream CVS; GImage includes
+# the reference build's JPEG error callback. The split GImage sources are not
+# compiled alongside that monolith.
 #
 # The original built zlib as its own project, in ..\..\temp\zlib\Release, and not
 # inside glg3d, so its ten objects carry /O2's own /Ob2 and not the /Ob1 glg3d
