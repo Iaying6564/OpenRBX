@@ -112,6 +112,18 @@ public:
 	{
 		return getDescriptor().MemberDescriptorContainer<FunctionDescriptor>::findConstMember(name, this);
 	}
+	MemberDescriptorContainer<FunctionDescriptor>::Iterator findFunction(const Name& name)
+	{
+		return getDescriptor().MemberDescriptorContainer<FunctionDescriptor>::findMember(name, this);
+	}
+	MemberDescriptorContainer<FunctionDescriptor>::Iterator functions_begin()
+	{
+		return getDescriptor().MemberDescriptorContainer<FunctionDescriptor>::members_begin(this);
+	}
+	MemberDescriptorContainer<FunctionDescriptor>::Iterator functions_end()
+	{
+		return getDescriptor().MemberDescriptorContainer<FunctionDescriptor>::members_end(this);
+	}
 	MemberDescriptorContainer<FunctionDescriptor>::ConstIterator functions_begin() const
 	{
 		return getDescriptor().MemberDescriptorContainer<FunctionDescriptor>::members_begin(this);
