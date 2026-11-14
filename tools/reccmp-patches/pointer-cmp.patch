@@ -1,0 +1,217 @@
+--- a/reccmp/compare/asm/replacement.py
++++ b/reccmp/compare/asm/replacement.py
+@@ -26,6 +26,8 @@
+     image_id: ImageId,
+     bin_read: Callable[[int], int | None],
+     offset_name: Callable[[CvdumpTypeKey, int], str],
++    *,
++    address_only: bool = False,
+ ) -> NameReplacementProtocol:
+     """Function generator for name replacement"""
+     assert image_id in (ImageId.ORIG, ImageId.RECOMP), "Invalid image id"
+@@ -45,6 +47,23 @@
+         Returns None if there is no suitable name."""
+         if offset == 0:
+             return entity.match_name()
++
++        # Address expressions may denote a matched object's end, or a byte
++        # inside a matched string. This does not enlarge the object's extent
++        # and must not be enabled for ordinary memory/dereference lookups.
++        if address_only and entity.matched:
++            size = entity.any_size(image_id)
++            if (
++                size > 0
++                and offset == size
++                and entity.entity_type in (EntityType.DATA, EntityType.OFFSET)
++            ):
++                return entity.match_name(f"+{offset}")
++            if (
++                0 < offset < size
++                and entity.entity_type in (EntityType.STRING, EntityType.WIDECHAR)
++            ):
++                return entity.match_name(f"+{offset}")
+ 
+         # We will not return an offset name if this is not a variable
+         # or if the offset is outside the range of the entity.
+--- a/reccmp/compare/asm/parse.py
++++ b/reccmp/compare/asm/parse.py
+@@ -43,10 +43,14 @@
+         name_lookup: NameReplacementProtocol | None = None,
+         is_32bit: bool = True,
+         reloc_test: Callable[[int], bool] | None = None,
++        address_lookup: Callable[[int], str | None] | None = None,
++        pointer_reloc_test: Callable[[int], bool] | None = None,
+     ) -> None:
+         self.addr_test = addr_test
+         self.reloc_test = reloc_test
+         self.name_lookup = name_lookup
++        self.address_lookup = address_lookup
++        self.pointer_reloc_test = pointer_reloc_test
+         self.is_32bit = is_32bit
+ 
+         self.replacements: dict[int, str] = {}
+@@ -147,6 +151,16 @@
+             return placeholder
+ 
+         return match.group(0)
++
++    def hex_replace_address_expression(self, match: re.Match) -> str:
++        """Name a proven pointer immediate without inventing a placeholder."""
++        value = int(match.group(1), 16)
++        name = (
++            self.address_lookup(value)
++            if callable(self.address_lookup)
++            else self.lookup(value)
++        )
++        return name if name is not None else match.group(0)
+ 
+     def hex_replace_indirect(self, match: re.Match) -> str:
+         """Edge case for hex_replace_always. The context of the instruction
+@@ -220,7 +234,27 @@
+         # In the event of pointer comparison, only replace the immediate value
+         # if it is a known address.
+         if inst_mnemonic == "cmp":
+-            op_str = immediate_replace_regex.sub(self.hex_replace_annotated, op_str)
++            # Only a 32-bit operand can have the relocated imm32 handled here.
++            # A relocation on a memory displacement is not sufficient: it
++            # must start at the final four-byte immediate field. In particular
++            # CMP memory, imm8/imm16 must not take this path.
++            left_operand = inst_op_str.rpartition(", ")[0]
++            is_dword_operand = left_operand in {
++                "eax", "ebx", "ecx", "edx", "esi", "edi", "esp", "ebp"
++            } or left_operand.startswith("dword ptr [")
++            is_pointer_immediate = (
++                self.is_32bit
++                and inst_size >= 5
++                and is_dword_operand
++                and callable(self.pointer_reloc_test)
++                and self.pointer_reloc_test(inst_address + inst_size - 4)
++            )
++            replacer = (
++                self.hex_replace_address_expression
++                if is_pointer_immediate
++                else self.hex_replace_annotated
++            )
++            op_str = immediate_replace_regex.sub(replacer, op_str)
+         elif self.is_relocated_at(
+             inst_address + inst_size - 4, inst_address + inst_size - 3
+         ):
+--- a/reccmp/compare/functions.py
++++ b/reccmp/compare/functions.py
+@@ -91,6 +91,14 @@
+     return lookup
+ 
+ 
++def create_pointer_reloc_lookup(bin_file: Image) -> Callable[[int], bool] | None:
++    """Require typed PE HIGHLOW evidence for new pointer-immediate substitutions."""
++    if not isinstance(bin_file, PEImage):
++        return None
++    relocations = bin_file.pointer_relocations
++    return lambda addr: addr in relocations
++
++
+ @dataclass
+ class FunctionComparator:
+     # pylint: disable=too-many-instance-attributes
+@@ -113,6 +121,14 @@
+             ),
+             is_32bit=self.is_32bit,
+             reloc_test=create_reloc_lookup(self.orig_bin),
++            pointer_reloc_test=create_pointer_reloc_lookup(self.orig_bin),
++            address_lookup=create_name_lookup(
++                self.db,
++                ImageId.ORIG,
++                create_bin_lookup(self.orig_bin),
++                partial(get_name_for_offset, self.types),
++                address_only=True,
++            ),
+         )
+         self.recomp_sanitize = ParseAsm(
+             addr_test=create_valid_addr_lookup(
+@@ -126,6 +142,14 @@
+             ),
+             is_32bit=self.is_32bit,
+             reloc_test=create_reloc_lookup(self.recomp_bin),
++            pointer_reloc_test=create_pointer_reloc_lookup(self.recomp_bin),
++            address_lookup=create_name_lookup(
++                self.db,
++                ImageId.RECOMP,
++                create_bin_lookup(self.recomp_bin),
++                partial(get_name_for_offset, self.types),
++                address_only=True,
++            ),
+         )
+ 
+     def _source_ref_of_recomp_addr(self, recomp_addr: int | None) -> str | None:
+--- a/reccmp/formats/pe.py
++++ b/reccmp/formats/pe.py
+@@ -662,6 +662,69 @@
+         return relocations
+ 
+     @cached_property
++    def pointer_relocations(self) -> set[int]:
++        """Complete HIGHLOW pointer fields inside the declared relocation directory.
++
++        Legacy relocations stay unchanged. Malformed blocks, overlapping fields,
++        or truncated HIGHADJ pairs fail closed without retaining prefix results.
++        """
++        region = self.get_data_directory_region(
++            PEDataDirectoryItemType.BASE_RELOCATION_TABLE
++        )
++        if region is None or region.virtual_size <= 0:
++            return set()
++        try:
++            view, remaining = self.seek(region.virtual_address)
++        except InvalidVirtualAddressError:
++            return set()
++        size = region.virtual_size
++        if size > remaining or size > len(view):
++            return set()
++        data = view[:size]
++        result: set[int] = set()
++        occupied: set[int] = set()
++        offset = 0
++        while offset < len(data):
++            if offset % 4 or len(data) - offset < 8:
++                return set()
++            page, block_size = struct.unpack_from("<II", data, offset)
++            if page == 0 and block_size == 0:
++                if any(data[offset:]):
++                    return set()
++                break
++            if (
++                page % 0x1000
++                or block_size < 8
++                or block_size % 2
++                or block_size > len(data) - offset
++            ):
++                return set()
++            cursor, end = offset + 8, offset + block_size
++            while cursor < end:
++                entry = struct.unpack_from("<H", data, cursor)[0]
++                cursor += 2
++                kind = entry >> 12
++                if kind == 0:  # IMAGE_REL_BASED_ABSOLUTE: padding, no field.
++                    continue
++                if kind not in (1, 2, 3, 4):  # Unsupported on the i386 images we handle.
++                    return set()
++                if kind == 4:  # IMAGE_REL_BASED_HIGHADJ consumes a raw data word.
++                    if cursor >= end:
++                        return set()
++                    cursor += 2
++                address = self.imagebase + page + (entry & 0xFFF)
++                width = 2 if kind in (1, 2, 4) else 4
++                field = set(range(address, address + width))
++                if occupied.intersection(field):
++                    return set()
++                occupied.update(field)
++                if kind == 3:  # IMAGE_REL_BASED_HIGHLOW: full 32-bit field.
++                    if all(self.is_valid_vaddr(address + i) for i in range(4)):
++                        result.add(address)
++            offset = end
++        return result
++
++    @cached_property
+     def _relocated_addrs(self) -> set[int]:
+         """We are now interested in the relocated addresses themselves. Seek to the
+         address where there is a relocation, then read the four bytes into our set."""
