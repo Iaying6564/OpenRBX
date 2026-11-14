@@ -1,4 +1,4 @@
-# OpenRBX
+# RBXDecomp
 
 [Discord](https://discord.gg/2JcBQFxVPv) | [Contributing](/CONTRIBUTING.md)
 
@@ -10,7 +10,7 @@ Keep in mind that this code reproduces the original release as it was, bugs incl
 
 ## Progress
 
-<p align="center"><a href="https://asphaltian.github.io/OpenRBX/ROBLOXPROGRESS.HTML"><img src="https://asphaltian.github.io/OpenRBX/ROBLOXPROGRESS.SVG" width="45%"></a> <a href="https://asphaltian.github.io/OpenRBX/WEBSERVICEPROGRESS.HTML"><img src="https://asphaltian.github.io/OpenRBX/WEBSERVICEPROGRESS.SVG" width="45%"></a></p>
+<p align="center"><a href="https://asphaltian.github.io/RBXDecomp/ROBLOXPROGRESS.HTML"><img src="https://asphaltian.github.io/RBXDecomp/ROBLOXPROGRESS.SVG" width="45%"></a> <a href="https://asphaltian.github.io/RBXDecomp/WEBSERVICEPROGRESS.HTML"><img src="https://asphaltian.github.io/RBXDecomp/WEBSERVICEPROGRESS.SVG" width="45%"></a></p>
 
 All but ~80 of the Roblox functions in `WebService.dll` from RBXGS, the game server, compile to the same instructions as the original.
 

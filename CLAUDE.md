@@ -1,4 +1,4 @@
-# OpenRBX
+# RBXDecomp
 
 Decompilation of Roblox as of 2007-12-20 using MSVC 8.0 SP1 (cl.exe 14.00.50727.762). Modeled after the [LEGO Racers decompilation](https://github.com/isledecomp/racers).
 
