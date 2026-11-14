@@ -6,6 +6,7 @@
 #include "reflection/signal.h"
 #include "util/Events.h"
 #include "v8datamodel/BrickColor.h"
+#include "v8datamodel/Team.h"
 #include "v8tree/Instance.h"
 
 #include <boost/shared_ptr.hpp>
