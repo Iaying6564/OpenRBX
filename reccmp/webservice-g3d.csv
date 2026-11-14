@@ -981,7 +981,7 @@ address,size,type,symbol,name
 0x101fbbf0,0x332,library,?makeShadersPS20@ToneMap@G3D@@CAXXZ,
 0x101fbf30,0x2b7,library,??0ToneMap@G3D@@QAE@XZ,
 0x101ef5a0,0x50,library,?setPointer@?$ReferenceCountedPointer@VVertexAndPixelShader@G3D@@@G3D@@AAEXPAVVertexAndPixelShader@2@@Z,
-0x10030fb0,0x19,library,??0?$ReferenceCountedPointer@VVertexAndPixelShader@G3D@@@G3D@@QAE@PAVVertexAndPixelShader@1@@Z,
+0x10030fb0,0x19,library,??0?$ReferenceCountedPointer@VTextureProxy@Render@RBX@@@G3D@@QAE@PAVTextureProxy@Render@RBX@@@Z,
 0x1021fc70,0x17,library,,`dynamic initializer for 'G3D::RenderDevice::dummyString''
 0x1021fc90,0xc,library,,`dynamic initializer for 'G3D::VARArea::allVARAreas''
 0x1021fca0,0x6f,library,,`dynamic initializer for 'G3D::TextureFormat::L8''
