@@ -20,21 +20,21 @@ GuiResponse Widget::processMouse(const GuiEvent& event)
 				return GuiResponse::used();
 			}
 
-			switch (event.eventType) {
-			case UIEvent::MOUSE_LEFT_BUTTON_DOWN:
-				widgetState = DOWN_OVER;
-				onDown(event);
-				break;
+			else {
+				switch (event.eventType) {
+				case UIEvent::MOUSE_LEFT_BUTTON_DOWN:
+					widgetState = DOWN_OVER;
+					onDown(event);
+					return GuiResponse::used();
 
-			case UIEvent::MOUSE_MOVE:
-				widgetState = HOVER;
-				break;
+				case UIEvent::MOUSE_MOVE:
+					widgetState = HOVER;
+					return GuiResponse::used();
 
-			default:
-				return GuiResponse::notUsed();
+				default:
+					return GuiResponse::used();
+				}
 			}
-
-			return GuiResponse::used();
 		}
 		else {
 			widgetState = NOTHING;
@@ -101,11 +101,15 @@ GuiResponse Widget::processMouse(const GuiEvent& event)
 // FUNCTION: ROBLOX 0x0063f7c0
 GuiResponse Widget::process(const GuiEvent& event)
 {
-	if (isEnabled() && event.isMouseEvent()) {
+	if (!isEnabled()) {
+		return GuiResponse::notUsed();
+	}
+	if (event.isMouseEvent()) {
 		return processMouse(event);
 	}
-
-	return GuiResponse::notUsed();
+	else {
+		return GuiResponse::notUsed();
+	}
 }
 
 // FUNCTION: ROBLOX 0x0063f830

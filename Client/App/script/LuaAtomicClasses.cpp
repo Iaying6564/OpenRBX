@@ -621,7 +621,7 @@ int CoordinateFrameBridge::on_pointToObjectSpace(lua_State* L)
 	return count;
 }
 
-// STUB: WEBSERVICE 0x100af1a0
+// FUNCTION: WEBSERVICE 0x100af1a0
 // STUB: ROBLOX 0x005ffb90
 int CoordinateFrameBridge::on_vectorToWorldSpace(lua_State* L)
 {
@@ -635,7 +635,8 @@ int CoordinateFrameBridge::on_vectorToWorldSpace(lua_State* L)
 	}
 
 	for (int i = 0; i < count; i++) {
-		Vector3Bridge::pushNewObject(L, value.vectorToWorldSpace(Vector3Bridge::getObject(L, i + 2)));
+		const G3D::Vector3& vector = Vector3Bridge::getObject(L, i + 2);
+		Vector3Bridge::pushVector3(L, value.vectorToWorldSpace(vector));
 	}
 
 	return count;
