@@ -1,3 +1,4 @@
+#line 1 ".\\glg3dcpp\\TextureManager.cpp"
 /**
   @file TextureManager.cpp
 
