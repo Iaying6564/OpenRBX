@@ -150,7 +150,7 @@ Client::Client()
 	updateLogger();
 }
 
-// STUB: WEBSERVICE 0x10198ba0
+// FUNCTION: WEBSERVICE 0x10198ba0
 // STUB: ROBLOX 0x004bae20
 PluginReceiveResult Client::OnReceive(RakPeerInterface* peer, Packet* packet)
 {
@@ -159,26 +159,27 @@ PluginReceiveResult Client::OnReceive(RakPeerInterface* peer, Packet* packet)
 		return result;
 	}
 
-	const SystemAddress& systemAddress = packet->systemAddress;
-
 	switch (packet->data[0]) {
 	case ID_CONNECTION_REQUEST_ACCEPTED:
 		try {
-			StandardOut::singleton()->print(MESSAGE_INFO, "Connection accepted from %s\n", systemAddress.ToString());
+			StandardOut::singleton()->print(
+				MESSAGE_INFO, "Connection accepted from %s\n", packet->systemAddress.ToString()
+			);
 
-			serverId = systemAddress;
+			serverId = packet->systemAddress;
 
-			boost::shared_ptr<Replicator> proxy = Creatable<Instance>::create<Replicator>(systemAddress, rakPeer.get());
+			boost::shared_ptr<Replicator> proxy =
+				Creatable<Instance>::create<Replicator>(packet->systemAddress, rakPeer.get());
 			proxy->setParent(this);
 
-			event_ConnectionAccepted.fire(this, systemAddress.ToString(), proxy);
+			event_ConnectionAccepted.fire(this, packet->systemAddress.ToString(), proxy);
 		}
 		catch (std::exception& e) {
 			StandardOut::singleton()->print(
 				MESSAGE_ERROR, "Client::OnReceive packet %d: %s", packet->data[0], e.what()
 			);
 		}
-		break;
+		return RR_CONTINUE_PROCESSING;
 
 	case ID_CONNECTION_ATTEMPT_FAILED:
 	case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -187,37 +188,37 @@ PluginReceiveResult Client::OnReceive(RakPeerInterface* peer, Packet* packet)
 			StandardOut::singleton()->print(
 				MESSAGE_ERROR,
 				"Failed to connect to %s. %s\n",
-				systemAddress.ToString(),
+				packet->systemAddress.ToString(),
 				Exposer::IDTOString(packet->data[0])
 			);
 
-			event_ConnectionFailed.fire(this, systemAddress.ToString(), packet->data[0]);
+			event_ConnectionFailed.fire(this, packet->systemAddress.ToString(), packet->data[0]);
 		}
 		catch (std::exception& e) {
 			StandardOut::singleton()->print(
 				MESSAGE_ERROR, "Client::OnReceive packet %d: %s", packet->data[0], e.what()
 			);
 		}
-		break;
+		return RR_CONTINUE_PROCESSING;
 
 	case ID_INVALID_PASSWORD:
 		try {
-			StandardOut::singleton()->print(MESSAGE_ERROR, "Invalid version from %s", systemAddress.ToString());
+			StandardOut::singleton()->print(MESSAGE_ERROR, "Invalid version from %s", packet->systemAddress.ToString());
 
-			event_ConnectionFailed.fire(this, systemAddress.ToString(), packet->data[0]);
-			event_ConnectionRejected.fire(this, systemAddress.ToString());
+			event_ConnectionFailed.fire(this, packet->systemAddress.ToString(), packet->data[0]);
+			event_ConnectionRejected.fire(this, packet->systemAddress.ToString());
 		}
 		catch (std::exception& e) {
 			StandardOut::singleton()->print(
 				MESSAGE_ERROR, "Client::OnReceive packet %d: %s", packet->data[0], e.what()
 			);
 		}
-		break;
+		return RR_CONTINUE_PROCESSING;
 
 	case ID_DISCONNECTION_NOTIFICATION:
 	case ID_CONNECTION_LOST:
 		serverId = UNASSIGNED_SYSTEM_ADDRESS;
-		break;
+		return RR_CONTINUE_PROCESSING;
 	}
 
 	return RR_CONTINUE_PROCESSING;

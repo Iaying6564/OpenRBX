@@ -80,7 +80,8 @@ namespace DataStructures
 		return allocation_size;
 	}
 
-	// FUNCTION: WEBSERVICE 0x101bc160
+
+	// FUNCTION: ROBLOX 0x004e1f10
 	// DataStructures::Queue<HuffmanEncodingTreeNode *>::Queue<HuffmanEncodingTreeNode *>
 	// FUNCTION: ROBLOX 0x004e1f10
 	// DataStructures::Queue<Packet *>::Queue<Packet *>
