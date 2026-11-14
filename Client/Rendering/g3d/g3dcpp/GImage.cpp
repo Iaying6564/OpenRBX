@@ -1,3 +1,4 @@
+#line 1 ".\\g3dcpp\\GImage.cpp"
 /**
   @file GImage.cpp
   @author Morgan McGuire, morgan@graphics3d.com
