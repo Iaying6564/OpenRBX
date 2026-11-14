@@ -81,8 +81,9 @@ void View::onWorkspaceDescendentAdded(boost::shared_ptr<Instance> descendent)
 	PartInstance* part = dynamic_cast<PartInstance*>(descendent.get());
 	if (part) {
 		new Part(shared_from(part), this);
+		return;
 	}
-	else if (PartInstance* parentPart = dynamic_cast<PartInstance*>(descendent->getParent())) {
+	if (PartInstance* parentPart = dynamic_cast<PartInstance*>(descendent->getParent())) {
 		RBX::Texture* texture = dynamic_cast<RBX::Texture*>(descendent.get());
 		if (texture) {
 			new Texture(*texture, *parentPart, this);

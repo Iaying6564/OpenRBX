@@ -57,7 +57,10 @@ struct Lookup
 		if (surfaceTypes > other.surfaceTypes) {
 			return false;
 		}
-		return color < other.color;
+		if (color < other.color) {
+			return true;
+		}
+		return false;
 	}
 };
 
