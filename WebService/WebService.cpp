@@ -697,7 +697,7 @@ HRESULT __stdcall CWebService::Execute(wchar_t* jobID, ScriptExecution script, L
 			dataModel = iter->second.dataModel;
 		}
 
-		std::auto_ptr<std::vector<RBX::Reflection::Value> > tuple;
+		std::auto_ptr<const std::vector<RBX::Reflection::Value> > tuple;
 		{
 			std::vector<RBX::Reflection::Value> args(script.arguments.count);
 			for (int i = 0; i < script.arguments.count; ++i) {

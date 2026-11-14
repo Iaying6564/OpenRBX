@@ -379,7 +379,7 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 			lighting->setClearColor(G3D::Color4(1, 1, 1, 1));
 		}
 
-		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D::xywh(0, 0, cx, cy));
+		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
 	}
 
 	OSContext context(cx, cy, alphaChannel);
@@ -394,7 +394,7 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 	G3D::RenderDevice renderDevice;
 	renderDevice.init(&context);
 
-	std::auto_ptr<RBX::ViewBase> rbxView(
+	boost::scoped_ptr<RBX::View::View> rbxView(
 		new RBX::View::View(RBX::shared_from(static_cast<RBX::DataModel*>(getParent())))
 	);
 
@@ -435,7 +435,7 @@ void ThumbnailGenerator::doClick(std::string fileType, int cx, int cy, bool hide
 		context.image.encode(format, *binaryOutput);
 	}
 	else if (hideSky) {
-		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D::xywh(0, 0, cx, cy));
+		RBX::ServiceProvider::find<RBX::Workspace>(this)->setImageServerView(G3D::Rect2D(G3D::Vector2(cx, cy)));
 	}
 
 	renderDevice.cleanup();

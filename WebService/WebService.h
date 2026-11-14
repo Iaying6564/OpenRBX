@@ -160,7 +160,12 @@ struct StandardOutMessages
 	StandardOutMessage* items; // 0x04
 };
 
-struct IWebService : public IUnknown
+// __declspec(novtable): the original's PDB has no IWebService record at all --
+// neither `??_7IWebService@Roblox@@6B` nor a default constructor -- while ours
+// emits both.  Without the keyword, every CWebService construction stores the
+// secondary vftable for this primary base, an instruction the original never
+// emits.
+struct __declspec(novtable) IWebService : public IUnknown
 {
 	virtual HRESULT __stdcall HelloWorld(BSTR* bstrOutput) = 0; // vtable+0x0c
 	virtual HRESULT __stdcall GetVersion(BSTR* result) = 0;     // vtable+0x10
@@ -214,8 +219,10 @@ private:
 	void touch(Job& job, double timeout) { job.expiration = G3D::System::getLocalTime() + timeout; }
 	double secondsToTimeout(const Job& job) { return job.expiration - G3D::System::getLocalTime(); }
 
+	// The original expands this at every one of its thirteen sites; /LTCG keeps
+	// one out-of-line copy for the nine convertToLua instantiations without it.
 	template <class T>
-	T* allocate(T*, int count)
+	__forceinline T* allocate(T*, int count)
 	{
 		if (count == 0) {
 			return NULL;
@@ -2506,39 +2513,39 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 // clang-format off
 // TEMPLATE: WEBSERVICE 0x100195e0
 // Roblox::convert<Roblox::LuaValue1>
-// STUB: WEBSERVICE 0x10019890
+// FUNCTION: WEBSERVICE 0x10019890
 // Roblox::CWebService::convertToLua<Roblox::LuaValue1>
 // TEMPLATE: WEBSERVICE 0x1001bfd0
 // Roblox::convert<Roblox::LuaValue2>
-// STUB: WEBSERVICE 0x1001c470
+// FUNCTION: WEBSERVICE 0x1001c470
 // Roblox::CWebService::convertToLua<Roblox::LuaValue2>
 // TEMPLATE: WEBSERVICE 0x1001d370
 // Roblox::convert<Roblox::LuaValue3>
-// STUB: WEBSERVICE 0x1001d890
+// FUNCTION: WEBSERVICE 0x1001d890
 // Roblox::CWebService::convertToLua<Roblox::LuaValue3>
 // TEMPLATE: WEBSERVICE 0x1001e0d0
 // Roblox::convert<Roblox::LuaValue4>
-// STUB: WEBSERVICE 0x1001e490
+// FUNCTION: WEBSERVICE 0x1001e490
 // Roblox::CWebService::convertToLua<Roblox::LuaValue4>
 // TEMPLATE: WEBSERVICE 0x1001eb60
 // Roblox::convert<Roblox::LuaValue5>
-// STUB: WEBSERVICE 0x1001edd0
+// FUNCTION: WEBSERVICE 0x1001edd0
 // Roblox::CWebService::convertToLua<Roblox::LuaValue5>
 // TEMPLATE: WEBSERVICE 0x1001f2b0
 // Roblox::convert<Roblox::LuaValue6>
-// STUB: WEBSERVICE 0x1001f520
+// FUNCTION: WEBSERVICE 0x1001f520
 // Roblox::CWebService::convertToLua<Roblox::LuaValue6>
 // TEMPLATE: WEBSERVICE 0x1001f8c0
 // Roblox::convert<Roblox::LuaValue7>
-// STUB: WEBSERVICE 0x1001fb30
+// FUNCTION: WEBSERVICE 0x1001fb30
 // Roblox::CWebService::convertToLua<Roblox::LuaValue7>
 // TEMPLATE: WEBSERVICE 0x1001ff50
 // Roblox::convert<Roblox::LuaValue8>
-// STUB: WEBSERVICE 0x100201c0
+// FUNCTION: WEBSERVICE 0x100201c0
 // Roblox::CWebService::convertToLua<Roblox::LuaValue8>
 // TEMPLATE: WEBSERVICE 0x10020560
 // Roblox::convert<Roblox::LuaValue9>
-// STUB: WEBSERVICE 0x10020800
+// FUNCTION: WEBSERVICE 0x10020800
 // Roblox::CWebService::convertToLua<Roblox::LuaValue9>
 // TEMPLATE: WEBSERVICE 0x10020b70
 // Roblox::convert<Roblox::LuaValue10>
@@ -2567,6 +2574,8 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 // `dynamic atexit destructor for 'standardOutLog''
 // SYNTHETIC: WEBSERVICE 0x102212b0
 // `dynamic atexit destructor for 'dotVersion''
+// SYNTHETIC: WEBSERVICE 0x102212c0
+// `initRoblox'::`16'::`dynamic atexit destructor for 'errorUploader''
 // SYNTHETIC: WEBSERVICE 0x102212d0
 // `dynamic atexit destructor for '_AtlModule''
 // SYNTHETIC: WEBSERVICE 0x102212e0
@@ -2579,6 +2588,19 @@ DECOMP_SIZE_ASSERT(CWebService, 0x180)
 
 } // namespace Roblox
 
-HANDLER_ENTRY_SDL("Default", CWebService, ::Roblox::CWebService, WSDL)
+// HANDLER_ENTRY_SDL pastes __COUNTER__ into every name it generates, and the
+// attribute provider's injected source had already taken 34 expansions by this
+// point in the original: it carries s_szClassNameWSDL34, __hdlrEntry_CWebService_35
+// and __hdlrEntry_WSDL_36. Attributed ATL is unavailable in this toolchain, so the
+// injections are written back out of .rdata in WebServiceMaps.cpp instead and the
+// counter never advances. The macro is therefore spelled out through ATL's own
+// internal forms with the three recorded numbers, which is what pairs the
+// CSDLGenerator instantiation and the two handler-entry records.
+using Roblox::CWebService;
+_ATLSOAP_DECLARE_WSDL_SRF()
+extern __declspec(selectany) const char s_szClassNameWSDL34[] = "Default";
+typedef ATL::CSDLGenerator<CWebService, s_szClassNameWSDL34> WSDL;
+__DECLARE_REQUEST_HANDLER("Default", CWebService, ::Roblox::CWebService, 35)
+__DECLARE_REQUEST_HANDLER("WSDL", WSDL, WSDL, 36)
 
 #endif // WEBSERVICE_WEBSERVICE_H
