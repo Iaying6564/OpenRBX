@@ -419,7 +419,7 @@ int Bridge<boost::shared_ptr<Reflection::DescribedBase>, 0>::on_index(
 	}
 
 	{
-		Reflection::MemberDescriptorContainer<Reflection::FunctionDescriptor>::ConstIterator iter =
+		Reflection::MemberDescriptorContainer<Reflection::FunctionDescriptor>::Iterator iter =
 			object->findFunction(memberName);
 		if (iter != object->functions_end()) {
 			const Reflection::FunctionDescriptor* descriptor = (*iter).getDescriptor();
