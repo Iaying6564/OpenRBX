@@ -8,10 +8,10 @@
 #include "util/Name.h"
 #include "util/RunStateOwner.h"
 #include "v8datamodel/ICharacterSubject.h"
-#include "v8datamodel/PartInstance.h"
 #include "v8kernel/Connector.h"
 #include "v8tree/Instance.h"
 
+#include <G3D/GCamera.h>
 #include <boost/shared_ptr.hpp>
 #include <memory>
 
@@ -22,6 +22,7 @@ class Body;
 class Controller;
 class JointInstance;
 class ModelInstance;
+class PartInstance;
 class Weld;
 class World;
 
@@ -151,12 +152,7 @@ public:
 	void buildJoints();
 	float getTorsoHeading() const;
 
-	Primitive* getHeadPrimitive()
-	{
-		PartInstance* part = getHead();
-
-		return part != NULL ? part->getPrimitive() : NULL;
-	}
+	Primitive* getHeadPrimitive();
 	Primitive* getTorsoPrimitive() const;
 	Primitive* getLeftLegPrimitive();
 	Primitive* getRightLegPrimitive();
