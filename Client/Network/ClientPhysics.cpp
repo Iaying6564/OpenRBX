@@ -33,7 +33,8 @@ bool areClose(const CoordinateFrame& c1, const CoordinateFrame& c2)
 		v2.y = c2.rotation[1][i];
 		v2.z = c2.rotation[2][i];
 
-		if ((v1 - v2).squaredLength() > 0.1f * 0.1f) {
+		const G3D::Vector3& delta = v1 - v2;
+		if (delta.squaredLength() > 0.1f * 0.1f) {
 			return false;
 		}
 	}
