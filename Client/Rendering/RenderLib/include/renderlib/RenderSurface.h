@@ -29,7 +29,7 @@ public:
 	// RBX::Render::RenderSurface::operator=
 	// clang-format on
 
-	RenderSurface() {}
+	RenderSurface() : material(NULL), mesh(NULL) {}
 };
 
 DECOMP_SIZE_ASSERT(RenderSurface, 0x44)

@@ -17,7 +17,8 @@ Clusterer::Cluster* Clusterer::findClosestCluster(Sample* sample)
 	Clusters::iterator end = clusters.end();
 
 	for (Clusters::iterator it = clusters.begin(); it != end; ++it) {
-		float distance = it->getDistanceFromCentroid(sample);
+		G3D::Vector3 delta = sample->cframe().translation - it->centroid;
+		float distance = sqrtf(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
 
 		if (distance < bestDistance) {
 			bestCluster = &(*it);
