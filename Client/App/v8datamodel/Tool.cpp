@@ -640,39 +640,49 @@ void Tool::setGripForward(const G3D::Vector3& v)
 	setGrip(c);
 }
 
-// STUB: WEBSERVICE 0x100cc980
+// FUNCTION: WEBSERVICE 0x100cc980
 // STUB: ROBLOX 0x00611550
 void Tool::setGripUp(const G3D::Vector3& v)
 {
-	CoordinateFrame c = getGrip();
-	G3D::Vector3 oldX = c.rotation.getColumn(0);
-	const G3D::Vector3& oldZ = c.rotation.getColumn(2);
+	G3D::CoordinateFrame c = grip;
+	G3D::Vector3 oldX = c.rightVector();
+	const G3D::Vector3& oldZ = -c.lookVector();
+
 	G3D::Vector3 y = v.direction();
+
 	G3D::Vector3 z = oldX.cross(y);
 	z.unitize();
+
 	G3D::Vector3 x = y.cross(z);
 	x.unitize();
+
 	c.rotation.setColumn(0, x);
 	c.rotation.setColumn(1, y);
 	c.rotation.setColumn(2, z);
+
 	setGrip(c);
 }
 
-// STUB: WEBSERVICE 0x100ccaf0
+// FUNCTION: WEBSERVICE 0x100ccaf0
 // STUB: ROBLOX 0x006116c0
 void Tool::setGripRight(const G3D::Vector3& v)
 {
-	CoordinateFrame c = getGrip();
-	G3D::Vector3 oldY = c.rotation.getColumn(1);
-	const G3D::Vector3& oldZ = c.rotation.getColumn(2);
+	G3D::CoordinateFrame c = grip;
+	G3D::Vector3 oldY = c.upVector();
+	const G3D::Vector3& oldZ = -c.lookVector();
+
 	G3D::Vector3 x = v.direction();
+
 	G3D::Vector3 z = x.cross(oldY);
 	z.unitize();
+
 	G3D::Vector3 y = z.cross(x);
 	y.unitize();
+
 	c.rotation.setColumn(0, x);
 	c.rotation.setColumn(1, y);
 	c.rotation.setColumn(2, z);
+
 	setGrip(c);
 }
 
