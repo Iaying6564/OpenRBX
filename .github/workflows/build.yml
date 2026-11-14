@@ -168,7 +168,7 @@ jobs:
     - name: Compare Accuracy With Current Master
       shell: bash
       env:
-        RELEASE_URL: https://github.com/Asphaltian/RBXDecomp/releases/download/continuous
+        RELEASE_URL: https://github.com/OpenRBX-org/RBXDecomp/releases/download/continuous
       run: |
         curl -fLSs -o progress-old.json $RELEASE_URL/WEBSERVICEPROGRESS.json || echo "" >progress-old.json
 
@@ -249,7 +249,7 @@ jobs:
     name: Upload artifacts
     needs: [verify]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'Asphaltian/RBXDecomp' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'OpenRBX-org/RBXDecomp' }}
     permissions:
       contents: write
       pages: write
