@@ -207,58 +207,67 @@ bool BlockBlockContact::getBestPlaneEdge(bool& planeContact, float overlapIgnore
 	float bestPlaneLength = Math::inf();
 	float bestEdgeLength = Math::inf();
 	float lastPlaneLength = Math::inf();
+	Vector3 p0p1;
 
 	int lastFeature[2] = {feature[0], feature[1]};
 
 	bool checkLastFeature = (lastFeature[0] >= 0 && lastFeature[0] < 6) || (lastFeature[1] >= 0 && lastFeature[1] < 6);
 
-	for (int i = separatingBodyId; i < separatingBodyId + 2; i++) {
+	int i = separatingBodyId;
+	if (i < separatingBodyId + 2) {
+		do {
 
-		int baseId = i % 2;
-		int i1 = (i + 1) % 2;
+			int baseId = i % 2;
+			int i1 = (i + 1) % 2;
 
-		const CoordinateFrame& cBase = getBody(baseId)->getCoordinateFrame();
-		const CoordinateFrame& cTest = getBody(i1)->getCoordinateFrame();
+			const CoordinateFrame& cBase = getBody(baseId)->getCoordinateFrame();
+			const CoordinateFrame& cTest = getBody(i1)->getCoordinateFrame();
 
-		const Vector3& eBase = block(baseId)->getExtent();
-		const Vector3& eTest = block(i1)->getExtent();
+			const Vector3& eBase = block(baseId)->getExtent();
+			const Vector3& eTest = block(i1)->getExtent();
 
-		Vector3 pTestInBase = cBase.pointToObjectSpace(cTest.translation);
+			Vector3 pTestInBase = cBase.pointToObjectSpace(cTest.translation);
 
-		for (int testId = separatingAxisId; testId < separatingAxisId + 3; testId++) {
+			for (int testId = separatingAxisId; testId < separatingAxisId + 3; testId++) {
 
-			int j = testId % 3;
+				int j = testId % 3;
 
-			Vector3 eBaseInTest = cBase.rotation.getColumn(j) * cTest.rotation;
+				Vector3 eBaseInTest = cBase.rotation.getColumn(j) * cTest.rotation;
 
-			float length = fabsf(eBaseInTest.y * eTest.y) + fabsf(eBaseInTest.x * eTest.x) +
-						   fabsf(eBaseInTest.z * eTest.z) + eBase[j] - fabsf(pTestInBase[j]);
+				float length = fabsf(eBaseInTest.y * eTest.y);
+				length += fabsf(eBaseInTest.x * eTest.x);
+				length += fabsf(eBaseInTest.z * eTest.z);
+				length += eBase[j];
+				length -= fabsf(pTestInBase[j]);
 
-			if (!(length > overlapIgnored)) {
-				separatingBodyId = baseId;
-				separatingAxisId = j;
+				if (!(length > overlapIgnored)) {
+					separatingBodyId = baseId;
+					separatingAxisId = j;
 
-				return false;
-			}
+					return false;
+				}
 
-			if (checkLastFeature) {
-				if (lastFeature[baseId] % 3 == j) {
-					lastPlaneLength = length;
+				if (checkLastFeature) {
+					if (lastFeature[baseId] % 3 == j) {
+						lastPlaneLength = length;
+					}
+				}
+
+				if (length < bestPlaneLength) {
+					bestPlaneLength = length;
+
+					feature[baseId] = pTestInBase[j] > 0 ? j : j + 3;
+					feature[i1] = -1;
+
+					separatingBodyId = baseId;
+					separatingAxisId = j;
+
+					planeContact = true;
 				}
 			}
 
-			if (length < bestPlaneLength) {
-				bestPlaneLength = length;
-
-				feature[baseId] = pTestInBase[j] > 0 ? j : j + 3;
-				feature[i1] = -1;
-
-				separatingBodyId = baseId;
-				separatingAxisId = j;
-
-				planeContact = true;
-			}
-		}
+			++i;
+		} while (i < separatingBodyId + 2);
 	}
 
 	if (checkLastFeature && (feature[0] != lastFeature[0] || feature[1] != lastFeature[1]) &&
@@ -276,7 +285,7 @@ bool BlockBlockContact::getBestPlaneEdge(bool& planeContact, float overlapIgnore
 	const Vector3& extent0 = block(0)->getExtent();
 	const Vector3& extent1 = block(1)->getExtent();
 
-	Vector3 p0p1 = c1.translation - c0.translation;
+	p0p1 = c1.translation - c0.translation;
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -289,12 +298,14 @@ bool BlockBlockContact::getBestPlaneEdge(bool& planeContact, float overlapIgnore
 
 			float p0p1inCrossAxis = p0p1.dot(crossAxis);
 
-			Vector3 crossInBase = crossAxis * c0.rotation;
-			Vector3 crossInTest = crossAxis * c1.rotation;
+			const Vector3 crossInBase = crossAxis * c0.rotation;
+			const Vector3 crossInTest = crossAxis * c1.rotation;
 
-			float length = fabsf(crossInBase.x * extent0.x) + fabsf(crossInBase.y * extent0.y) +
-						   fabsf(crossInBase.z * extent0.z) + fabsf(crossInTest.x * extent1.x) +
-						   fabsf(crossInTest.y * extent1.y) + fabsf(crossInTest.z * extent1.z) - fabsf(p0p1inCrossAxis);
+			float projectedExtent0 = fabsf(extent0[0] * crossInBase[0]) + fabsf(extent0[1] * crossInBase[1]) +
+									 fabsf(extent0[2] * crossInBase[2]);
+			float projectedExtent1 = fabsf(extent1[0] * crossInTest[0]) + fabsf(extent1[1] * crossInTest[1]) +
+									 fabsf(extent1[2] * crossInTest[2]);
+			float length = projectedExtent0 + projectedExtent1 - fabsf(p0p1inCrossAxis);
 
 			if (!(length > overlapIgnored)) {
 				return false;
@@ -352,18 +363,20 @@ bool BallBlockContact::computeIsColliding(float overlapIgnored)
 	return computeIsColliding(onBorder, clip, projectionInBlock, overlapIgnored);
 }
 
+inline bool BlockBlockContact::computeIsColliding(bool& planeContact, float overlapIgnored)
+{
+	if (Primitive::aaBoxCollide(*getPrimitive(0), *getPrimitive(1))) {
+		return getBestPlaneEdge(planeContact, overlapIgnored);
+	}
+	return false;
+}
+
 // FUNCTION: WEBSERVICE 0x100d2ef0
 // FUNCTION: ROBLOX 0x0060aea0
 bool BlockBlockContact::computeIsColliding(float overlapIgnored)
 {
-	if (Primitive::aaBoxCollide(*getPrimitive(0), *getPrimitive(1))) {
-
-		bool temp;
-
-		return getBestPlaneEdge(temp, overlapIgnored);
-	}
-
-	return false;
+	bool temp;
+	return computeIsColliding(temp, overlapIgnored);
 }
 
 // FUNCTION: WEBSERVICE 0x100d4150
@@ -606,7 +619,7 @@ int BlockBlockContact::intersectRectQuad(Vector2& planeRect, Vector2 (&otherQuad
 	return found;
 }
 
-// STUB: WEBSERVICE 0x100d4be0
+// FUNCTION: WEBSERVICE 0x100d4be0
 // STUB: ROBLOX 0x0060bbc0
 int BlockBlockContact::computePlaneContact()
 {
@@ -629,16 +642,8 @@ int BlockBlockContact::computePlaneContact()
 	Block& otherBlock = *block(bOther);
 	Block& planeBlock = *block(bPlane);
 
-	int planeFlip = planeID / 3;
-	int planeAxis = planeID - 3 * planeFlip;
-
-	otherPlaneID = Math::getClosestObjectNormalId(
-		-(Vector3(
-			  planeCoord.rotation[0][planeAxis], planeCoord.rotation[1][planeAxis], planeCoord.rotation[2][planeAxis]
-		  ) *
-		  (float) (1 - 2 * planeFlip)),
-		otherCoord.rotation
-	);
+	const Vector3& worldNormal = Math::getWorldNormal(planeID, planeCoord);
+	otherPlaneID = Math::getClosestObjectNormalId(-worldNormal, otherCoord.rotation);
 
 	Vector2 planeRect = planeBlock.getProjectedVertex(*planeBlock.getFaceVertex(planeID, 0), planeID);
 
@@ -661,7 +666,7 @@ bool BlockBlockContact::stepContact()
 {
 	bool planeContact;
 
-	if (Primitive::aaBoxCollide(*getPrimitive(0), *getPrimitive(1)) && getBestPlaneEdge(planeContact, 0.0f)) {
+	if (computeIsColliding(planeContact, 0.0f)) {
 
 		if (inKernel()) {
 
