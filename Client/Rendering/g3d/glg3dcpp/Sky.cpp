@@ -67,7 +67,7 @@ SkyRef Sky::fromFile(
 SkyRef Sky::fromFile(
     RenderDevice*                       rd,
     const std::string&                  directory,
-    const std::string*                  _filename,
+    const std::string*                  _filename6,
     bool                                _drawCelestialBodies,
     double                              quality,
     int                                 scaleDownFactor) {
@@ -79,18 +79,14 @@ SkyRef Sky::fromFile(
         "Directory must end in a slash");
 
     const TextureFormat* format;
-    const TextureFormat* alphaFormat;
-    std::string filename = _filename[0];
+    std::string filename = _filename6[0];
 
     if (quality > .66) {
         format      = TextureFormat::RGB8;
-        alphaFormat = TextureFormat::RGBA8;
     } else if (quality > .33) {
         format      = TextureFormat::RGB_DXT1;
-        alphaFormat = TextureFormat::RGBA_DXT1;
     } else {
         format      = TextureFormat::RGBA_DXT5;
-        alphaFormat = TextureFormat::RGBA_DXT5;
     }
 
     // Look for the filename
@@ -99,7 +95,7 @@ SkyRef Sky::fromFile(
     std::string filenameExt;
     std::string fullFilename = filename;
 
-    if (_filename[1] == "") {
+    if (_filename6[1] == "") {
         // First look relative to the current directory
         Texture::splitFilenameAtWildCard(fullFilename, filenameBase, filenameExt);
 
@@ -114,12 +110,12 @@ SkyRef Sky::fromFile(
 
     if (GLCaps::supports_GL_ARB_texture_cube_map() && ! GLCaps::hasBug_normalMapTexGen()) {
    
-        if (_filename[1] == "") {
+        if (_filename6[1] == "") {
             // Specified one cube map
-            faceTextures[0] = Texture::fromFile(filenameBase + "*" + filenameExt, format, Texture::CLAMP, Texture::TRILINEAR_MIPMAP, Texture::DIM_CUBE_MAP, 1.0, Texture::DEPTH_NORMAL, 1.0, 1.0f / scaleDownFactor);
+            faceTextures[0] = Texture::fromFile(filenameBase + "*" + filenameExt, format, Texture::CLAMP, Texture::BILINEAR_NO_MIPMAP, Texture::DIM_CUBE_MAP, 1.0, Texture::DEPTH_NORMAL, 1.0, 1.0f / scaleDownFactor);
         } else {
             // Specified six filenames
-            faceTextures[0] = Texture::fromFile(_filename, format, Texture::CLAMP, Texture::TRILINEAR_MIPMAP, Texture::DIM_CUBE_MAP, 1.0, Texture::DEPTH_NORMAL, 1.0, 1.0f / scaleDownFactor);
+            faceTextures[0] = Texture::fromFile(_filename6, format, Texture::CLAMP, Texture::BILINEAR_NO_MIPMAP, Texture::DIM_CUBE_MAP, 1.0, Texture::DEPTH_NORMAL, 1.0, 1.0f / scaleDownFactor);
         }
 
         // For the cube map case, we don't need the other five texture slots
@@ -135,8 +131,9 @@ SkyRef Sky::fromFile(
         // switch to bilinear instead of trilinear to save space on the mipmaps.
 
         static const char* ext[] = {"up", "lf", "rt", "bk", "ft", "dn"};
+        static const int hack[6] = {2, 5, 4, 1, 0, 3};
 
-        if (_filename[1] == "") {
+        if (_filename6[1] == "") {
             // Specified one cube map
             for (int t = 0; t < 6; ++t) {
                 faceTextures[t] = Texture::fromFile(filenameBase + ext[t] + filenameExt, 
@@ -146,7 +143,7 @@ SkyRef Sky::fromFile(
         } else {
             // Specified six textures
             for (int t = 0; t < 6; ++t) {
-                faceTextures[t] = Texture::fromFile(_filename[t], 
+                faceTextures[t] = Texture::fromFile(_filename6[hack[t]],
                     format, Texture::CLAMP, Texture::BILINEAR_NO_MIPMAP, Texture::DIM_2D,
                     1.0, Texture::DEPTH_NORMAL, 1.0, 1.0f / scaleDownFactor);
             }

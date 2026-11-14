@@ -1011,8 +1011,6 @@ void initTime() {
         realWorldGetTickTime0 = local;
     #endif
 }
-
-
 RealTime System::getTick() { 
     init();
     #ifdef G3D_WIN32

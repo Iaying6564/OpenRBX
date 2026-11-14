@@ -1,3 +1,4 @@
+#line 1 "c:\\Roblox\\Releases\\2007.12.20\\Client\\Rendering\\g3d\\include\\G3D/Table.h"
 /**
   @file Table.h
 
@@ -23,7 +24,6 @@
 #include "G3D/Crypto.h"
 #include <assert.h>
 #include <string>
-#include <locale>
 
 #ifdef G3D_WIN32
 #   pragma warning (push)
@@ -83,8 +83,8 @@ inline unsigned int hashCode(const G3D::Hashable& a) {
  String hashing function for use with Table.
  */
 inline unsigned int hashCode(const std::string& a) {
-    //static const std::collate<char>& col = std::use_facet< std::collate<char> > (std::locale::empty( ));
-    //return col.hash(a.c_str(), a.c_str() + a.size());
+//    static stdext::hash_value<std::string> hash;
+//    return hash(a);
     return G3D::Crypto::crc32(a.c_str(), a.size());
 }
 

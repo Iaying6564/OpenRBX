@@ -1,3 +1,4 @@
+#line 1 "c:\\Roblox\\Releases\\2007.12.20\\Client\\Rendering\\g3d\\include\\glg3d\\GWindow.h"
 /**
   @file Window.h
 
