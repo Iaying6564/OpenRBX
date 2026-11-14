@@ -132,7 +132,7 @@ const Name& Name::lookup(const char* sName)
 // FUNCTION: ROBLOX 0x004afe40
 bool Name::empty() const
 {
-	return this == &getNullName();
+	return &getNullName() == this;
 }
 
 Name::Name(const char* name, int dictionaryIndex) : dictionaryIndex(dictionaryIndex), name(name)

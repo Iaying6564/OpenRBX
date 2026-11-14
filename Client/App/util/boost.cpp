@@ -105,15 +105,14 @@ void worker_thread::wake()
 	_data->wakeCondition.notify_all();
 }
 
-// STUB: WEBSERVICE 0x10032730
-// STUB: ROBLOX 0x005aa1a0
+// FUNCTION: WEBSERVICE 0x10032730
+// FUNCTION: ROBLOX 0x005aa1a0
 void worker_thread::threadProc(boost::shared_ptr<data> data, const boost::function0<work_result>& work_function)
 {
 	while (true) {
-		if (data->endRequest) {
+		while (data->endRequest) {
 			return;
 		}
-
 		if (work_function() != more) {
 			boost::mutex::scoped_lock lock(data->sync);
 			data->wakeCondition.wait(lock);

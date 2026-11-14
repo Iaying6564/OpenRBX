@@ -9,7 +9,7 @@ class Vector6
 public:
 	Vector6(const T& value)
 	{
-		for (int i = 0; i < 6; ++i) {
+		for (int i = 5; i >= 0; --i) {
 			data[i] = value;
 		}
 	}

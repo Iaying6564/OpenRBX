@@ -363,7 +363,7 @@
 ** CHANGE it to undefined as soon as you replace to 'luaL_registry'
 ** your uses of 'luaL_openlib'
 */
-#define LUA_COMPAT_OPENLIB
+#undef LUA_COMPAT_OPENLIB
 
 
 
