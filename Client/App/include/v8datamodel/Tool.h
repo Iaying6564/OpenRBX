@@ -82,8 +82,13 @@ private:
 	void upTo_HasHandle();
 	void downFrom_Activated();
 	void downFrom_Equipped();
-	void downFrom_HasTorso();
-	void downFrom_InCharacter();
+	// __declspec(noinline): setDesiredState reaches both of these through its
+	// second jump table and the original keeps a real call at every arm. /Ob2,
+	// which /O2 implies, absorbs the pair, and the six bytes it takes shifts both
+	// tables and the tail jne, which is the whole residual. Stating the election
+	// is what SleepStage2.h does for the same reason.
+	__declspec(noinline) void downFrom_HasTorso();
+	__declspec(noinline) void downFrom_InCharacter();
 	void downFrom_InWorkspace();
 	void downFrom_HasHandle();
 	void onEquipping();

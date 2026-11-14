@@ -115,8 +115,8 @@ CoordinateFrame Feature::computeLocalCoordinateFrame() const
 
 	switch (inOut) {
 	case INSET:
-		uv.x = Math::sign(uv.x) * std::max(fabs(uv.x) - 1.0f, 0.0f);
-		uv.y = Math::sign(uv.y) * std::max(fabs(uv.y) - 1.0f, 0.0f);
+		uv.x = Math::sign(uv.x) * std::max(0.0f, fabs(uv.x) - 1.0f);
+		uv.y = Math::sign(uv.y) * std::max(0.0f, fabs(uv.y) - 1.0f);
 		break;
 	case CENTER_IO:
 		uv.x = 0.0f;

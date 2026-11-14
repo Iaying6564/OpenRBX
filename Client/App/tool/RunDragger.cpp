@@ -346,8 +346,8 @@ void RunDragger::smartPtrHackPost()
 	}
 }
 
-// STUB: WEBSERVICE 0x1012c040
-// STUB: ROBLOX 0x00669340
+// FUNCTION: WEBSERVICE 0x1012c040
+// FUNCTION: ROBLOX 0x00669340
 bool RunDragger::moveDragPart()
 {
 	const G3D::CoordinateFrame& snapCoord = snapInfo.snap->getCoordinateFrame();
@@ -372,8 +372,9 @@ bool RunDragger::moveDragPart()
 
 	dragSurface = Math::getClosestObjectNormalId(-snapNormal, dragRotation);
 
+	const G3D::Vector3& localPoint = dragPointLocal;
 	G3D::Ray throughDragHit =
-		G3D::Ray::fromOriginAndDirection(dragCoord.pointToWorldSpace(dragPointLocal), mouseRay.direction);
+		G3D::Ray::fromOriginAndDirection(dragCoord.pointToWorldSpace(localPoint), mouseRay.direction);
 	G3D::Ray rayInDrag = dragCoord.toObjectSpace(throughDragHit);
 	Extents dragExtentsLocal = drag->getExtentsLocal();
 	G3D::Plane plane = dragExtentsLocal.getPlane(dragSurface);

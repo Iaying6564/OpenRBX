@@ -63,7 +63,10 @@ protected:
 	void upTo_InWorkspace();
 	void upTo_HasHandle();
 	void downFrom_Equipped();
-	void downFrom_InCharacter();
+	// __declspec(noinline): setDesiredState reaches this through its second jump
+	// table and the original keeps a real call, while /Ob2 absorbs the two
+	// disconnects and shifts the table by ten bytes. Same election Tool.h states.
+	__declspec(noinline) void downFrom_InCharacter();
 	void downFrom_InWorkspace();
 	void downFrom_HasHandle();
 	void onChildAdded();
