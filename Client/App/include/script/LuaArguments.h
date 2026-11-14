@@ -29,8 +29,8 @@ public:
 	// FUNCTION: ROBLOX 0x005fc760
 	virtual unsigned int size() const { return lua_gettop(L) - 1; }
 
-	// STUB: WEBSERVICE 0x10064ef0
-	// STUB: ROBLOX 0x00572030
+	// FUNCTION: WEBSERVICE 0x10064ef0
+	// FUNCTION: ROBLOX 0x00572030
 	static bool get(lua_State* L, int luaIndex, Reflection::Value& value)
 	{
 		if (luaIndex > lua_gettop(L)) {
@@ -63,7 +63,7 @@ public:
 				get(L, -1, item);
 				lua_pop(L, 1);
 			}
-			break;
+			return true;
 		}
 
 		case LUA_TNIL:
