@@ -4,13 +4,16 @@
 
 namespace RBX {
 
-// STUB: WEBSERVICE 0x10126c10
+// FUNCTION: WEBSERVICE 0x10126c10
 // STUB: ROBLOX 0x00664470
 void RunningAverageState::update(const CoordinateFrame& cofm, float radius)
 {
-	position = position * (1.0f - weight()) + cofm.translation * weight();
+	const Vector3& translation = cofm.translation;
+	const G3D::Matrix3& rotation = cofm.rotation;
 
-	angles = angles * (1.0f - weight()) + Quaternion(cofm.rotation) * (weight() * radius);
+	position = position * (1.0f - weight()) + translation * weight();
+
+	angles = angles * (1.0f - weight()) + Quaternion(rotation) * (weight() * radius);
 }
 
 // FUNCTION: WEBSERVICE 0x10126ce0

@@ -60,12 +60,6 @@ char sSoundChannel[] = "Sound";
 // GLOBAL: ROBLOX 0x0095be61
 bool SoundService::soundDisabled = false;
 
-// FUNCTION: WEBSERVICE 0x1007c9b0
-int SoundChannel::getPlayCount() const
-{
-	return playCount;
-}
-
 // FUNCTION: WEBSERVICE 0x1007cd50
 bool SoundChannel::isPaused() const
 {
@@ -113,13 +107,6 @@ float SoundChannel::getVolume() const
 bool SoundChannel::getLooped() const
 {
 	return looped;
-}
-
-// FUNCTION: WEBSERVICE 0x1007d420
-// FUNCTION: ROBLOX 0x005c1280
-Sound::Sound(FMOD::System* system, SoundId id, bool is3D)
-	: fmod_sound(NULL), system(system), refCount(0), id(id), is3D(is3D)
-{
 }
 
 } // namespace Soundscape

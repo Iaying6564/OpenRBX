@@ -296,7 +296,7 @@ void SerializerV2::loadXML(std::istream& stream, RBX::DataModel* dataModel)
 	dataModel->setDirty(false);
 }
 
-// STUB: WEBSERVICE 0x10098b30
+// FUNCTION: WEBSERVICE 0x10098b30
 // STUB: ROBLOX 0x005a45c0
 void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)
 {
@@ -309,8 +309,10 @@ void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)
 	if (strcmp(header, "RBX_") != 0) {
 		stream.clear();
 		stream.seekg(0, std::ios_base::beg);
+		loadXML(stream, dataModel);
+		return;
 	}
-	else {
+	{
 		unsigned long fileFormatVersion;
 		if (!stream.read((char*) &fileFormatVersion, 4).good()) {
 			throw std::runtime_error("SerializerV2::load can't read old fileFormatVersion");
@@ -341,8 +343,8 @@ void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)
 					throw std::runtime_error("SerializerV2::load error reading compound file (2)");
 				}
 
-				char compression;
-				if (!stream.read(&compression, 1).good()) {
+				unsigned char compression;
+				if (!stream.read((char*) &compression, 1).good()) {
 					throw std::runtime_error("SerializerV2::load error reading compound file (3)");
 				}
 				if (compression != 0) {
@@ -356,8 +358,8 @@ void SerializerV2::load(std::istream& stream, RBX::DataModel* dataModel)
 			stream.seekg(xmlPos, std::ios_base::beg);
 		}
 
-		char xmlCompression;
-		if (!stream.read(&xmlCompression, 1).good()) {
+		unsigned char xmlCompression;
+		if (!stream.read((char*) &xmlCompression, 1).good()) {
 			throw std::runtime_error("SerializerV2::load error reading compound file (5)");
 		}
 		if (xmlCompression != 0) {

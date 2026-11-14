@@ -32,12 +32,13 @@ public:
 		// RBX::MergeBinder::IDREFItem::~IDREFItem
 	};
 
-	// STUB: WEBSERVICE 0x10096f20
+	// FUNCTION: WEBSERVICE 0x10096f20
 	// STUB: ROBLOX 0x00446aa0
 	virtual bool resolveRefs() // vtable+0x08
 	{
 		for (std::vector<IDREFItem>::iterator it = deferredIDREFItems.begin(); it != deferredIDREFItems.end(); ++it) {
-			it->idref->assignIDREF(it->propertyOwner, it->value);
+			const IIDREF* const& idref = it->idref;
+			idref->assignIDREF(it->propertyOwner, it->value);
 		}
 
 		deferredIDREFItems.clear();
