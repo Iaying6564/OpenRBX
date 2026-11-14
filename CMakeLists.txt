@@ -130,7 +130,6 @@ set(OPENRBX_APP_SOURCES
   Client/App/v8tree/enumproperty.cpp
   Client/App/v8xml/XmlElement.cpp
   Client/App/v8xml/SerializerV2.cpp
-  Client/App/v8xml/XmlSerializer.cpp
   Client/App/util/IRenderable.cpp
   Client/App/v8tree/Instance.cpp
   Client/App/v8tree/Verb.cpp
@@ -151,6 +150,7 @@ set(OPENRBX_APP_SOURCES
   Client/App/util/NormalId.cpp
   Client/App/util/Quaternion.cpp
   Client/App/util/ContentProvider.cpp
+  Client/App/v8xml/XmlSerializer.cpp
   Client/App/util/Utilities.cpp
   Client/App/util/Profiling.cpp
   Client/App/util/Rect.cpp
@@ -431,10 +431,16 @@ set(OPENRBX_APPDRAW_SOURCES
   Client/Rendering/AppDraw/AdornG3D.cpp
   Client/Rendering/AppDraw/Draw.cpp
   Client/Rendering/AppDraw/DrawAdorn.cpp
-  Client/Rendering/AppDraw/DrawPrimitives.cpp
   Client/Rendering/AppDraw/Fonts.cpp
   Client/Rendering/AppDraw/HitTest.cpp
   Client/Rendering/AppDraw/Textures.cpp
+)
+
+# DrawPrimitives.cpp alone, so its copy of the shared template instantiations
+# reaches the link before the app block's. See the note beside its
+# add_engine_library.
+set(OPENRBX_APPDRAW_HEAD_SOURCES
+  Client/Rendering/AppDraw/DrawPrimitives.cpp
 )
 
 set(OPENRBX_ENGINE_INCLUDE_DIRS
@@ -531,6 +537,18 @@ list(SUBLIST OPENRBX_APP_SOURCES 0 ${OPENRBX_APP_REFLECTION_INDEX} OPENRBX_APP_P
 list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_REFLECTION_INDEX} ${OPENRBX_APP_REFLECTION_LENGTH} OPENRBX_APP_PART_app_reflection)
 list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_SIGNAL_INDEX} 1 OPENRBX_APP_PART_app_signal)
 list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_TAIL_INDEX} -1 OPENRBX_APP_PART_app_tail)
+
+# DrawPrimitives.cpp, compiled with appdraw's own flags but linked ahead of app.
+# It instantiates Rect2D::xyxy and the Array comparator family; the linker keeps
+# the FIRST object that defines a duplicate COMDAT name, and app's Hopper.cpp
+# reaches it with a 117-byte /fp:fast body where appdraw's is the original's
+# 155-byte one. Linking appdraw first as a block is not enough, because app
+# precedes it, so this one source has to come out.
+add_engine_library(appdraw_head
+  DEFINITIONS _RELEASE
+  OPTIONS /O2 /GS-
+  SOURCES ${OPENRBX_APPDRAW_HEAD_SOURCES}
+)
 
 foreach(part app app_reflection app_signal app_tail)
   add_engine_library(${part}
@@ -1017,7 +1035,7 @@ if (MSVC_FOR_DECOMP)
   )
 
   set(OPENRBX_CLIENT_ENGINE_LIBRARIES)
-  foreach(lib rbxview renderlib rbxviewnew renderlibnew network_client app_client_objects appdraw_rbxgfx appdraw appdraw_client lua)
+  foreach(lib rbxview renderlib rbxviewnew renderlibnew network_client app_client_objects appdraw_head app appdraw_rbxgfx appdraw appdraw_client lua)
     if (lib STREQUAL "app_client_objects")
       list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${OPENRBX_APP_CLIENT_OBJECTS})
     elseif (TARGET ${lib})

@@ -19,6 +19,7 @@ WEBSERVICEPROGRESS.*
 
 WebService.dll
 WebService.pdb
+Roblox.exe
 
 *.obj
 *.exp

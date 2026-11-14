@@ -9,10 +9,212 @@ endif()
 
 set(G3D "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d")
 
-file(GLOB OPENRBX_GRAPHICS3D_SOURCES "${G3D}/g3dcpp/*.cpp" "${G3D}/ijg/*.c" "${G3D}/png/*.c")
-file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" "${G3D}/zlib/*.c")
+# graphics3d is an OBJECT library and the list is in the original's .text order,
+# read off each object's first contribution in the original PDB. As a static
+# archive MSVC pulls members by reference and the link order is whatever the
+# dependency graph yields, which put every jc* object before its jd* twin;
+# reccmp pairs same-named functions by address order, so process_data_simple_main,
+# grayscale_convert, null_convert, start_pass_main and start_iMCU_row each paired
+# with the wrong copy. Objects the original left with no .text at all have no
+# order to recover and follow in filename order.
+set(OPENRBX_GRAPHICS3D_SOURCES
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Log.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/debugAssert.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bmp.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_tga.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_png.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_jpeg.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_ppm.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GImage_bayer.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/System.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/BinaryOutput.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Matrix4.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/format.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Color3.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Color3uint8.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Matrix3.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/CoordinateFrame.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Color4.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Stopwatch.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GCamera.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Vector3.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/g3dmath.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Sphere.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/CollisionDetection.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Plane.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Vector4.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/RegistryUtil.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Vector2.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Line.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Vector3int16.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/prompt.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/BinaryInput.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdmarker.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcomapi.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngwrite.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngset.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngwio.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/png.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdapimin.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdapistd.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jerror.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngread.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngtrans.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngrtran.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngget.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngrio.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/stringutils.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcapimin.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcapistd.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcparam.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/TextOutput.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/TextInput.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Crypto.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/fileutils.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Capsule.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Quat.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/LineSegment.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jutils.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngwutil.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngerror.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngwtran.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngmem.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdinput.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jmemmgr.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdmaster.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngrutil.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcmarker.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcinit.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jmemansi.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdmainct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdcoefct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdhuff.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdphuff.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jddctmgr.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdpostct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdsample.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdcolor.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdmerge.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jquant2.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jquant1.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcmainct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jccoefct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jchuff.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcphuff.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcdctmgr.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcprepct.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcsample.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jccolor.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jcmaster.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jidctint.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jidctfst.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jidctflt.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jidctred.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jfdctint.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jfdctfst.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jfdctflt.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/MeshAlg.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/MeshAlgAdjacency.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/MeshAlgWeld.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GLight.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/AABox.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/BinaryFormat.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Box.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Color4uint8.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Cone.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/ConvexPolyhedron.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Crypto_md5.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Cylinder.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Discovery.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/GThread.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/MeshBuilder.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/NetAddress.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/NetworkDevice.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/PhysicsFrame.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Ray.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Triangle.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/Vector2int16.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/g3derror.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/g3dcpp/license.cpp"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jctrans.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdatadst.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdatasrc.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/ijg/jdtrans.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pnggccrd.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngpread.c"
+  "${PROJECT_SOURCE_DIR}/Client/Rendering/g3d/png/pngvcrd.c"
+)
+# graphics3d is an OBJECT library and the list is in the original's .text order,
+# read off each object's first contribution in the original PDB. As a static
+# archive MSVC pulls members by reference and the link order is whatever the
+# dependency graph yields, which put every jc* object before its jd* twin;
+# reccmp pairs same-named functions by address order, so process_data_simple_main,
+# grayscale_convert, null_convert, start_pass_main and start_iMCU_row each paired
+# with the wrong copy. Objects the original left with no .text at all have no
+# order to recover and follow in filename order.
+file(GLOB OPENRBX_ZLIB_SOURCES "${G3D}/zlib/*.c")
+file(GLOB OPENRBX_GLG3D_SOURCES "${G3D}/glg3dcpp/*.cpp" ${OPENRBX_ZLIB_SOURCES})
 
-add_library(graphics3d STATIC ${OPENRBX_GRAPHICS3D_SOURCES})
+# __FILE__ in these objects is the absolute path of the source, where the
+# original's is the relative spelling its PDB records (`cwd` =
+# <root>\Client\Rendering\g3d, `src` = .\glg3dcpp\GLCaps.cpp), so 38 residual
+# rows in the WEBSERVICE report differ only in that one string literal. Measured
+# on this toolchain, in order of how much they were worth trying:
+#
+#   /d1trimfile:<prefix>  c1xx : fatal error C1007: unrecognized flag
+#   /D__FILE__="."        warning C4117: macro name is reserved, #define ignored
+#   /FI with #undef/#define   the same C4117, both directives ignored
+#   /FI with `#line 1 "x"`    compiles clean, and the main file still reports
+#                             its own name: MSVC restores the file position when
+#                             it leaves a forced include
+#   a wrapper that #includes the real .cpp
+#                             __FILE__ inside it becomes <dir-of-includer>\.\x.cpp;
+#                             cl joins the spelling to the includer's directory,
+#                             so the absolute prefix cannot be dropped
+#   add_custom_command with WORKING_DIRECTORY and a relative source argument
+#                             works, and is the only construct that produces the
+#                             exact bytes: the object carries .\glg3dcpp\GLCaps.cpp
+#                             and nothing else in it changes. But it has to carry
+#                             its own copy of the flag set, and an external .obj
+#                             listed in add_library(... OBJECT) is dropped
+#                             silently, so it cannot reach graphics3d, which is an
+#                             OBJECT library because the original's .text order
+#                             needs one object per source.
+#
+# What does work, and costs one line per file instead of a build system:
+#     #line 1 ".\\glg3dcpp\\GLCaps.cpp"
+# as the first line of the source, with the backslashes DOUBLED because cl
+# escape-processes the directive's filename: the single form warned C4129
+# 'unrecognized character escape sequence' and dropped them, so the object
+# carried .glg3dcppGLCaps.cpp and the report did not move at all. Verified
+# against the original's bytes: with `#line 1` the assert pushes 0x22b and
+# .\glg3dcpp\GLCaps.cpp, both matching the original, and every other row of
+# every function in the file is unchanged (`#line 2` would shift __LINE__ by
+# one, which is why the number is 1 and the directive sits on line 1 of a file
+# whose first line is a comment). Nothing under Client/Rendering/g3d carries a
+# marker, so resetting the filename cannot disturb line-record resolution.
+# Applied to ten files in b1b00fde: 32 functions improved, 24 of them to
+# exactly 1.0000, no regressions, +0.3558 accuracy-units. Probe diffs for all
+# twelve candidates are in build/probe/Vendored/.
+#
+# The four files whose __LINE__ also differs are a separate cause and this
+# directive does not fix it: RenderDevice.cpp is uniformly -2, System.cpp +2 and
+# Table.h +1, so the original's copies are a commit or two from ours, while
+# GImage.cpp is a genuinely larger file (the original reaches line 2932 where
+# ours has 1000) and is not closable without substituting upstream source.
+#
+# The original built zlib as its own project, in ..\..\temp\zlib\Release, and not
+# inside glg3d, so its ten objects carry /O2's own /Ob2 and not the /Ob1 glg3d
+# asks for. inflate is the only place that shows: at /Ob1 the small helpers stay
+# out of line and the body scores 0.51 against the original, at /Ob2 it scores
+# 0.97. Every other zlib object is byte-identical either way, so the override is
+# scoped to the sources rather than to the target.
+if (MSVC)
+  set_source_files_properties(${OPENRBX_ZLIB_SOURCES} PROPERTIES COMPILE_OPTIONS "/Ob2")
+endif()
+
+add_library(graphics3d OBJECT ${OPENRBX_GRAPHICS3D_SOURCES})
 add_library(glg3d STATIC ${OPENRBX_GLG3D_SOURCES})
 
 foreach(name graphics3d glg3d)
