@@ -224,8 +224,8 @@ void Mesh::computeDirectionalShadowVolume(
 	bool generateLightCap
 ) const
 {
-	G3D::Vector3 objectLight = cframe.rotation.transpose() * wsLightVector;
-	const G3D::Array<G3D::Vector3>& geometry = shadowSurface.geometry;
+	G3D::Vector3 objectLight;
+	objectLight = cframe.vectorToObjectSpace(wsLightVector);
 
 	static G3D::Array<bool> backface;
 	backface.resize(shadowSurface.faceNormalArray.size(), false);
@@ -241,6 +241,7 @@ void Mesh::computeDirectionalShadowVolume(
 				indexArray.append(n, n + 1, n + 2);
 
 				const G3D::MeshAlg::Face& face = shadowSurface.faceArray[f];
+				const G3D::Array<G3D::Vector3>& geometry = shadowSurface.geometry;
 				const G3D::Vector3& v0 = geometry[face.vertexIndex[0]];
 				const G3D::Vector3& v1 = geometry[face.vertexIndex[1]];
 				const G3D::Vector3& v2 = geometry[face.vertexIndex[2]];
@@ -257,8 +258,8 @@ void Mesh::computeDirectionalShadowVolume(
 		bool b0 = backface[edge.faceIndex[0]];
 
 		if (b0 != backface[edge.faceIndex[1]]) {
-			const G3D::Vector3& v0 = geometry[edge.vertexIndex[0]];
-			const G3D::Vector3& v1 = geometry[edge.vertexIndex[1]];
+			const G3D::Vector3& v0 = shadowSurface.geometry[edge.vertexIndex[0]];
+			const G3D::Vector3& v1 = shadowSurface.geometry[edge.vertexIndex[1]];
 
 			G3D::Vector3 wvertex0 = cframe.pointToWorldSpace(v0), wvertex1 = cframe.pointToWorldSpace(v1);
 
@@ -325,23 +326,22 @@ G3D::ReferenceCountedPointer<Mesh> Mesh::aggregate(
 			const G3D::ReferenceCountedPointer<Chunk>& chunk = *iter;
 			const G3D::ReferenceCountedPointer<Mesh>& srcMesh = chunk->getMesh();
 
-			if (srcMesh.isNull()) {
-				continue;
-			}
+			if (srcMesh.notNull()) {
 
-			const G3D::CoordinateFrame& cframe = chunk->cframe();
-			LevelRef srcLevel = srcMesh->detailLevel(0.3f);
-			const G3D::Array<IndexType>& indexArray = srcLevel->indexArray;
+				const G3D::CoordinateFrame& cframe = chunk->cframe();
+				LevelRef srcLevel = srcMesh->detailLevel(0.3f);
+				const G3D::Array<IndexType>& indexArray = srcLevel->indexArray;
 
-			G3D::CoordinateFrame netTransform = outCFrame.inverse() * cframe;
+				G3D::CoordinateFrame netTransform = outCFrame.inverse() * cframe;
 
-			for (int i = 0; i < indexArray.size(); i++) {
-				IndexType index = indexArray[i];
-				G3D::Vector3 v = netTransform.pointToWorldSpace(visibleGeometry.vertexArray[index]);
-				G3D::Vector3 n = netTransform.vectorToWorldSpace(visibleGeometry.normalArray[index]);
-				G3D::Vector2 t = texCoordArray[index];
+				for (int i = 0; i < indexArray.size(); i++) {
+					IndexType index = indexArray[i];
+					G3D::Vector3 v = netTransform.pointToWorldSpace(visibleGeometry.vertexArray[index]);
+					G3D::Vector3 n = netTransform.vectorToWorldSpace(visibleGeometry.normalArray[index]);
+					G3D::Vector2 t = texCoordArray[index];
 
-				dstLevel->indexArray.append(allocVertex(v, n, t, false));
+					dstLevel->appendVertex(v, n, t);
+				}
 			}
 		}
 	}
@@ -377,8 +377,7 @@ G3D::ReferenceCountedPointer<Mesh> Mesh::aggregate(
 
 		for (int i = 0; i < src.edgeArray.size(); i++) {
 			const G3D::MeshAlg::Edge& srcEdge = src.edgeArray[i];
-			shadow.edgeArray.resize(shadow.edgeArray.size() + 1, false);
-			G3D::MeshAlg::Edge& e = shadow.edgeArray.last();
+			G3D::MeshAlg::Edge& e = shadow.edgeArray.next();
 
 			for (int j = 0; j < 2; j++) {
 				e.vertexIndex[j] = srcEdge.vertexIndex[j] + vertexOffset;
@@ -388,8 +387,7 @@ G3D::ReferenceCountedPointer<Mesh> Mesh::aggregate(
 
 		for (int i = 0; i < src.faceArray.size(); i++) {
 			const G3D::MeshAlg::Face& srcFace = src.faceArray[i];
-			shadow.faceArray.resize(shadow.faceArray.size() + 1, false);
-			G3D::MeshAlg::Face& f = shadow.faceArray.last();
+			G3D::MeshAlg::Face& f = shadow.faceArray.next();
 
 			for (int j = 0; j < 2; j++) {
 				f.edgeIndex[j] = srcFace.edgeIndex[j] + edgeOffset;

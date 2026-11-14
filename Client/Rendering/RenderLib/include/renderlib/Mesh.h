@@ -32,12 +32,17 @@ public:
 	class Level : public G3D::ReferenceCountedObject
 	{
 	public:
+		void appendVertex(const G3D::Vector3& vertex, const G3D::Vector3& normal, const G3D::Vector2& tex)
+		{
+			indexArray.append(Mesh::allocVertex(vertex, normal, tex, false));
+		}
+
 		G3D::Array<IndexType> indexArray;       // 0x0c
 		G3D::RenderDevice::Primitive primitive; // 0x18
 
 		Level();
 
-		// STUB: WEBSERVICE 0x10167b50
+		// FUNCTION: WEBSERVICE 0x10167b50
 		// FUNCTION: ROBLOX 0x00484130
 		Level(G3D::RenderDevice::Primitive primitive) : primitive(primitive) {}
 
@@ -194,7 +199,11 @@ public:
 	// SYNTHETIC: ROBLOX 0x007f06e0
 	// `dynamic atexit destructor for 'RBX::Render::Mesh::vertexVAR''
 	// clang-format on
-	static void flushVAR();
+	static void flushVAR()
+	{
+		makeVAR();
+		varDirty = true;
+	}
 };
 
 DECOMP_SIZE_ASSERT(Mesh, 0x50)
