@@ -30,13 +30,6 @@ class Vector4;
  memory layout.
  */
 class Vector2 {
-private:
-    // Hidden operators
-    bool operator<(const Vector2&) const;
-    bool operator>(const Vector2&) const;
-    bool operator<=(const Vector2&) const;
-    bool operator>=(const Vector2&) const;
-
 public:
     // coordinates
     float x, y;
