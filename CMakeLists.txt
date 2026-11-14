@@ -325,6 +325,39 @@ set(OPENRBX_RAKNET_SOURCES
   Client/Network/raknet30/Source/StringTable.cpp
   Client/Network/raknet30/Source/rijndael.cpp
 )
+set(OPENRBX_NETWORK_CLIENT_SOURCES
+  Client/Network/Player.cpp
+  Client/Network/Players.cpp
+  Client/Network/CrashReporter.cpp
+  Client/Network/API.cpp
+  Client/Network/raknet30/Source/PluginInterface.cpp
+  Client/Network/Client.cpp
+  Client/Network/Server.cpp
+  Client/Network/raknet30/Source/BitStream.cpp
+  Client/Network/Streaming.cpp
+  Client/Network/raknet30/Source/RakNetTypes.cpp
+  Client/Network/raknet30/Source/FileOperations.cpp
+  Client/Network/NetworkSettings.cpp
+  Client/Network/Replicator.cpp
+  Client/Network/raknet30/Source/PacketLogger.cpp
+  Client/Network/raknet30/Source/StringCompressor.cpp
+  Client/Network/raknet30/Source/GetTime.cpp
+  Client/Network/ClientPhysics.cpp
+  Client/Network/raknet30/Source/RakPeer.cpp
+  Client/Network/raknet30/Source/DS_HuffmanEncodingTree.cpp
+  Client/Network/raknet30/Source/SocketLayer.cpp
+  Client/Network/raknet30/Source/ReliabilityLayer.cpp
+  Client/Network/raknet30/Source/RPCMap.cpp
+  Client/Network/raknet30/Source/Rand.cpp
+  Client/Network/raknet30/Source/NetworkIDManager.cpp
+  Client/Network/raknet30/Source/StringTable.cpp
+  Client/Network/raknet30/Source/SHA1.cpp
+  Client/Network/raknet30/Source/RakSleep.cpp
+  Client/Network/raknet30/Source/DataBlockEncryptor.cpp
+  Client/Network/raknet30/Source/rijndael.cpp
+  Client/Network/raknet30/Source/CheckSum.cpp
+  Client/Network/raknet30/Source/SimpleMutex.cpp
+)
 set(OPENRBX_RBXVIEW_SOURCES
   Client/RbxView/BevelMesh.cpp
   Client/RbxView/BrickMesh.cpp
@@ -492,6 +525,19 @@ add_engine_library(lua
   SOURCES ${OPENRBX_LUA_SOURCES}
 )
 
+if (MSVC_FOR_DECOMP)
+  list(APPEND OPENRBX_APP_SOURCES Client/boost_1_34_1/libs/iostreams/src/zlib.cpp)
+endif()
+
+list(FIND OPENRBX_APP_SOURCES Client/App/reflection/reflection_object.cpp OPENRBX_APP_REFLECTION_INDEX)
+list(FIND OPENRBX_APP_SOURCES Client/App/reflection/signal.cpp OPENRBX_APP_SIGNAL_INDEX)
+math(EXPR OPENRBX_APP_REFLECTION_LENGTH "${OPENRBX_APP_SIGNAL_INDEX} - ${OPENRBX_APP_REFLECTION_INDEX}")
+math(EXPR OPENRBX_APP_TAIL_INDEX "${OPENRBX_APP_SIGNAL_INDEX} + 1")
+list(SUBLIST OPENRBX_APP_SOURCES 0 ${OPENRBX_APP_REFLECTION_INDEX} OPENRBX_APP_PART_app)
+list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_REFLECTION_INDEX} ${OPENRBX_APP_REFLECTION_LENGTH} OPENRBX_APP_PART_app_reflection)
+list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_SIGNAL_INDEX} 1 OPENRBX_APP_PART_app_signal)
+list(SUBLIST OPENRBX_APP_SOURCES ${OPENRBX_APP_TAIL_INDEX} -1 OPENRBX_APP_PART_app_tail)
+
 # DrawPrimitives.cpp, compiled with appdraw's own flags but linked ahead of app.
 # It instantiates Rect2D::xyxy and the Array comparator family; the linker keeps
 # the FIRST object that defines a duplicate COMDAT name, and app's Hopper.cpp
@@ -504,19 +550,219 @@ add_engine_library(appdraw_head
   SOURCES ${OPENRBX_APPDRAW_HEAD_SOURCES}
 )
 
-if (MSVC_FOR_DECOMP)
-  list(APPEND OPENRBX_APP_SOURCES Client/boost_1_34_1/libs/iostreams/src/zlib.cpp)
-endif()
-
-add_engine_library(app
-  DEFINITIONS _CRT_SECURE_NO_WARNINGS _RELEASE BOOST_IOSTREAMS_NO_LIB
-  OPTIONS /O2 /Ob2 /Oi /Oy /GF /Gy /GS- /fp:fast
-  SOURCES ${OPENRBX_APP_SOURCES}
-)
+foreach(part app app_reflection app_signal app_tail)
+  add_engine_library(${part}
+    DEFINITIONS _CRT_SECURE_NO_WARNINGS _RELEASE BOOST_IOSTREAMS_NO_LIB
+    OPTIONS /O2 /Ob2 /Oi /Oy /GF /Gy /GS- /fp:fast
+    SOURCES ${OPENRBX_APP_PART_${part}}
+  )
+  if (TARGET ${part})
+    target_link_libraries(${part} PRIVATE fmodex)
+  endif()
+endforeach()
 
 if (TARGET app)
-  target_link_libraries(app PRIVATE fmodex)
+  add_dependencies(app app_reflection app_signal app_tail)
 endif()
+
+set(OPENRBX_APP_CLIENT_SOURCES
+  Client/App/util/Name.cpp
+  Client/App/v8datamodel/ModelInstance.cpp
+  Client/App/v8datamodel/Selection.cpp
+  Client/App/util/RunStateOwner.cpp
+  Client/App/script/ScriptContext.cpp
+  Client/App/script/Script.cpp
+  Client/App/v8tree/Instance.cpp
+  Client/App/v8datamodel/DebugSettings.cpp
+  Client/App/util/ContentProvider.cpp
+  Client/App/v8datamodel/GlobalSettings.cpp
+  Client/App/util/standardout.cpp
+  Client/App/util/Http.cpp
+  Client/App/v8datamodel/Team.cpp
+  Client/App/v8tree/Service.cpp
+  Client/App/gui/GUI.cpp
+  Client/App/v8datamodel/DataModel.cpp
+  Client/App/v8xml/XmlElement.cpp
+  Client/App/v8datamodel/Commands.cpp
+  Client/App/v8tree/Verb.cpp
+  Client/App/v8xml/XmlSerializer.cpp
+  Client/App/v8datamodel/RootInstance.cpp
+  Client/App/v8xml/SerializerV2.cpp
+  Client/App/script/ThreadRef.cpp
+  Client/App/reflection/type.cpp
+  Client/App/v8tree/enumproperty.cpp
+  Client/App/reflection/signal.cpp
+  Client/App/reflection/reflection_object.cpp
+  Client/App/reflection/reflection_function.cpp
+  Client/App/util/boost.cpp
+  Client/App/util/MeshId.cpp
+  Client/App/v8datamodel/Decal.cpp
+  Client/App/v8datamodel/PartInstance.cpp
+  Client/App/v8datamodel/custommesh.cpp
+  Client/App/v8datamodel/Workspace.cpp
+  Client/App/util/Log.cpp
+  Client/App/util/FileSystem.cpp
+  Client/App/util/Guid.cpp
+  Client/App/v8datamodel/Accoutrement.cpp
+  Client/App/v8datamodel/BrickColor.cpp
+  Client/App/v8datamodel/ToolsPart.cpp
+  Client/App/reflection/reflection_property.cpp
+  Client/App/util/Sound.cpp
+  Client/App/util/Utilities.cpp
+  Client/App/util/Handle.cpp
+  Client/App/v8datamodel/GameSettings.cpp
+  Client/App/v8datamodel/factoryregistration.cpp
+  Client/App/util/Profiling.cpp
+  Client/App/v8datamodel/Visit.cpp
+  Client/App/v8datamodel/Unknown005d2700.cpp
+  Client/App/script/LuaMemory.cpp
+  Client/App/v8datamodel/Stats.cpp
+  Client/App/v8datamodel/UserController.cpp
+  Client/App/v8datamodel/Camera.cpp
+  Client/App/util/UserInputBase.cpp
+  Client/App/util/Rect.cpp
+  Client/App/v8datamodel/Lighting.cpp
+  Client/App/v8datamodel/Sky.cpp
+  Client/App/v8datamodel/Surfaces.cpp
+  Client/App/v8datamodel/FaceInstance.cpp
+  Client/App/v8datamodel/Surface.cpp
+  Client/App/util/NormalId.cpp
+  Client/App/security/SecurityContext.cpp
+  Client/App/v8datamodel/Hopper.cpp
+  Client/App/v8datamodel/Backpack.cpp
+  Client/App/v8datamodel/SpawnLocation.cpp
+  Client/App/v8datamodel/CharacterAppearance.cpp
+  Client/App/v8datamodel/Teams.cpp
+  Client/App/v8datamodel/TimerService.cpp
+  Client/App/humanoid/Humanoid.cpp
+  Client/App/v8world/World.cpp
+  Client/App/util/Quaternion.cpp
+  Client/App/util/Math.cpp
+  Client/App/v8world/Mechanism.cpp
+  Client/App/v8datamodel/JointInstance.cpp
+  Client/App/v8world/Assembly2.cpp
+  Client/App/util/IRenderable.cpp
+  Client/App/v8datamodel/JointsService.cpp
+  Client/App/v8world/MotorJoint.cpp
+  Client/App/v8world/Primitive.cpp
+  Client/App/v8datamodel/PVInstance.cpp
+  Client/App/util/Extents.cpp
+  Client/App/tool/DragUtilities.cpp
+  Client/App/util/Timer.cpp
+  Client/App/script/LuaInstanceBridge.cpp
+  Client/App/script/LuaAtomicClasses.cpp
+  Client/App/script/LuaSignalBridge.cpp
+  Client/App/script/ScriptEvent.cpp
+  Client/App/v8world/Contact.cpp
+  Client/App/v8kernel/Kernel.cpp
+  Client/App/v8datamodel/LocakBackpack.cpp
+  Client/App/v8datamodel/Tool.cpp
+  Client/App/v8datamodel/GuiBuilder.cpp
+  Client/App/v8datamodel/TimeState.cpp
+  Client/App/v8datamodel/Feature.cpp
+  Client/App/v8world/SpatialHash.cpp
+  Client/App/tool/MegaDragger.cpp
+  Client/App/tool/Dragger.cpp
+  Client/App/v8kernel/Link.cpp
+  Client/App/v8kernel/Body.cpp
+  Client/App/v8world/IMoving.cpp
+  Client/App/v8datamodel/Enums.cpp
+  Client/App/v8world/Controller.cpp
+  Client/App/v8datamodel/MouseCommand.cpp
+  Client/App/tool/ToolsArrow.cpp
+  Client/App/tool/NullTool.cpp
+  Client/App/v8datamodel/Flag.cpp
+  Client/App/v8datamodel/IEquipable.cpp
+  Client/App/util/SoundWorld.cpp
+  Client/App/v8datamodel/Explosion.cpp
+  Client/App/v8datamodel/FlagStand.cpp
+  Client/App/v8datamodel/ForceField.cpp
+  Client/App/v8datamodel/GeometryService.cpp
+  Client/App/v8datamodel/Gyro.cpp
+  Client/App/v8datamodel/Message.cpp
+  Client/App/v8datamodel/Value.cpp
+  Client/App/v8datamodel/DebrisService.cpp
+  Client/App/v8datamodel/Seat.cpp
+  Client/App/tool/ToolsSurface.cpp
+  Client/App/v8datamodel/ICharacterSubject.cpp
+  Client/App/v8datamodel/ICameraOwner.cpp
+  Client/App/v8world/ContactManager.cpp
+  Client/App/v8world/MacroTypes.cpp
+  Client/App/gui/Widget.cpp
+  Client/App/gui/GuiDraw.cpp
+  Client/App/v8datamodel/ScriptMouseCommand.cpp
+  Client/App/humanoid/Running.cpp
+  Client/App/humanoid/FallingDown.cpp
+  Client/App/v8world/Clump2.cpp
+  Client/App/v8world/JointStage.cpp
+  Client/App/v8world/SleepStage2.cpp
+  Client/App/v8world/ClumpStage2.cpp
+  Client/App/v8kernel/Constants.cpp
+  Client/App/v8world/SimJobStage.cpp
+  Client/App/v8world/JointBuilder.cpp
+  Client/App/v8world/Joint.cpp
+  Client/App/v8world/IPipelined.cpp
+  Client/App/v8world/RigidJoint.cpp
+  Client/App/v8world/RotateJoint.cpp
+  Client/App/v8world/MultiJoint.cpp
+  Client/App/v8world/GlueJoint.cpp
+  Client/App/v8world/Block.cpp
+  Client/App/v8world/Ball.cpp
+  Client/App/util/Face.cpp
+  Client/App/v8world/Edge.cpp
+  Client/App/v8kernel/Pair.cpp
+  Client/App/v8kernel/Connector.cpp
+  Client/App/v8kernel/Point.cpp
+  Client/App/v8datamodel/ToolMouseCommand.cpp
+  Client/App/v8datamodel/Mouse.cpp
+  Client/App/gui/ChatWidget.cpp
+  Client/App/gui/MenuItem.cpp
+  Client/App/gui/Button.cpp
+  Client/App/gui/ChatOutput.cpp
+  Client/App/gui/ScoreHud.cpp
+  Client/App/gui/HealthHud.cpp
+  Client/App/gui/EquationDisplay.cpp
+  Client/App/gui/ArrowPanel.cpp
+  Client/App/v8datamodel/SafeChat.cpp
+  Client/App/v8kernel/SimBody.cpp
+  Client/App/v8kernel/Cofm.cpp
+  Client/App/util/Units.cpp
+  Client/App/v8datamodel/Filters.cpp
+  Client/App/tool/DragTool.cpp
+  Client/App/tool/PartDragTool.cpp
+  Client/App/util/ExponentialRunningAverage.cpp
+  Client/App/humanoid/Balancing.cpp
+  Client/App/humanoid/Seated.cpp
+  Client/App/humanoid/Jumping.cpp
+  Client/App/humanoid/GettingUp.cpp
+  Client/App/util/RunningAverage.cpp
+  Client/App/v8world/IWorldStage.cpp
+  Client/App/v8world/AssemblyStage2.cpp
+  Client/App/v8world/SnapJoint.cpp
+  Client/App/v8world/WeldJoint.cpp
+  Client/App/util/Hash.cpp
+  Client/App/gui/ProfanityFilter.cpp
+  Client/App/tool/GroupDragTool.cpp
+  Client/App/tool/RunDragger.cpp
+  Client/App/humanoid/Flying.cpp
+  Client/App/humanoid/Freefall.cpp
+  Client/App/util/Debug.cpp
+  Client/App/util/IndexBox.cpp
+)
+
+if (MSVC_FOR_DECOMP)
+  list(APPEND OPENRBX_APP_CLIENT_SOURCES Client/boost_1_34_1/libs/iostreams/src/zlib.cpp)
+endif()
+
+set(OPENRBX_APP_CLIENT_OBJECTS)
+foreach(src ${OPENRBX_APP_CLIENT_SOURCES})
+  foreach(part app app_reflection app_signal app_tail)
+    list(FIND OPENRBX_APP_PART_${part} ${src} OPENRBX_APP_CLIENT_INDEX)
+    if (NOT OPENRBX_APP_CLIENT_INDEX EQUAL -1)
+      list(APPEND OPENRBX_APP_CLIENT_OBJECTS "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${part}.dir/${src}.obj")
+    endif()
+  endforeach()
+endforeach()
 
 
 add_engine_library(network
@@ -528,6 +774,12 @@ if (TARGET network AND OPENRBX_RAKNET_SOURCES)
   set_source_files_properties(${OPENRBX_RAKNET_SOURCES}
     PROPERTIES COMPILE_DEFINITIONS "_CRT_SECURE_NO_WARNINGS")
 endif()
+
+add_engine_library(network_client
+  OPTIONS /O2
+  SOURCES ${OPENRBX_NETWORK_CLIENT_SOURCES}
+)
+list(REMOVE_ITEM OPENRBX_ENGINE_LIBRARIES network_client)
 
 add_engine_library(rbxview
   DEFINITIONS _RELEASE
@@ -783,8 +1035,10 @@ if (MSVC_FOR_DECOMP)
   )
 
   set(OPENRBX_CLIENT_ENGINE_LIBRARIES)
-  foreach(lib rbxview renderlib rbxviewnew renderlibnew network appdraw_head app appdraw_rbxgfx appdraw appdraw_client lua)
-    if (TARGET ${lib})
+  foreach(lib rbxview renderlib rbxviewnew renderlibnew network_client app_client_objects appdraw_head app appdraw_rbxgfx appdraw appdraw_client lua)
+    if (lib STREQUAL "app_client_objects")
+      list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${OPENRBX_APP_CLIENT_OBJECTS})
+    elseif (TARGET ${lib})
       list(APPEND OPENRBX_CLIENT_ENGINE_LIBRARIES ${lib})
     endif()
   endforeach()
@@ -816,6 +1070,7 @@ if (MSVC_FOR_DECOMP)
     "${OPENRBX_3RDPARTY}/Microsoft DirectX SDK (November 2007)/Lib/x86/dinput8.lib"
     "${OPENRBX_3RDPARTY}/Microsoft DirectX SDK (November 2007)/Lib/x86/dxguid.lib"
   )
+  add_dependencies(roblox app app_reflection app_signal app_tail)
 
   target_link_options(roblox PRIVATE "-MAP:$<TARGET_FILE_DIR:roblox>/$<TARGET_FILE_BASE_NAME:roblox>.map" "/FIXED:NO" "/MANIFEST:NO")
   foreach(lib zlib.lib G3D.lib G3D-debug.lib GLG3D.lib GLG3D-debug.lib sdl.lib sdlmain.lib glut32.lib)

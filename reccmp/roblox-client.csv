@@ -708,7 +708,7 @@ address,type,symbol,name,module,size
 00613260,library,??$?0VArrowPanel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VArrowPanel@RBX@@@boost@@QAE@PAVArrowPanel@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z,,,
 00613310,library,??$?0VMenuSpacer@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@1@@?$shared_ptr@VMenuSpacer@RBX@@@boost@@QAE@PAVMenuSpacer@RBX@@VDeleter@?$Creatable@VInstance@RBX@@@3@@Z,,,
 00623380,library,??1_Node@?$_Tree_nod@V?$_Tmap_traits@W4SoundType@RBX@@V?$shared_ptr@VSoundChannel@Soundscape@RBX@@@boost@@U?$less@W4SoundType@RBX@@@std@@V?$allocator@U?$pair@$$CBW4SoundType@RBX@@V?$shared_ptr@VSoundChannel@Soundscape@RBX@@@boost@@@std@@@6@$0A@@std@@@std@@QAE@XZ,,,
-0062f7c0,library,,"boost::signal1<void,bool,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(bool),std::allocator<void> > >::signal1<void,bool,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(bool),std::allocator<void> > >",,
+0062f7c0,library,,"boost::signal2<void,float,float,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(float,float),std::allocator<void> > >::signal2<void,float,float,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(float,float),std::allocator<void> > >",,
 0063c740,library,?GetTooltip@CXTPReportColumn@@QBE?AV?$CStringT@DV?$StrTraitMFC_DLL@DV?$ChTraitsCRT@D@ATL@@@@@ATL@@XZ,,,
 00658600,library,??$use_facet@V?$ctype@D@std@@@std@@YAABV?$ctype@D@0@ABVlocale@0@@Z,,,
 00658700,library,??$_Transform@PADPADU?$to_lowerF@D@detail@algorithm@boost@@Uforward_iterator_tag@std@@@std@@YAPADPAD00U?$to_lowerF@D@detail@algorithm@boost@@Uforward_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z,,,
@@ -3618,7 +3618,8 @@ address,type,symbol,name,module,size
 00530d20,library,?erase@?$_Tree@V?$_Tset_traits@V?$WeakReferenceCountedPointer@VChunk@RenderNew@RBX@@@G3D@@U?$less@V?$WeakReferenceCountedPointer@VChunk@RenderNew@RBX@@@G3D@@@std@@V?$allocator@V?$WeakReferenceCountedPointer@VChunk@RenderNew@RBX@@@G3D@@@4@$0A@@std@@@std@@QAE?AViterator@12@V312@0@Z,,,
 00958788,global,?vertexRefCounts@Mesh@RenderNew@RBX@@0V?$Array@H@G3D@@A,,,
 00958700,global,,g_unk0x00958700,,
-00958738,global,,g_unk0x00958738,,
+00958738,global,,vertexRefCount,,
+00958735,global,,g_unk0x00958735,,
 0095873c,global,,g_unk0x0095873c,,
 00958798,global,,g_unk0x00958798,,
 0095877c,global,?g_unk0x0095877c@Mesh@RenderNew@RBX@@2VMeshPtr@Ogre@@A,,,
@@ -3771,7 +3772,6 @@ address,type,symbol,name,module,size
 0081a9b0,global,,bevel,TorsoMesh.obj,
 0081a708,global,?widthInset@BrickMesh@ViewNew@RBX@@2MB,,,
 0081a70c,global,?normalPerturbation@BrickMesh@ViewNew@RBX@@2MB,,,
-00534740,stub,??1TextureProxy@RenderNew@RBX@@UAE@XZ,,,
 0050bf30,library,?freeMemory@?$Table@VRenderSurfaceTypes@ViewNew@RBX@@V?$Table@VVector3@G3D@@UVariations@?$MeshFactory@VPBBMesh@ViewNew@RBX@@$03@ViewNew@RBX@@@G3D@@@G3D@@AAEXXZ,,,
 0050bfa0,library,?freeMemory@?$Table@VRenderSurfaceTypes@ViewNew@RBX@@V?$Table@VVector3@G3D@@UVariations@?$MeshFactory@VSphereMesh@ViewNew@RBX@@$00@ViewNew@RBX@@@G3D@@@G3D@@AAEXXZ,,,
 0050c010,library,?freeMemory@?$Table@VRenderSurfaceTypes@ViewNew@RBX@@V?$Table@VVector3@G3D@@UVariations@?$MeshFactory@VCylinderAlongXMesh@ViewNew@RBX@@$00@ViewNew@RBX@@@G3D@@@G3D@@AAEXXZ,,,
@@ -4040,7 +4040,7 @@ address,type,symbol,name,module,size
 00429e90,synthetic,??_E?$FactoryProduct@VClass@Metadata@Reflection@RBX@@VItem@234@$1?sClass@234@3PADA@RBX@@ODM@AEPAXI@Z,,,
 00429ed0,synthetic,??_E?$FactoryProduct@VClass@Metadata@Reflection@RBX@@VItem@234@$1?sClass@234@3PADA@RBX@@OBA@AEPAXI@Z,,,
 00429ff0,synthetic,??_E?$FactoryProduct@VMember@Metadata@Reflection@RBX@@VItem@234@$1?sMember@234@3PADA@RBX@@OJM@AEPAXI@Z,,,
-00437a90,library,?PreTranslateMessage@CXTTreeViewBase@@OGA@AEHPAUtagMSG@@@Z,,,
+00437a90,library,?OnNotify@CXTTreeViewBase@@OGA@AEHIJPAJ@Z,,,8
 004486a0,synthetic,??_E?$FactoryProduct@VCRenderSettings@@VItem@GlobalSettings@RBX@@$1?sRenderSettings@@3QBDB@RBX@@OBE@AEPAXI@Z,,,
 004486b0,synthetic,??_E?$FactoryProduct@VCRenderSettings@@VItem@GlobalSettings@RBX@@$1?sRenderSettings@@3QBDB@RBX@@OFE@AEPAXI@Z,,,
 004486c0,synthetic,??_E?$FactoryProduct@VCRenderSettings@@VItem@GlobalSettings@RBX@@$1?sRenderSettings@@3QBDB@RBX@@OCE@AEPAXI@Z,,,
@@ -4129,7 +4129,7 @@ address,type,symbol,name,module,size
 0080df0c,global,??_7CScintillaCtrl@Scintilla@@6B@,,,
 0080e098,global,??_7?$CArray@HH@@6B@,,,20
 0080e0b4,global,??_7CScintillaView@Scintilla@@6B@,,,
-0080e31c,global,??_7CScintillaFindReplaceDlg@Scintilla@@6B@,,,364
+0080e31c,global,??_7CScintillaFindReplaceDlg@Scintilla@@6B@,,,360
 0080e858,global,??_7CFont@@6B@,,,20
 0080ea0c,global,??_7CScriptEditor@@6B@,,,552
 0081a4e4,global,??_7?$Table@VRenderSurfaceTypes@ViewNew@RBX@@V?$Table@VVector3@G3D@@UVariations@?$MeshFactory@VPBBMesh@ViewNew@RBX@@$03@ViewNew@RBX@@@G3D@@@G3D@@6B@,,,4
@@ -4189,7 +4189,7 @@ address,type,symbol,name,module,size
 0083f9e4,global,??_7CXTPCommandBarsContextMenus@@6B@,,,92
 0083fa44,global,??_7CXTPCommandBarsOptions@@6B@,,,88
 0083faa4,global,??_7CXTPCommandBarKeyboardTip@@6B@,,,316
-0083fbe4,global,??_7CXTPCommandBars@@6B@,,,156
+0083fbe4,global,??_7CXTPCommandBars@@6B@,,,152
 0083ff20,global,??_7CXTPControlComboBoxAutoCompleteWnd@@6B@,,,
 0083ff4c,global,??_7CXTPControlComboBox@@6BCXTPAccessible@@@,,,92
 0083ffac,global,??_7CXTPControlComboBox@@6BCCmdTarget@@@,,,384
@@ -4292,7 +4292,7 @@ address,type,symbol,name,module,size
 00844dbc,global,??_7CXTTreeCtrlBase@@6BCXTTreeBase@@@,,,132
 00844e44,global,??_7CXTTreeCtrlBase@@6BCTreeCtrl@@@,,,328
 00844f94,global,??_7CXTTreeView@@6BCXTTreeBase@@@,,,132
-0084501c,global,??_7CXTTreeView@@6BCTreeView@@@,,,412
+0084501c,global,??_7CXTTreeView@@6BCTreeView@@@,,,408
 0084535c,global,??_7?$CTypedPtrList@VCPtrList@@PAU_TREEITEM@@@@6B@,,,20
 00845374,global,??_7?$CMap@PAXPAXUCLRFONT@CXTTreeBase@@AAU12@@@6B@,,,20
 0084538c,global,??_7CXTTreeBase@@6B@,,,
@@ -4320,7 +4320,7 @@ address,type,symbol,name,module,size
 00846ccc,global,??_7CCustomizeEdit@CXTPCustomizeSheet@@6BCXTPAccessible@@@,,,92
 00846d2c,global,??_7CCustomizeEdit@CXTPCustomizeSheet@@6BCCmdTarget@@@,,,352
 00846e94,global,??_7CCustomizeButton@CXTPCustomizeSheet@@6BCXTPAccessible@@@,,,92
-00846ef4,global,??_7CCustomizeButton@CXTPCustomizeSheet@@6BCCmdTarget@@@,,,332
+00846ef4,global,??_7CCustomizeButton@CXTPCustomizeSheet@@6BCCmdTarget@@@,,,328
 008472bc,global,??_7CXTPCustomizeOptionsPage@@6B@,,,392
 0084744c,global,??_7CStatic@@6B@,,,324
 00847594,global,??_7CComboBox@@6B@,,,336
@@ -4328,7 +4328,7 @@ address,type,symbol,name,module,size
 0084796c,global,??_7CListBox@@6B@,,,344
 00847acc,global,??_7CXTPCustomizeCommandsListBox@@6B@,,,344
 00847c28,global,??_7?$CArray@PAUXTP_COMMANDBARS_CATEGORYINFO@@PAU1@@@6B@,,,20
-00847c44,global,??_7CXTPCustomizeCommandsPage@@6B@,,,396
+00847c44,global,??_7CXTPCustomizeCommandsPage@@6B@,,,392
 00847e84,global,??_7CControlExpandButton@CXTPPopupBar@@6BCXTPAccessible@@@,,,92
 00847ee4,global,??_7CControlExpandButton@CXTPPopupBar@@6BCCmdTarget@@@,,,328
 00848034,global,??_7CXTPPopupBar@@6BCXTPAccessible@@@,,,92
@@ -4374,7 +4374,7 @@ address,type,symbol,name,module,size
 00849eac,global,??_7CXTPPropertyGrid@@6B@,,,352
 0084a010,global,??_7?$CArray@PAVCXTPPropertyGridVerb@@PAV1@@@6B@,,,20
 0084a02c,global,??_7CXTPPropertyGridUpdateContext@@6B@,,,88
-0084a08c,global,??_7CXTPPropertyGridVerbs@@6B@,,,92
+0084a08c,global,??_7CXTPPropertyGridVerbs@@6B@,,,88
 0084a3a4,global,??_7CXTPPropExchangeEnumerator@@6B@,,,12
 0084a3b4,global,??_7CXTPPropExchange@@6B@,,,
 0084a4f4,global,??_7CXTPPropExchangeArchive@@6B@,,,156
@@ -4394,7 +4394,7 @@ address,type,symbol,name,module,size
 0084ac9c,global,??_7?$CArray@VCRect@@AAV1@@@6B@,,,20
 0084acb4,global,??_7?$CArray@PAUHWND__@@AAPAU1@@@6B@,,,20
 0084ad08,global,??_7CXTPTabClientWnd@@6BCXTPTabManagerAtom@@@,,,12
-0084ad1c,global,??_7CXTPTabClientWnd@@6BCWnd@@@,,,376
+0084ad1c,global,??_7CXTPTabClientWnd@@6BCWnd@@@,,,372
 0084b25c,global,??_7CXTColorDialog@@6B@,,,
 0084b424,global,??_7CXTPDockingPane@@6BCXTPAccessible@@@,,,92
 0084b484,global,??_7CXTPDockingPane@@6BCXTPDockingPaneBase@@@,,,88
@@ -4409,7 +4409,7 @@ address,type,symbol,name,module,size
 0084b914,global,??_7CXTPStatusBarPane@@6B@,,,
 0084b994,global,??_7?$CArray@PAVCXTPStatusBarPane@@PAV1@@@6B@,,,20
 0084b9ac,global,??_7?$CArray@HAAH@@6B@,,,20
-0084b9c4,global,??_7CXTPStatusBar@@6B@,,,380
+0084b9c4,global,??_7CXTPStatusBar@@6B@,,,376
 0084bd84,global,??_7CStandardToolTip@CXTPToolTipContext@@6B@,,,
 0084bf04,global,??_7CXTPToolTipContext@@6B@,,,92
 0084bf64,global,??_7?$CArray@PAUTOOLITEM@CXTPToolTipContextToolTip@@PAU12@@@6B@,,,20
@@ -4419,7 +4419,7 @@ address,type,symbol,name,module,size
 0084c144,global,??_7CLunaToolTip@CXTPToolTipContext@@6B@,,,332
 0084c294,global,??_7COffice2007ToolTip@CXTPToolTipContext@@6B@,,,
 0084c414,global,??_7CRichEditToolTip@CXTPToolTipContext@@6B@,,,332
-0084c564,global,??_7CHTMLToolTip@CXTPToolTipContext@@6B@,,,336
+0084c564,global,??_7CHTMLToolTip@CXTPToolTipContext@@6B@,,,332
 0084c924,global,??_7CXTAuxData@@6B@,,,4
 0084c964,global,??_7CXTPPropertyGridItemConstraint@@6B@,,,96
 0084c9c8,global,??_7?$CArray@PAVCXTPPropertyGridItem@@PAV1@@@6B@,,,20
@@ -4435,9 +4435,9 @@ address,type,symbol,name,module,size
 0084cf74,global,??_7CXTPPropertyGridToolTip@@6B@,,,316
 0084d0b4,global,??_7CXTPPropertyGridView@@6BCXTPAccessible@@@,,,92
 0084d114,global,??_7CXTPPropertyGridView@@6BCListBox@@@,,,
-0084d274,global,??_7?$CArray@UWNDRECT@CXTPPropertyGridView@@AAU12@@@6B@,,,24
+0084d274,global,??_7?$CArray@UWNDRECT@CXTPPropertyGridView@@AAU12@@@6B@,,,20
 0084d554,global,??_7CXTColorPopup@@6BCXTThemeManagerStyleHost@@@,,,12
-0084d564,global,??_7CXTColorPopup@@6BCWnd@@@,,,336
+0084d564,global,??_7CXTColorPopup@@6BCWnd@@@,,,332
 0084d804,global,??_7CXTPPropertyGridItemBool@@6BCXTPAccessible@@@,,,92
 0084d864,global,??_7CXTPPropertyGridItemBool@@6BCCmdTarget@@@,,,240
 0084d95c,global,??_7CXTPPropertyGridItemEnum@@6BCXTPAccessible@@@,,,92
@@ -4450,7 +4450,7 @@ address,type,symbol,name,module,size
 0084e474,global,??_7CXTPNewToolbarDlg@@6B@,,,356
 0084e644,global,??_7?$CArray@UDOCK_INFO@CXTPDockBar@@AAU12@@@6B@,,,20
 0084e65c,global,??_7CXTPDockBar@@6B@,,,
-0084e79c,global,??_7CDockInfoArray@CXTPDockBar@@6B@,,,24
+0084e79c,global,??_7CDockInfoArray@CXTPDockBar@@6B@,,,20
 0084e864,global,??_7CXTPHookManagerHookAble@@6B@,,,8
 0084e870,global,??_7?$CMap@PAUHWND__@@PAU1@PAXPAX@@6B@,,,20
 0084e888,global,??_7?$CList@PAVCXTPHookManagerHookAble@@PAV1@@@6B@,,,20
@@ -4479,7 +4479,7 @@ address,type,symbol,name,module,size
 0084fb84,global,??_7CControlMDISysMenuPopup@CXTPMenuBar@@6BCCmdTarget@@@,,,
 0084fcdc,global,??_7CXTPMenuBar@@6BCXTPAccessible@@@,,,92
 0084fd3c,global,??_7CXTPMenuBar@@6BCXTPHookManagerHookAble@@@,,,8
-0084fd4c,global,??_7CXTPMenuBar@@6BCWnd@@@,,,544
+0084fd4c,global,??_7CXTPMenuBar@@6BCWnd@@@,,,540
 0084ffdc,global,??_7CControlQuickAccessCommand@CXTPRibbonBar@@6BCXTPAccessible@@@,,,92
 0085003c,global,??_7CControlQuickAccessCommand@CXTPRibbonBar@@6BCCmdTarget@@@,,,328
 0085018c,global,??_7CControlCaptionButton@CXTPRibbonBar@@6BCXTPAccessible@@@,,,92
@@ -4502,7 +4502,7 @@ address,type,symbol,name,module,size
 008515f4,global,??_7CXTPControlGalleryPaintManager@@6B@,,,
 0085165c,global,??_7CXTPControlComboBoxGalleryPopupBar@@6BCXTPAccessible@@@,,,92
 008516bc,global,??_7CXTPControlComboBoxGalleryPopupBar@@6BCXTPHookManagerHookAble@@@,,,8
-008516cc,global,??_7CXTPControlComboBoxGalleryPopupBar@@6BCWnd@@@,,,552
+008516cc,global,??_7CXTPControlComboBoxGalleryPopupBar@@6BCWnd@@@,,,548
 00851934,global,??_7?$CArray@UGALLERYITEM_POSITION@CXTPControlGallery@@AAU12@@@6B@,,,
 0085194c,global,??_7CXTPControlGallery@@6B@,,,40
 0085197c,global,??_7CXTPControlGallery@@6BCXTPAccessible@@@,,,92
@@ -4516,7 +4516,7 @@ address,type,symbol,name,module,size
 00852954,global,??_7CXTPOfficeTheme@XTPPaintThemes@@6B@,,,
 00852a8c,global,??_7CXTPControlEdit@@6BCXTPAccessible@@@,,,92
 00852aec,global,??_7CXTPControlEdit@@6BCCmdTarget@@@,,,352
-00852c54,global,??_7CXTPControlEditCtrl@@6B@,,,328
+00852c54,global,??_7CXTPControlEditCtrl@@6B@,,,324
 00852e94,global,??_7?$CArray@UtagRECT@@AAU1@@@6B@,,,20
 00852eac,global,??_7?$CArray@PAUCAnimateInfo@CXTPCommandBarAnimation@@PAU12@@@6B@,,,20
 00852ec4,global,??_7CXTPGraphicBitmapPng@@6B@,,,
@@ -4529,7 +4529,7 @@ address,type,symbol,name,module,size
 008532a4,global,??_7CXTPReportInplaceEdit@@6BCXTPReportInplaceControl@@@,,,8
 008532b4,global,??_7CXTPReportInplaceEdit@@6BCEdit@@@,,,316
 008533f4,global,??_7CXTPReportInplaceList@@6BCXTPReportInplaceControl@@@,,,8
-00853404,global,??_7CXTPReportInplaceList@@6BCListBox@@@,,,352
+00853404,global,??_7CXTPReportInplaceList@@6BCListBox@@@,,,348
 00853774,global,??_7CXTPReportHyperlink@@6B@,,,
 008537f4,global,??_7?$CArray@PAVCXTPReportHyperlink@@PAV1@@@6B@,,,20
 0085380c,global,??_7?$CXTPArrayT@PAVCXTPReportHyperlink@@PAV1@PAUIDispatch@@@@6B@,,,184
@@ -4539,10 +4539,10 @@ address,type,symbol,name,module,size
 00853a64,global,??_7CXTPReportColumns@@6B@,,,
 00853ac4,global,??_7CXTPReportGroupRow@@6B@,,,
 00853bfc,global,??_7CXTPReportRow@@6B@,,,252
-00853cfc,global,??_7CXTPReportTip@@6B@,,,324
+00853cfc,global,??_7CXTPReportTip@@6B@,,,320
 00853ec4,global,??_7CXTPReportNavigator@@6B@,,,
 00853f24,global,??_7CXTPReportHeaderDragWnd@@6B@,,,324
-0085406c,global,??_7CXTPReportHeaderDropWnd@@6B@,,,324
+0085406c,global,??_7CXTPReportHeaderDropWnd@@6B@,,,320
 00854254,global,??_7CXTRegistryManager@@6B@,,,
 00854294,global,??_7?$CList@UXTP_DOCKINGPANE_INFO@@AAU1@@@6B@,,,20
 008542ac,global,??_7?$CMap@HHPAVCXTPDockingPaneBase@@PAV1@@@6B@,,,20
@@ -4551,19 +4551,19 @@ address,type,symbol,name,module,size
 0085448c,global,??_7CPanelDropTarget@CXTPDockingPaneAutoHidePanel@@6B@,,,116
 00854504,global,??_7CAutoHidePanelTabManager@CXTPDockingPaneAutoHidePanel@@6B@,,,128
 00854588,global,??_7?$CArray@PAVCAutoHidePanelTabManager@CXTPDockingPaneAutoHidePanel@@PAV12@@@6B@,,,
-008545a4,global,??_7CXTPDockingPaneAutoHideWnd@@6B@,,,392
+008545a4,global,??_7CXTPDockingPaneAutoHideWnd@@6B@,,,388
 008547dc,global,??_7CAutoHidePanelTabManagersArray@CXTPDockingPaneAutoHidePanel@@6B@,,,20
 008547f4,global,??_7CXTPDockingPaneAutoHidePanel@@6BCXTPDockingPaneBaseContainer@@@,,,88
-00854854,global,??_7CXTPDockingPaneAutoHidePanel@@6BCWnd@@@,,,332
+00854854,global,??_7CXTPDockingPaneAutoHidePanel@@6BCWnd@@@,,,328
 00854aa4,global,??_7?$CArray@PAUCItem@CXTPDockingPaneWindowSelect@@PAU12@@@6B@,,,20
 00854abc,global,??_7?$CArray@UCColumn@CXTPDockingPaneWindowSelect@@AAU12@@@6B@,,,20
 00854ad4,global,??_7?$CMap@PAUHWND__@@PAU1@PAVCXTPDockingPaneManager@@PAV2@@@6B@,,,20
 00854aec,global,??_7CXTPDockingPaneWindowSelect@@6B@,,,404
-00854c84,global,??_7CXTPDockingPaneKeyboardHook@@6B@,,,8
+00854c84,global,??_7CXTPDockingPaneKeyboardHook@@6B@,,,4
 00854dd4,global,??_7CXTPDockingPaneMiniWnd@@6BCXTPDockingPaneBase@@@,,,88
 00854e34,global,??_7CXTPDockingPaneMiniWnd@@6BCMiniFrameWnd@@@,,,408
 00854fd0,global,??_7?$CArray@PAVCXTPDockingPaneCaptionButton@@PAV1@@@6B@,,,20
-00854fe8,global,??_7CXTPDockingPaneCaptionButtons@@6B@,,,24
+00854fe8,global,??_7CXTPDockingPaneCaptionButtons@@6B@,,,20
 0085518c,global,??_7CXTPDockingPaneBase@@6B@,,,88
 008551ec,global,??_7CXTPDockingPaneClientContainer@@6BCXTPDockingPaneBase@@@,,,88
 0085524c,global,??_7CXTPDockingPaneClientContainer@@6BCCmdTarget@@@,,,
@@ -4571,11 +4571,11 @@ address,type,symbol,name,module,size
 008553b4,global,??_7CXTPDockingPaneTabbedContainer@@6BCXTPAccessible@@@,,,92
 00855414,global,??_7CXTPDockingPaneTabbedContainer@@6BCXTPTabManager@@@,,,128
 0085549c,global,??_7CXTPDockingPaneTabbedContainer@@6BCXTPDockingPaneBaseContainer@@@,,,88
-008554fc,global,??_7CXTPDockingPaneTabbedContainer@@6BCWnd@@@,,,352
+008554fc,global,??_7CXTPDockingPaneTabbedContainer@@6BCWnd@@@,,,348
 008557b4,global,??_7CXTPDockingPaneSplitterWnd@@6B@,,,
 00855900,global,??_7?$CList@PAVCXTPDockingPaneSplitterWnd@@PAV1@@@6B@,,,20
 0085591c,global,??_7CXTPDockingPaneSplitterContainer@@6BCXTPDockingPaneBaseContainer@@@,,,88
-0085597c,global,??_7CXTPDockingPaneSplitterContainer@@6BCCmdTarget@@@,,,96
+0085597c,global,??_7CXTPDockingPaneSplitterContainer@@6BCCmdTarget@@@,,,92
 00855a74,global,??_7CXTPDockingPanePaintManager@@6B@,,,
 00855b14,global,??_7CColorSetVisualStudio@CXTPTabPaintManager@@6B@,,,44
 00855b44,global,??_7CXTPDockingPaneDefaultTheme@XTPDockingPanePaintThemes@@6B@,,,136
@@ -4596,7 +4596,7 @@ address,type,symbol,name,module,size
 0085633c,global,??_7CXTPDockingPaneContextAlphaWnd@@6B@,,,316
 0085647c,global,??_7CXTPDockingPaneContextStickerWnd@@6B@,,,316
 008565bc,global,??_7?$CList@PAVCXTPDockingPaneContextStickerWnd@@PAV1@@@6B@,,,20
-008565d4,global,??_7?$CMap@IIPAVCRgn@@PAV1@@@6B@,,,24
+008565d4,global,??_7?$CMap@IIPAVCRgn@@PAV1@@@6B@,,,20
 0085668c,global,??_7CXTPDockingPaneContext@@6B@,,,40
 008566c4,global,??_7CShadowWnd@CXTPShadowsManager@@6BCXTPHookManagerHookAble@@@,,,8
 008566d4,global,??_7CShadowWnd@CXTPShadowsManager@@6BCWnd@@@,,,316
@@ -4605,12 +4605,12 @@ address,type,symbol,name,module,size
 00856924,global,??_7CAlphaBitmap@CXTPImageEditorPicture@@6B@,,,20
 0085693c,global,??_7CDlgToolBar@CXTPImageEditorDlg@@6B@,,,380
 00856abc,global,??_7CXTPImageEditorPicker@@6B@,,,324
-00856c04,global,??_7CXTPImageEditorPreview@@6B@,,,328
+00856c04,global,??_7CXTPImageEditorPreview@@6B@,,,324
 00856d84,global,??_7?$CList@PAVCAlphaBitmap@CXTPImageEditorPicture@@PAV12@@@6B@,,,20
 00856d9c,global,??_7CXTPImageEditorPicture@@6B@,,,
 00856f6c,global,??_7CXTPImageEditorDlg@@6B@,,,356
 00857394,global,??_7CXTPCustomizeToolbarsPageCheckListBox@@6B@,,,348
-008574f4,global,??_7CXTPCustomizeToolbarsPage@@6B@,,,396
+008574f4,global,??_7CXTPCustomizeToolbarsPage@@6B@,,,392
 00857780,global,??_7CXTPControlCustom@@6B@,,,8
 0085778c,global,??_7CXTPControlCustom@@6BCXTPAccessible@@@,,,92
 008577ec,global,??_7CXTPControlCustom@@6BCCmdTarget@@@,,,
@@ -4619,7 +4619,7 @@ address,type,symbol,name,module,size
 008579ec,global,??_7CXTPPropertyGridInplaceButtons@@6B@,,,
 00857a84,global,??_7CXTPPropertyGridInplaceEdit@@6B@,,,364
 00857bf4,global,??_7?$CXTMaskEditT@VCEdit@@@@6B@,,,344
-00857d50,global,??_7?$CArray@PAVCXTPPropertyGridInplaceControl@@PAV1@@@6B@,,,24
+00857d50,global,??_7?$CArray@PAVCXTPPropertyGridInplaceControl@@PAV1@@@6B@,,,20
 00857f3c,global,??_7CXTPPropertyGridItemMetrics@@6B@,,,92
 00857f9c,global,??_7CXTPPropertyGridPaintManager@@6B@,,,76
 00857fec,global,??_7CXTPPropertyGridNativeXPTheme@XTPPropertyGridPaintThemes@@6B@,,,76
@@ -4630,7 +4630,7 @@ address,type,symbol,name,module,size
 008581ec,global,??_7CXTPPropertyGridDelphiTheme@XTPPropertyGridPaintThemes@@6B@,,,76
 0085823c,global,??_7CXTPPropertyGridOfficeXPTheme@XTPPropertyGridPaintThemes@@6B@,,,76
 0085828c,global,??_7CXTPPropertyGridWhidbeyTheme@XTPPropertyGridPaintThemes@@6B@,,,
-00858314,global,??_7CXTPPropertyGridInplaceList@@6B@,,,364
+00858314,global,??_7CXTPPropertyGridInplaceList@@6B@,,,360
 0085854c,global,??_7CXTPTabManagerNavigateButton@@6B@,,,
 00858574,global,??_7CNavigateButtonArrowLeft@CXTPTabManager@@6B@,,,28
 00858594,global,??_7CNavigateButtonArrowRight@CXTPTabManager@@6B@,,,28
@@ -4655,12 +4655,12 @@ address,type,symbol,name,module,size
 00858a7c,global,??_7CAppearanceSet@CXTPTabPaintManager@@6B@,,,
 00858d3c,global,??_7?$CList@PAUHEXCOLOR_CELL@CXTColorHex@@PAU12@@@6B@,,,20
 00858d54,global,??_7CXTColorHex@@6B@,,,332
-00858ea4,global,??_7CXTColorPageStandard@@6B@,,,396
+00858ea4,global,??_7CXTColorPageStandard@@6B@,,,392
 008590fc,global,??_7CXTColorBase@@6B@,,,332
 0085924c,global,??_7CXTColorLum@@6B@,,,336
 008593a4,global,??_7CSpinButtonCtrl@@6B@,,,324
 008594ec,global,??_7CXTColorWnd@@6B@,,,336
-00859644,global,??_7CXTColorPageCustom@@6B@,,,396
+00859644,global,??_7CXTColorPageCustom@@6B@,,,392
 00859a6c,global,??_7CXTSplitterWndThemeFactory@@6B@,,,28
 00859a8c,global,??_7CXTSplitterWndTheme@@6B@,,,16
 00859aa0,global,??_7CXTSplitterWndThemeOfficeXP@@6B@,,,16
@@ -4670,11 +4670,11 @@ address,type,symbol,name,module,size
 00859c34,global,??_7CXTPOffice2007Image@@6B@,,,
 00859cbc,global,??_7?$CList@PAUCOLOR_CELL@CXTColorSelectorCtrl@@PAU12@@@6B@,,,20
 00859cd4,global,??_7CXTColorSelectorCtrl@@6BCXTThemeManagerStyleHost@@@,,,12
-00859ce4,global,??_7CXTColorSelectorCtrl@@6BCWnd@@@,,,332
+00859ce4,global,??_7CXTColorSelectorCtrl@@6BCWnd@@@,,,328
 00859f5c,global,??_7CXTShadowHook@@6B@,,,36
 00859f84,global,??_7CXTShadowWnd@@6B@,,,316
 0085a0c4,global,??_7?$CList@PAVCXTShadowWnd@@PAV1@@@6B@,,,20
-0085a0dc,global,??_7CShadowList@CXTShadowsManager@@6B@,,,24
+0085a0dc,global,??_7CShadowList@CXTShadowsManager@@6B@,,,20
 0085a22c,global,??_7CXTCaptionThemeFactory@@6B@,,,28
 0085a24c,global,??_7CXTCaptionTheme@@6B@,,,28
 0085a26c,global,??_7CXTCaptionThemeOffice2003@@6B@,,,28
@@ -4684,7 +4684,7 @@ address,type,symbol,name,module,size
 0085a39c,global,??_7CXTCaptionThemeOfficeXP@@6B@,,,28
 0085a3bc,global,??_7CXTCaptionButtonThemeOffice2003@@6B@,,,
 0085a468,global,??_7CXTButton@@6BCXTThemeManagerStyleHost@@@,,,12
-0085a47c,global,??_7CXTButton@@6BCButton@@@,,,416
+0085a47c,global,??_7CXTButton@@6BCButton@@@,,,412
 0085a81c,global,??_7CXTCaptionPopupWnd@@6B@,,,
 0085aa14,global,??_7CXTPRibbonTab@@6B@,,,104
 0085aab0,global,??_7?$CArray@PAVCXTPRibbonTabContextHeader@@PAV1@@@6B@,,,
@@ -4701,7 +4701,7 @@ address,type,symbol,name,module,size
 0085b02c,global,??_7CXTPRibbonGroupPopupToolBar@@6BCWnd@@@,,,520
 0085b23c,global,??_7CXTPRibbonBarMorePopupToolBar@@6BCXTPAccessible@@@,,,92
 0085b29c,global,??_7CXTPRibbonBarMorePopupToolBar@@6BCXTPHookManagerHookAble@@@,,,8
-0085b2ac,global,??_7CXTPRibbonBarMorePopupToolBar@@6BCWnd@@@,,,524
+0085b2ac,global,??_7CXTPRibbonBarMorePopupToolBar@@6BCWnd@@@,,,520
 0085b58c,global,??_7CXTPRibbonGroupControlPopup@@6BCXTPAccessible@@@,,,92
 0085b5ec,global,??_7CXTPRibbonGroupControlPopup@@6BCCmdTarget@@@,,,336
 0085b744,global,??_7CXTPRibbonGroupOption@@6BCXTPAccessible@@@,,,92
@@ -4742,7 +4742,7 @@ address,type,symbol,name,module,size
 0085d1c4,global,??_7CCaptionPopupBar@CXTPDialogBar@@6BCWnd@@@,,,520
 0085d3d4,global,??_7CXTPDialogBar@@6BCXTPAccessible@@@,,,92
 0085d434,global,??_7CXTPDialogBar@@6BCXTPHookManagerHookAble@@@,,,8
-0085d444,global,??_7CXTPDialogBar@@6BCWnd@@@,,,536
+0085d444,global,??_7CXTPDialogBar@@6BCWnd@@@,,,532
 0085e1ac,global,??_7CXTPDockingPaneBaseContainer@@6B@,,,88
 0085e25c,global,??_7CXTColorSelectorCtrlThemeFactory@@6B@,,,28
 0085e27c,global,??_7CXTColorSelectorCtrlTheme@@6B@,,,24
@@ -7638,7 +7638,7 @@ address,type,symbol,name,module,size
 005ef030,library,,,,
 0067a7f0,library,,,,
 00687f10,library,,,,
-00689cb0,library,,,,
+00689cb0,library,??4?$SharedPtr@VShadowCameraSetup@Ogre@@@Ogre@@QAEAAV01@ABV01@@Z,,,
 0068c070,library,,,,
 0068cc30,library,,,,
 0068f420,library,,,,
@@ -9374,7 +9374,7 @@ address,type,symbol,name,module,size
 006f5430,library,,,,
 00707985,library,,,,
 0070c340,library,,,,
-0070d070,library,,,,
+0070d070,library,?GetRuntimeClass@CXTPPropertyGridItemColor@@UBEPAUCRuntimeClass@@XZ,,,
 0070d0c0,library,,,,
 0070ff70,library,,,,
 00710710,library,,,,
@@ -9559,8 +9559,8 @@ address,type,symbol,name,module,size
 006936d0,library,?_Insert_n@?$vector@UShadowTextureConfig@Ogre@@V?$allocator@UShadowTextureConfig@Ogre@@@std@@@std@@IAEXV?$_Vector_iterator@UShadowTextureConfig@Ogre@@V?$allocator@UShadowTextureConfig@Ogre@@@std@@@2@IABUShadowTextureConfig@Ogre@@@Z,,,
 007517e0,library,??0CXTPDockingPaneAutoHideWnd@@AAE@PAVCXTPDockingPaneAutoHidePanel@@PAVCXTPDockingPaneTabbedContainer@@@Z,,,
 0076f660,library,?OnCommand@?$CXTMaskEditT@VCEdit@@@@MAEHIJ@Z,,,
-00631ec0,synthetic,,"RBX::Reflection::TSignalDesc<void __cdecl(bool)>::TSignalInstance::`scalar deleting destructor'",,
-006254b0,library,,"boost::signal1<void,bool,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(bool),std::allocator<void> > >::~signal1<void,bool,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(bool),std::allocator<void> > >",,
+00631ec0,synthetic,,"RBX::Reflection::TSignalDesc<void __cdecl(float,float)>::TSignalInstance::`scalar deleting destructor'",,
+006254b0,library,,"boost::signal2<void,float,float,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(float,float),std::allocator<void> > >::~signal2<void,float,float,boost::last_value<void>,int,std::less<int>,boost::function<void __cdecl(float,float),std::allocator<void> > >",,
 005c0ad0,library,,"FMOD_ErrorString",,
 0056f520,library,,,,
 00419510,library,??$_Uninit_fill_n@PAVany@boost@@IV12@V?$allocator@Vany@boost@@@std@@@std@@YAXPAVany@boost@@IABV12@AAV?$allocator@Vany@boost@@@0@U_Nonscalar_ptr_iterator_tag@0@U_Range_checked_iterator_tag@0@@Z,,,
@@ -9609,3 +9609,214 @@ address,type,symbol,name,module,size
 0095429c,global,,g_unk0x0095429c,Roblox.obj,
 0081a86c,global,??_7BadConversion@ViewNew@RBX@@6B@,,,
 008d2b6c,global,__TI3?AVBadConversion@ViewNew@RBX@@,,,
+007ee240,synthetic,,"`dynamic initializer for 'sing''",,
+007f55e0,synthetic,,"`dynamic atexit destructor for 'sing''",,
+007ee250,synthetic,,"RBX::`dynamic initializer for 'g_unk0x00949c7c''",,
+007f5670,synthetic,,"RBX::`dynamic atexit destructor for 'g_unk0x00949c7c''",,
+007ee2c0,synthetic,,"RBX::`dynamic initializer for 'g_unk0x0096130c''",,
+007f5640,synthetic,,"RBX::`dynamic atexit destructor for 'g_unk0x0096130c''",,
+007ee320,synthetic,,"`dynamic initializer for 'RBX::Fonts::fontRef''",,
+007f56b0,synthetic,,"`dynamic atexit destructor for 'RBX::Fonts::fontRef''",,
+007e68c0,library,,"G3D::`dynamic initializer for '_supportedTextureFormat''",,
+007e6900,library,,"`dynamic initializer for 'G3D::GLCaps::extensionSet''",,
+007e6940,library,,,,
+007e6950,library,,"`dynamic initializer for 'G3D::RenderDevice::dummyString''",,
+007e6970,library,,"`dynamic initializer for 'G3D::Win32Window::_shareWindow''",,
+007f1310,library,,,,
+007f1320,library,,,,
+007f1330,library,,,,
+007f1340,library,,,,
+007f1350,library,,,,
+007f1360,library,,,,
+007f1380,library,,,,
+007f13a0,library,,,,
+007f13b0,library,,"`dynamic atexit destructor for 'G3D::RenderDevice::dummyString''",,
+007f13c0,library,,"`dynamic atexit destructor for 'G3D::Win32Window::_shareWindow''",,
+007f1b40,library,,,,
+007f1b50,library,,,,
+00961360,global,factory___Ogre::VisualEngine::FUN_00673860,,,
+007f56f0,synthetic,,"`Ogre::VisualEngine::FUN_00673860'::`6'::`dynamic atexit destructor for 'factory''",,
+007ee330,synthetic,,"`dynamic initializer for 'Ogre::RbxEntityFactory::FACTORY_TYPE_NAME''",,
+007f5710,synthetic,,"`dynamic atexit destructor for 'Ogre::RbxEntityFactory::FACTORY_TYPE_NAME''",,
+007e8080,library,,"`dynamic initializer for 'G3D::Matrix3::ZERO''",,
+007e80c0,library,,"`dynamic initializer for 'G3D::Matrix3::IDENTITY''",,
+007e8220,library,,"`dynamic initializer for 'G3D::Matrix4::IDENTITY''",,
+007e8280,library,,"`dynamic initializer for 'G3D::Matrix4::ZERO''",,
+007eebe0,library,,"`dynamic initializer for '_init_CXTPControlEdit''",,
+007eebf0,library,,"`dynamic initializer for '_init_CXTPControlButton''",,
+007e7ae0,synthetic,,"`dynamic initializer for 'RBX::ViewNew::MeshFactory<RBX::ViewNew::PBBMesh,4>::cache1''",,
+007e7ad0,library,,"`dynamic initializer for 'G3D::Milestone::factory''",,
+007f15b0,synthetic,,"`dynamic atexit destructor for 'RBX::ViewNew::MeshFactory<RBX::ViewNew::PBBMesh,4>::cache1''",,
+009613a8,global,?FACTORY_TYPE_NAME@RbxEntityFactory@Ogre@@2V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A,,,
+0095855c,global,"indices___RBX::ViewNew::meshFace<0>",,,
+0095856c,global,"lastPerturbationMax___RBX::ViewNew::meshFace<0>",,,
+00958574,global,"lastPerturbationMin___RBX::ViewNew::meshFace<0>",,,
+007f1710,synthetic,,"`RBX::ViewNew::meshFace<0>'::`14'::`dynamic atexit destructor for 'indices''",,
+00958580,global,"indices___RBX::ViewNew::meshFace<1>",,,
+00958590,global,"lastPerturbationMax___RBX::ViewNew::meshFace<1>",,,
+00958598,global,"lastPerturbationMin___RBX::ViewNew::meshFace<1>",,,
+007f16d0,synthetic,,"`RBX::ViewNew::meshFace<1>'::`14'::`dynamic atexit destructor for 'indices''",,
+009585a4,global,"indices___RBX::ViewNew::meshFace<2>",,,
+009585b4,global,"lastPerturbationMax___RBX::ViewNew::meshFace<2>",,,
+009585bc,global,"lastPerturbationMin___RBX::ViewNew::meshFace<2>",,,
+007f1690,synthetic,,"`RBX::ViewNew::meshFace<2>'::`14'::`dynamic atexit destructor for 'indices''",,
+009585c8,global,"indices___RBX::ViewNew::meshFace<3>",,,
+009585d8,global,"lastPerturbationMax___RBX::ViewNew::meshFace<3>",,,
+009585e0,global,"lastPerturbationMin___RBX::ViewNew::meshFace<3>",,,
+007f1650,synthetic,,"`RBX::ViewNew::meshFace<3>'::`14'::`dynamic atexit destructor for 'indices''",,
+009585ec,global,"indices___RBX::ViewNew::meshFace<4>",,,
+009585fc,global,"lastPerturbationMax___RBX::ViewNew::meshFace<4>",,,
+00958604,global,"lastPerturbationMin___RBX::ViewNew::meshFace<4>",,,
+007f1610,synthetic,,"`RBX::ViewNew::meshFace<4>'::`14'::`dynamic atexit destructor for 'indices''",,
+00958610,global,"indices___RBX::ViewNew::meshFace<5>",,,
+00958620,global,"lastPerturbationMax___RBX::ViewNew::meshFace<5>",,,
+00958628,global,"lastPerturbationMin___RBX::ViewNew::meshFace<5>",,,
+007f15d0,synthetic,,"`RBX::ViewNew::meshFace<5>'::`14'::`dynamic atexit destructor for 'indices''",,
+007efad0,synthetic,,"`FUN_0043c580'::`2'::`dynamic atexit destructor for 'mutex''",,
+0095397c,global,"mutex___FUN_0043c580",,,
+007ea980,synthetic,,"`dynamic initializer for 'RBX::FillTool::color''",,
+007f2e60,synthetic,,"`dynamic atexit destructor for 'RBX::FillTool::color''",,
+007f57d0,synthetic,,"`Ogre::RbxSceneManager::renderSingleObject'::`30'::`dynamic atexit destructor for 'localLightList''",,
+00961480,global,"localLightList___Ogre::RbxSceneManager::renderSingleObject",,,
+007f1af0,synthetic,,"`RBX::RenderNew::TextureProxy::resolve'::`17'::`dynamic atexit destructor for 'cachedBumpImage''",,
+007f1b00,synthetic,,"`RBX::RenderNew::TextureProxy::resolve'::`17'::`dynamic atexit destructor for 'lastFilename''",,
+0095879c,global,"cachedBumpImage___RBX::RenderNew::TextureProxy::resolve",,,
+009587b0,global,"lastFilename___RBX::RenderNew::TextureProxy::resolve",,,
+007f59b0,library,,"`dynamic atexit destructor for 'extendedColors''",,
+007f1b30,library,,,,
+007f1b60,library,,,,
+0081aecc,global,??_7?$SharedPtr@V?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@@Ogre@@6B@,,,
+0092a308,global,?g_unk0x0092a308@ViewNew@RBX@@3PAPBDA,,,
+005a8c60,synthetic,,RBX::Reflection::sync,signal.obj,
+005a9440,synthetic,,RBX::Reflection::sync,reflection_object.obj,
+007f27b0,synthetic,,"`RBX::Reflection::sync'::`2'::`dynamic atexit destructor for 's''",signal.obj,
+007f27c0,synthetic,,"`RBX::Reflection::sync'::`2'::`dynamic atexit destructor for 's''",reflection_object.obj,
+0095aff0,global,,s___RBX::Reflection::sync,signal.obj,
+0095b004,global,,s___RBX::Reflection::sync,reflection_object.obj,
+007eca80,synthetic,,"RBX::`dynamic initializer for 'desc_CoordFrame''",PVInstance.obj,
+007f4590,synthetic,,"RBX::`dynamic atexit destructor for 'desc_CoordFrame''",PVInstance.obj,
+0040bce0,,?QueryInterface@?$CComObject@V?$CComEnum@UIEnumConnections@@$1?_GUID_b196b287_bab4_101a_b69c_00aa00341d07@@3U__s_GUID@@BUtagCONNECTDATA@@V?$_Copy@UtagCONNECTDATA@@@ATL@@VCComSingleThreadModel@6@@ATL@@@ATL@@UAGJABU_GUID@@PAPAX@Z,,,
+0040c9c0,,?Clone@?$CComEnumImpl@UIEnumConnections@@$1?_GUID_b196b287_bab4_101a_b69c_00aa00341d07@@3U__s_GUID@@BUtagCONNECTDATA@@V?$_Copy@UtagCONNECTDATA@@@ATL@@@ATL@@UAGJPAPAUIEnumConnections@@@Z,,,
+006d2e70,,??_GCXTPReportRecordItemDateTime@@UAEPAXI@Z,,,
+004201a0,,?GetColumns@CXTPReportColumn@@QBEPAVCXTPReportColumns@@XZ,,,
+00710e10,,?GetRuntimeClass@CXTPPropertyGridItemBool@@UBEPAUCRuntimeClass@@XZ,,,
+00711180,,?GetThisClass@CXTPPropertyGridItemEnum@@SGPAUCRuntimeClass@@XZ,,,
+00718570,,?Serialize@?$CArray@PAVCXTPTabManagerItem@@PAV1@@@UAEXAAVCArchive@@@Z,,,
+00467390,,?OnNotify@CScintillaView@Scintilla@@MAEHIJPAJ@Z,,,
+00787cd0,,?OnWndMsg@CXTColorSelectorCtrl@@MAEHIIJPAJ@Z,,,
+004f8dd0,,?GetPaintManager@CXTPControlGalleryPaintManager@@QBEPAVCXTPPaintManager@@XZ,,,
+005344a0,,??_E?$SharedPtr@V?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@@Ogre@@UAEPAXI@Z,,,
+00534a70,,?destroy@?$SharedPtr@V?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@@Ogre@@MAEXXZ,,,
+0069c8c0,,??_ECXTPCommandBarList@@UAEPAXI@Z,,,
+006eabe0,,??_ECCaptionPopupBar@CXTPDialogBar@@UAEPAXI@Z,,,
+006a0b60,,??_GCXTPControlEditCtrl@@UAEPAXI@Z,,,
+0069ff70,,?GetRuntimeClass@CXTPEdit@@UBEPAUCRuntimeClass@@XZ,,,
+00738780,,??_ECXTPPaintManager@@MAEPAXI@Z,,,
+006b3ca0,,?TextOutA@CDC@@UAEHHHPBDH@Z,,,
+006b3d50,,?DrawTextA@CDC@@UAEHPBDHPAUtagRECT@@I@Z,,,
+006b3d80,,?DrawTextExA@CDC@@UAEHPADHPAUtagRECT@@IPAUtagDRAWTEXTPARAMS@@@Z,,,
+006b3df0,,?Escape@CDC@@UAEHHHPBDPAX@Z,,,
+006b7650,,??_GCXTPImageManagerIcon@@UAEPAXI@Z,,,
+0073ee20,,?GetThisClass@CXTPControlButton@@SGPAUCRuntimeClass@@XZ,,,
+006ee700,,??_ECXTPControlToolbar@CXTPControlToolbars@@UAEPAXI@Z,,,
+006e0700,,?GetThisClass@CXTPControlPopup@@SGPAUCRuntimeClass@@XZ,,,
+0071c820,,??_GCXTPRibbonGroupControlPopup@@UAEPAXI@Z,,,
+006be380,,??_EXTP_REPORTRECORDITEM_CLICKARGS@@UAEPAXI@Z,,,
+006f2c60,,??_GCXTPPrintOptions@@UAEPAXI@Z,,,
+006d0b10,,?GetRuntimeClass@CXTPReportRecords@@UBEPAUCRuntimeClass@@XZ,,,
+006fc5a0,,??_ECTabClientDropTarget@CXTPTabClientWnd@@UAEPAXI@Z,,,
+0074a1c0,,?GetThisClass@CXTPReportRow@@SGPAUCRuntimeClass@@XZ,,,
+006d4ad0,,?Serialize@?$CArray@USELECTED_BLOCK@CXTPReportSelectedRows@@AAU12@@@UAEXAAVCArchive@@@Z,,,
+0070daa0,,?GetThisInterfaceMap@CXTPPropertyGridView@@KGPBUAFX_INTERFACEMAP@@XZ,,,
+006e21a0,,??_GCXTPAccessible@@UAEPAXI@Z,,,
+0073b4a0,,?GetRuntimeClass@CXTPControlEdit@@UBEPAUCRuntimeClass@@XZ,,,
+0073b990,,??_ECCustomizeEdit@CXTPCustomizeSheet@@UAEPAXI@Z,,,
+007682e0,,??_GCStatic@@UAEPAXI@Z,,,
+006e63d0,,??_ECListBox@@UAEPAXI@Z,,,
+006e7580,,?GetThisClass@CXTPPopupBar@@SGPAUCRuntimeClass@@XZ,,,
+006ead50,,?GetThisClass@CXTPControls@@SGPAUCRuntimeClass@@XZ,,,
+00792590,,??_GCXTPOriginalControls@@UAEPAXI@Z,,,
+006f7920,,??_GCXTPPropExchange@@UAEPAXI@Z,,,
+006fba10,,??_GCNavigateButtonArrow@CXTPTabManager@@UAEPAXI@Z,,,
+006fcdc0,,?Serialize@?$CArray@VCRect@@AAV1@@@UAEXAAVCArchive@@@Z,,,
+00785810,,??_ECXTCaptionTheme@@UAEPAXI@Z,,,
+0078aaf0,,??_ECXTThemeManagerStyleFactory@@UAEPAXI@Z,,,
+007059f0,,?GetThisClass@CXTPToolTipContextToolTip@@SGPAUCRuntimeClass@@XZ,,,
+00709100,,??_ECXTPToolTipContextToolTip@@UAEPAXI@Z,,,
+0078b810,,?GetThisClass@CXTButton@@SGPAUCRuntimeClass@@XZ,,,
+0078c7c0,,??_GCXTButton@@UAEPAXI@Z,,,
+0078ba70,,?IsThemeValid@CXTButton@@UBEHXZ,,,
+00714340,,??_G?$CArray@UDOCK_INFO@CXTPDockBar@@AAU12@@@UAEPAXI@Z,,,
+00716b20,,??_GCTrustedArray@CXTPMouseManager@@UAEPAXI@Z,,,
+007603e0,,??_ECColorSetVisualStudio@CXTPTabPaintManager@@UAEPAXI@Z,,,
+00776e90,,??_ECAppearanceSetPropertyPage@CXTPTabPaintManager@@UAEPAXI@Z,,,
+0074efd0,,??_ECXTPDockingPaneLayout@@UAEPAXI@Z,,,
+00756460,,??_G?$CArray@PAVCXTPDockingPaneCaptionButton@@PAV1@@@UAEPAXI@Z,,,
+00762220,,??_GCXTPDockingPaneDefaultTheme@XTPDockingPanePaintThemes@@UAEPAXI@Z,,,
+00766730,,??_E?$CList@PAVCShadowWnd@CXTPShadowsManager@@PAV12@@@UAEPAXI@Z,,,
+0076e5d0,,?SetEditMask@?$CXTMaskEditT@VCEdit@@@@UAEHPBD00@Z,,,
+0076de60,,?CheckChar@?$CXTMaskEditT@VCEdit@@@@UAEHAADH@Z,,,
+0076d650,,?ProcessMask@?$CXTMaskEditT@VCEdit@@@@UAEHAADH@Z,,,
+0076f1b0,,?PreTranslateMessage@?$CXTMaskEditT@VCEdit@@@@UAEHPAUtagMSG@@@Z,,,
+00772930,,??_GCXTPPropertyGridSimpleTheme@XTPPropertyGridPaintThemes@@UAEPAXI@Z,,,
+0079a510,,?GetThisClass@CXTWndHook@@SGPAUCRuntimeClass@@XZ,,,
+0079a840,,??_GCXTWndHook@@UAEPAXI@Z,,,
+00789aa0,,??_ECShadowList@CXTShadowsManager@@UAEPAXI@Z,,,
+0079b470,,??_GCXTButtonTheme@@UAEPAXI@Z,,,
+0078b210,,?DrawButtonText@CXTCaptionButtonThemeOfficeXP@@MAEXPAVCDC@@IAAVCRect@@PAVCXTButton@@@Z,,,
+0078afa0,,??_GCXTButtonThemeOffice2003@@UAEPAXI@Z,,,
+00847dcc,global,,messageMap___CXTPCustomizeCommandsListBox::GetThisMessageMap,,
+00847dd4,global,,_messageEntries___CXTPCustomizeCommandsListBox::GetThisMessageMap,,
+0084ae90,global,,messageMap___CXTPTabClientWnd::CSingleWorkspace::GetThisMessageMap,,
+0084ae98,global,,_messageEntries___CXTPTabClientWnd::CSingleWorkspace::GetThisMessageMap,,
+0084c6b0,global,,messageMap___CXTPToolTipContextToolTip::GetThisMessageMap,,
+0084c6b8,global,,_messageEntries___CXTPToolTipContextToolTip::GetThisMessageMap,,
+0084e7b0,global,,messageMap___CXTPDockBar::GetThisMessageMap,,
+0084e7b8,global,,_messageEntries___CXTPDockBar::GetThisMessageMap,,
+0084ff68,global,,messageMap___CXTPMenuBar::GetThisMessageMap,,
+0084ff70,global,,_messageEntries___CXTPMenuBar::GetThisMessageMap,,
+008518f0,global,,messageMap___CXTPControlComboBoxGalleryPopupBar::GetThisMessageMap,,
+008518f8,global,,_messageEntries___CXTPControlComboBoxGalleryPopupBar::GetThisMessageMap,,
+00852d98,global,,messageMap___CXTPControlEditCtrl::GetThisMessageMap,,
+00852da0,global,,_messageEntries___CXTPControlEditCtrl::GetThisMessageMap,,
+00853560,global,,messageMap___CXTPReportInplaceEdit::GetThisMessageMap,,
+008541ac,global,,messageMap___CXTPReportHeaderDropWnd::GetThisMessageMap,,
+008541b4,global,,_messageEntries___CXTPReportHeaderDropWnd::GetThisMessageMap,,
+00854728,global,,messageMap___CXTPDockingPaneAutoHideWnd::GetThisMessageMap,,
+00854730,global,,_messageEntries___CXTPDockingPaneAutoHideWnd::GetThisMessageMap,,
+00854c88,global,,messageMap___CXTPDockingPaneWindowSelect::GetThisMessageMap,,
+00854c90,global,,_messageEntries___CXTPDockingPaneWindowSelect::GetThisMessageMap,,
+00855658,global,,messageMap___CXTPDockingPaneTabbedContainer::GetThisMessageMap,,
+00855660,global,,_messageEntries___CXTPDockingPaneTabbedContainer::GetThisMessageMap,,
+008559d8,global,,messageMap___CXTPDockingPaneSplitterWnd::GetThisMessageMap,,
+008559e0,global,,_messageEntries___CXTPDockingPaneSplitterWnd::GetThisMessageMap,,
+00856d48,global,,messageMap___CXTPImageEditorDlg::CDlgToolBar::GetThisMessageMap,,
+00856d50,global,,_messageEntries___CXTPImageEditorDlg::CDlgToolBar::GetThisMessageMap,,
+0085767c,global,,messageMap___CXTPCustomizeToolbarsPageCheckListBox::GetThisMessageMap,,
+0085a0f0,global,,messageMap___CXTShadowWnd::GetThisMessageMap,,
+0085a0f8,global,,_messageEntries___CXTShadowWnd::GetThisMessageMap,,
+0085a618,global,,messageMap___CXTButton::GetThisMessageMap,,
+0085a620,global,,_messageEntries___CXTButton::GetThisMessageMap,,
+0085d658,global,,messageMap___CXTPDialogBar::GetThisMessageMap,,
+0085d660,global,,_messageEntries___CXTPDialogBar::GetThisMessageMap,,
+00437960,library,?GetItemState@CXTTreeViewBase@@UBEIPAU_TREEITEM@@I@Z,,,8
+00437970,library,?SelectItem@CXTTreeViewBase@@UAEHPAU_TREEITEM@@@Z,,,8
+00437980,library,?SetItemState@CXTTreeViewBase@@UAEHPAU_TREEITEM@@II@Z,,,8
+004379c0,library,?OnNotify@CXTTreeViewBase@@MAEHIJPAJ@Z,,,8
+004379d0,library,?PreTranslateMessage@CXTTreeViewBase@@MAEHPAUtagMSG@@@Z,,,8
+006eabd0,library,??_ECCaptionPopupBar@CXTPDialogBar@@WFM@AEPAXI@Z,,,8
+006ee680,library,??_ECControlQuickAccessCommand@CXTPRibbonBar@@WCA@AEPAXI@Z,,,8
+0070d4b0,library,??_ECPropertyGridItemColorColorPopup@?8??OnInplaceButtonDown@CXTPPropertyGridItemColor@@MAEXPAVCXTPPropertyGridInplaceButton@@@Z@WFE@AEPAXI@Z,,,8
+0071c5e0,library,??_ECXTPRibbonControlSystemButton@@WCA@AEPAXI@Z,,,8
+00728e00,library,??_ECXTPRibbonBarMorePopupToolBar@@WFE@AEPAXI@Z,,,8
+0073b8e0,library,??_ECCustomizeEdit@CXTPCustomizeSheet@@WCA@AEPAXI@Z,,,8
+0078bd80,library,??_ECXTCaptionButton@@WFE@AEPAXI@Z,,,8
+00408ff0,library,?AddRef@?$CComContainedObject@VCApp@@@ATL@@W3AGKXZ,,,10
+0040bab0,library,?Release@?$CComContainedObject@VCBrowserViewExternal@@@ATL@@W3AGKXZ,,,10
+0040bae0,library,?QueryInterface@?$CComContainedObject@VCBrowserViewExternal@@@ATL@@WBE@AGJABU_GUID@@PAPAX@Z,,,10
+0040baf0,library,?Release@?$CComContainedObject@VCApp@@@ATL@@WBE@AGKXZ,,,10
+0040bb00,library,?AddRef@?$CComContainedObject@VCBrowserViewExternal@@@ATL@@WBE@AGKXZ,,,10
+0040bb10,library,?QueryInterface@?$CComContainedObject@VCBrowserViewExternal@@@ATL@@W3AGJABU_GUID@@PAPAX@Z,,,10
+00437aa0,library,?PreTranslateMessage@CXTTreeViewBase@@OGA@AEHPAUtagMSG@@@Z,,,8
+00761a90,,??_ECXTPDockingPaneOffice2003Theme@XTPDockingPanePaintThemes@@UAEPAXI@Z,,,
+006b3c80,,?RectVisible@CDC@@UBEHPBUtagRECT@@@Z,,,

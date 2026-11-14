@@ -1164,8 +1164,7 @@ bool PartInstance::resize(NormalId p_unk0x04, int p_unk0x08)
 		CoordinateFrame newCoord(oldCoord.rotation, newTranslation);
 
 		setCoordinateFrame(newCoord);
-		Vector3 sizeXml = uiToXmlSize(newSizeUi);
-		setPartSizeXml(sizeXml);
+		setPartSizeXml(uiToXmlSize(newSizeUi));
 		safeMove();
 
 		if (Math::fuzzyEq(getCoordinateFrame(), newCoord, 0.00001f, 0.00001f)) {
@@ -1202,7 +1201,7 @@ void PartInstance::onCameraNear(float distance)
 }
 
 // FUNCTION: WEBSERVICE 0x1009ff60
-// STUB: ROBLOX 0x005b2ce0
+// FUNCTION: ROBLOX 0x005b2ce0
 void PartInstance::render3dAdorn(Adorn* adorn)
 {
 	if (partType == Part::CYLINDER_PART || SurfacesNeedAdorn) {
@@ -1210,7 +1209,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (highlightSleepParts && primitive->getAssembly()) {
-		Sim::AssemblyState status = primitive->getAssembly()->getRootAssembly()->getSleepStatus();
+		Sim::AssemblyState status = primitive->getAssembly()->getRootAssemblyConst()->getSleepStatus();
 
 		if (status != Sim::ANCHORED && status != Sim::AWAKE) {
 			Color3 sleepColor;
@@ -1233,7 +1232,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (highlightAwakeParts && primitive->getAssembly()) {
-		Sim::AssemblyState status = primitive->getAssembly()->getRootAssembly()->getSleepStatus();
+		Sim::AssemblyState status = primitive->getAssembly()->getRootAssemblyConst()->getSleepStatus();
 
 		if (status != Sim::ANCHORED && status != Sim::SLEEPING_DEEPLY) {
 			Color3 wakeColor;
@@ -1260,11 +1259,11 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 	}
 
 	if (showAnchoredParts && primitive->getAnchorObject()) {
-		G3D::Color4 surfaceColor(Color3::gray(), alpha());
-		const G3D::Matrix3& rotation = primitive->getCoordinateFrame().rotation;
-
 		DrawAdorn::partSurface(
-			getPart(), Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), rotation), adorn, surfaceColor
+			getPart(),
+			Math::getClosestObjectNormalId(Vector3(0.0f, -1.0f, 0.0f), getCoordinateFrame().rotation),
+			adorn,
+			G3D::Color4(Color3::gray(), alpha())
 		);
 	}
 
@@ -1276,7 +1275,7 @@ void PartInstance::render3dAdorn(Adorn* adorn)
 		setAlphaModifier(0.3f);
 
 		if (Assembly* assembly = primitive->getAssembly()) {
-			if (primitive.get() == assembly->getAssemblyPrimitive()) {
+			if (primitive.get() == assembly->getAssemblyPrimitiveConst()) {
 				adorn->setObjectToWorldMatrix(
 					CoordinateFrame(Matrix3::identity(), primitive->getCoordinateFrame().translation)
 				);

@@ -132,7 +132,7 @@ void View::suppressSkybox()
 	renderLibScene->colorClearValue = clearColor;
 }
 
-// STUB: ROBLOX 0x0050c5c0
+// FUNCTION: ROBLOX 0x0050c5c0
 void View::FUN_0050c5c0(void* rd)
 {
 	Ogre::VisualEngine* engine = static_cast<Ogre::VisualEngine*>(rd);
@@ -185,9 +185,9 @@ void View::FUN_0050c5c0(void* rd)
 	std::string path;
 	Ogre::StringUtil::splitFilename(files[0], baseName, path);
 	if (baseName.find(".") == std::string::npos) {
-		unsigned int format = G3D::GImage::resolveFormat(files[0]);
+		G3D::GImage::Format format = G3D::GImage::resolveFormat(files[0]);
 		std::string suffix;
-		if (format < 8) {
+		if (format >= 0 && format < sizeof(g_unk0x0092a308) / sizeof(g_unk0x0092a308[0])) {
 			suffix = std::string(".") + g_unk0x0092a308[format];
 		}
 		else {
@@ -223,16 +223,16 @@ void View::FUN_0050c5c0(void* rd)
 	);
 
 	Ogre::DataStreamPtr stream(new Ogre::MemoryDataStream(script, strlen(script) + 1));
+	if (Ogre::MaterialManager::getSingleton().resourceExists("rbxskybox")) {
+		Ogre::MaterialManager::getSingleton().remove("rbxskybox");
+	}
 	try {
-		if (Ogre::MaterialManager::getSingleton().resourceExists("rbxskybox")) {
-			Ogre::MaterialManager::getSingleton().remove("rbxskybox");
-		}
 		Ogre::MaterialManager::getSingleton().parseScript(stream, "General");
 		Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName("rbxskybox");
 
 		Ogre::RbxSceneManager* sceneManager = static_cast<Ogre::RbxSceneManager*>(engine->m_unk0x04);
 		sceneManager->m_unk0x8a68 = skyFolder;
-		sceneManager->setSkyBox(
+		engine->m_unk0x04->setSkyBox(
 			true,
 			"rbxskybox",
 			2700.0f,
@@ -242,7 +242,7 @@ void View::FUN_0050c5c0(void* rd)
 		);
 	}
 	catch (Ogre::Exception& e) {
-		Ogre::LogManager::getSingleton().logMessage("RBX error in skybox: " + e.getFullDescription());
+		Ogre::LogManager::getSingleton().logMessage(std::string("RBX error in skybox: ") + e.what());
 	}
 
 	if (moved[0] != "") {
@@ -252,7 +252,7 @@ void View::FUN_0050c5c0(void* rd)
 	}
 }
 
-// STUB: ROBLOX 0x0050d3d0
+// FUNCTION: ROBLOX 0x0050d3d0
 void View::FUN_0050d3d0(void* rd)
 {
 	if (!lightingValid) {
@@ -283,7 +283,10 @@ void View::FUN_0050d3d0(void* rd)
 		}
 
 		renderLibScene->presetLighting(
-			NULL, lighting->getSkyParameters(), lighting->getAmbientTop(), lighting->getAmbientBottom()
+			G3D::ReferenceCountedPointer<G3D::Sky>(),
+			lighting->getSkyParameters(),
+			lighting->getAmbientTop(),
+			lighting->getAmbientBottom()
 		);
 		G3D::Color4 clearColor = lighting->getClearColor();
 		renderLibScene->colorClearValue = clearColor;

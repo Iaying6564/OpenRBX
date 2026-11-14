@@ -86,8 +86,7 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 		}
 	}
 
-	G3D::Array<G3D::GLight>& shadowed = lighting->shadowedLightArray;
-	std::sort(shadowed.begin(), shadowed.end(), brighter);
+	lighting->shadowedLightArray.sort(brighter);
 
 	int excessShadowLights = lighting->shadowedLightArray.size() - numShadowLights;
 
@@ -101,8 +100,7 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 		lighting->shadowedLightArray.resize(lighting->shadowedLightArray.size() - excessShadowLights, true);
 	}
 
-	G3D::Array<G3D::GLight>& lights = lighting->lightArray;
-	std::sort(lights.begin(), lights.end(), brighter);
+	lighting->lightArray.sort(brighter);
 
 	int excessLights = lighting->lightArray.size() - numNonShadowLights;
 
@@ -112,14 +110,13 @@ G3D::ReferenceCountedPointer<G3D::Lighting> EffectSettings::update(
 
 	_useAllLightsInUnshadowedPass = _stencilShadows == false;
 
+	static const float brighten = 1.0f;
 	for (int i = 0; i < lighting->lightArray.size(); i++) {
-		G3D::GLight& light = lighting->lightArray[i];
-		light.enabled = light.enabled;
+		lighting->lightArray[i].color *= brighten;
 	}
 
 	for (int i = 0; i < lighting->shadowedLightArray.size(); i++) {
-		G3D::GLight& light = lighting->shadowedLightArray[i];
-		light.enabled = light.enabled;
+		lighting->shadowedLightArray[i].color *= brighten;
 	}
 
 	if (_toneMap) {

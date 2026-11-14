@@ -1145,3 +1145,6 @@ address,type,name,module
 0x10252db0,global,halfSolarYear,LightingParameters.obj
 0x10252db8,global,moonPhaseInterval,LightingParameters.obj
 0x10252dc8,global,initialMoonPhase,LightingParameters.obj
+0x10047470,synthetic,RBX::Reflection::sync,reflection_object.obj
+0x10221680,synthetic,"`RBX::Reflection::sync'::`2'::`dynamic atexit destructor for 's''",reflection_object.obj
+0x102f59a4,global,s___RBX::Reflection::sync,reflection_object.obj

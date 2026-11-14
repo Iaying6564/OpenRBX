@@ -219,7 +219,7 @@ address,type,size
 00408780,function,137
 00408810,function,119
 00408890,function,134
-00408920,function,642
+00408920,function,723
 00408c00,function,266
 00408d20,function,36
 00408d50,function,67
@@ -2091,7 +2091,7 @@ address,type,size
 00451f00,function,179
 00451fc0,function,255
 004520c0,function,269
-004521d0,function,1266
+004521d0,function,1303
 004526f0,function,162
 004527a0,function,130
 00452830,function,90
@@ -2401,7 +2401,7 @@ address,type,size
 00460bd0,function,308
 00460d10,function,15
 00460d30,function,795
-004610a0,function,723
+004610a0,function,888
 00461420,function,257
 00461660,function,36
 00461690,function,181
@@ -5497,9 +5497,9 @@ address,type,size
 0050c360,function,146
 0050c400,function,146
 0050c4a0,function,281
-0050c5c0,function,1815
+0050c5c0,function,3566
 0050d3b0,function,31
-0050d3d0,function,213
+0050d3d0,function,572
 0050d610,function,57
 0050d650,function,52
 0050d690,function,346
@@ -5562,7 +5562,7 @@ address,type,size
 005151d0,function,132
 00515260,function,125
 005152e0,function,30
-00515300,function,831
+00515300,function,852
 00515660,function,159
 00515700,function,336
 00515850,function,10
@@ -5662,7 +5662,7 @@ address,type,size
 0051af00,function,442
 0051b0c0,function,235
 0051b1b0,function,259
-0051b2e0,function,839
+0051b2e0,function,1319
 0051b810,function,152
 0051b8b0,function,126
 0051b930,function,75
@@ -5919,7 +5919,7 @@ address,type,size
 00534a70,function,42
 00534aa0,function,451
 00534c70,function,173
-00534d20,function,2397
+00534d20,function,4188
 00535d80,function,31
 00535da0,function,175
 00535e50,function,98
@@ -13520,7 +13520,7 @@ address,type,size
 00672e60,function,889
 006731e0,function,971
 006735b0,function,673
-00673860,function,542
+00673860,function,5514
 00674df0,function,49
 00674e30,function,13
 00674e40,function,93
@@ -20615,7 +20615,7 @@ address,type,size
 007ef1d0,function,12
 007ef1f0,function,56
 007ef230,function,64
-007ef270,function,70
+007ef270,function,64
 007ef2b0,function,55
 007ef2f0,function,55
 007ef330,function,55
@@ -20648,6 +20648,7 @@ address,type,size
 007efa30,function,55
 007efa70,function,12
 007efa80,function,64
+007efad0,function,71
 007efae0,function,55
 007efb20,function,55
 007efec0,function,11
@@ -20791,7 +20792,11 @@ address,type,size
 007f1330,function,11
 007f1340,function,11
 007f1350,function,11
+007f1360,function,20
 007f1380,function,30
+007f13a0,function,10
+007f13b0,function,11
+007f13c0,function,23
 007f13f0,function,20
 007f1410,function,63
 007f1450,function,63
@@ -20800,6 +20805,13 @@ address,type,size
 007f1510,function,64
 007f1550,function,20
 007f1570,function,64
+007f15b0,function,20
+007f15d0,function,49
+007f1610,function,49
+007f1650,function,49
+007f1690,function,49
+007f16d0,function,49
+007f1710,function,49
 007f1750,function,64
 007f1790,function,20
 007f17b0,function,20
@@ -20820,6 +20832,8 @@ address,type,size
 007f1a90,function,32
 007f1ab0,function,32
 007f1ae0,function,11
+007f1af0,function,27
+007f1b00,function,11
 007f1b40,function,11
 007f1b50,function,11
 007f1ba0,function,10
@@ -20944,6 +20958,7 @@ address,type,size
 007f2760,function,11
 007f2780,function,11
 007f27a0,function,11
+007f27b0,function,10
 007f27c0,function,10
 007f27d0,function,10
 007f27e0,function,25
@@ -21009,6 +21024,7 @@ address,type,size
 007f2e30,function,10
 007f2e40,function,10
 007f2e50,function,10
+007f2e60,function,49
 007f2eb0,function,49
 007f2ef0,function,25
 007f2f10,function,25
@@ -21357,10 +21373,17 @@ address,type,size
 007f55b0,function,10
 007f55c0,function,10
 007f55d0,function,10
+007f55e0,function,47
 007f5610,function,11
 007f5620,function,11
 007f5630,function,11
+007f5640,function,11
 007f5650,function,11
 007f5660,function,11
+007f5670,function,49
+007f56b0,function,63
+007f56f0,function,21
+007f5710,function,11
 007f5740,function,11
+007f57d0,function,49
 007f5afe,function,10
