@@ -82,13 +82,19 @@ private:
 	Sim::AssemblyState computeAssemblyState(Assembly* assembly);
 
 	Sim::AssemblyState getState(Assembly* assembly);
-	AssemblySet* stateToSet(Sim::AssemblyState state);
+	// __forceinline: the original's callers carry its switch expanded, and the
+	// inlined copy of stateToSet is what emits the jump table over the state.
+	__forceinline AssemblySet* stateToSet(Sim::AssemblyState state);
 
 	int getSleepCount(Assembly* assembly);
 	void incrementSleepCount(Assembly* assembly);
 	void resetSleepCount(Assembly* assembly);
 
-	void changeAssemblyState(Assembly* assembly, Sim::AssemblyState state);
+	// __declspec(noinline): the original keeps a real body at 0x101197c0 and calls it
+	// from seven sites, so the inline election has to be stated rather than left to
+	// the optimizer, which inlines all of them. The two callers the original expands
+	// spell it out at their own call sites instead.
+	__declspec(noinline) void changeAssemblyState(Assembly* assembly, Sim::AssemblyState state);
 	void changeAssemblyState(const std::vector<Assembly*>& assemblies, Sim::AssemblyState state);
 	void changeContactState(Contact* contact, Sim::EdgeState state);
 	void changeContactState(const std::vector<Contact*>& contacts, Sim::EdgeState state);

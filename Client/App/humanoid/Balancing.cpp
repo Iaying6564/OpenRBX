@@ -53,8 +53,8 @@ G3D::Vector3 Balancing::getYAxis() const
 	return G3D::Vector3::unitY();
 }
 
-// STUB: WEBSERVICE 0x10122140
-// STUB: ROBLOX 0x006632c0
+// FUNCTION: WEBSERVICE 0x10122140
+// FUNCTION: ROBLOX 0x006632c0
 void Balancing::onComputeForce(const float dt)
 {
 	Body* torso = humanoid->getTorsoBody();
@@ -85,7 +85,7 @@ void Balancing::onComputeForce(const float dt)
 				}
 			}
 
-			torqueRoot -= branchIBody * kD * angVelRoot;
+			torqueRoot = torqueRoot - branchIBody * kD * angVelRoot;
 
 			G3D::Vector3 addedTorque = rootPV.position.vectorToWorldSpace(torqueRoot) - oldTorqueWorld;
 			root->accumulateTorque(addedTorque);
@@ -93,8 +93,8 @@ void Balancing::onComputeForce(const float dt)
 	}
 }
 
-// STUB: WEBSERVICE 0x10122520
-// STUB: ROBLOX 0x006636a0
+// FUNCTION: WEBSERVICE 0x10122520
+// FUNCTION: ROBLOX 0x006636a0
 PartInstance* Balancing::findFloor(bool existingFloor)
 {
 	if (humanoid->getTorsoBody()) {
@@ -119,10 +119,9 @@ PartInstance* Balancing::findFloor(bool existingFloor)
 			return floor;
 		}
 
-		for (int x = -1; x < 2; x += 2) {
-			for (int z = -1; z < 2; z += 2) {
-				offset.x = x * halfSize.x;
-				offset.z = z * halfSize.z;
+		for (int x = -1; x <= 1; x += 2) {
+			for (int z = -1; z <= 1; z += 2) {
+				offset = G3D::Vector3(x * halfSize.x, -halfSize.y, z * halfSize.z);
 				pointOnTorso = torsoCoord.pointToWorldSpace(offset);
 				tryRay = G3D::Ray::fromOriginAndDirection(pointOnTorso, -G3D::Vector3::unitY());
 

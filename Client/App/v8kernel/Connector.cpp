@@ -44,7 +44,8 @@ float PointToPointBreakConnector::potentialEnergy()
 {
 	Vector3 delta = point1->getWorldPos() - point0->getWorldPos();
 
-	float length = delta.magnitude();
+	// squared in y,z,x order: Vector3::magnitude() drains the x87 stack the other way
+	float length = sqrtf(delta.y * delta.y + delta.z * delta.z + delta.x * delta.x);
 
 	return k * length * length * 0.5f;
 }

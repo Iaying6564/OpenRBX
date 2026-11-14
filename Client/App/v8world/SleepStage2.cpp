@@ -313,12 +313,40 @@ void SleepStage::changeAssemblyState(Assembly* a, Sim::AssemblyState newState)
 	a->getSleepInfo()->state = newState;
 }
 
-// STUB: WEBSERVICE 0x10119970
-// STUB: ROBLOX 0x00643460
+// FUNCTION: WEBSERVICE 0x10119970
+// FUNCTION: ROBLOX 0x00643460
 void SleepStage::onAssemblyRemoving(Assembly* assembly)
 {
 	if (getState(assembly) != Sim::SLEEPING_DEEPLY) {
-		changeAssemblyState(assembly, Sim::SLEEPING_DEEPLY);
+		// the original expands changeAssemblyState(assembly, SLEEPING_DEEPLY) here
+		// rather than calling it, so the body is spelled out with newState folded to
+		// the constant. Statement order mirrors changeAssemblyState's above; both
+		// alternatives measure worse (348 bytes for newSet hoisted above oldSet, or
+		// computed after the erase).
+		// The expansion keeps changeAssemblyState's `a' alias for every statement but
+		// the downstream test, which the original writes through `assembly'. That one
+		// difference decides the callee-saved assignment: spelled through `a' the body
+		// comes out at 352 bytes and 85 masked diffs, through `assembly' everywhere at
+		// 356 and 198.
+		Assembly* a = assembly;
+		Sim::AssemblyState newState = Sim::SLEEPING_DEEPLY;
+
+		Sim::AssemblyState oldState = getState(a);
+
+		AssemblySet* oldSet = stateToSet(oldState);
+		AssemblySet* newSet = stateToSet(newState);
+
+		oldSet->erase(a);
+		newSet->insert(a);
+
+		a->getAssemblyPrimitive()->getBody()->setVelocity(Velocity::zero());
+
+		if (assembly->downstreamOfStage(this)) {
+			static_cast<SimJobStage*>(getDownstream())->onAssemblyRemoving(a);
+		}
+
+		resetSleepCount(a);
+		a->getSleepInfo()->state = newState;
 	}
 
 	sleepingDeeply.erase(assembly);
@@ -687,8 +715,8 @@ void SleepStage::stepContacts(ContactList& contacts)
 	changeContactState(toTouchingSleeping, Sim::TOUCHING_SLEEPING);
 }
 
-// STUB: WEBSERVICE 0x1011ab10
-// STUB: ROBLOX 0x00644600
+// FUNCTION: WEBSERVICE 0x1011ab10
+// FUNCTION: ROBLOX 0x00644600
 void SleepStage::wakeAssemblyAndNeighbors(Assembly* assembly, int recurseDepth)
 {
 	Sim::AssemblyState state = getState(assembly);
@@ -737,7 +765,27 @@ void SleepStage::stepAssembliesRecursiveWakePending()
 		Assembly* assembly = toWake[i];
 
 		if (getState(assembly) != Sim::RECURSIVE_WAKE_PENDING) {
-			changeAssemblyState(assembly, Sim::RECURSIVE_WAKE_PENDING);
+			// the original expands changeAssemblyState(assembly, RECURSIVE_WAKE_PENDING)
+			// here rather than calling it, so the body is spelled out with newState
+			// folded to the constant.
+			Assembly* a = assembly;
+			Sim::AssemblyState newState = Sim::RECURSIVE_WAKE_PENDING;
+
+			Sim::AssemblyState oldState = getState(a);
+
+			AssemblySet* oldSet = stateToSet(oldState);
+			AssemblySet* newSet = stateToSet(newState);
+
+			oldSet->erase(a);
+			newSet->insert(a);
+
+			if ((oldState == Sim::SLEEPING_CHECKING || oldState == Sim::SLEEPING_DEEPLY) &&
+				newState != Sim::SLEEPING_CHECKING && newState != Sim::SLEEPING_DEEPLY) {
+				a->getAssemblyPrimitive()->getBody()->resetAccumulators();
+			}
+
+			resetSleepCount(a);
+			a->getSleepInfo()->state = newState;
 		}
 
 		wakeAssemblyAndNeighbors(assembly, 8);
